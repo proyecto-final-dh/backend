@@ -12,6 +12,6 @@ public class delete {
 
     @Test
     public void fail() {
-        Assertions.assertEquals(6, 6);
+        Assertions.assertEquals(5, 5);
     }
 }
