@@ -9,4 +9,9 @@ public class delete {
     public void pass() {
         Assertions.assertEquals(6, 1);
     }
+
+    @Test
+    public void fail() {
+        Assertions.assertEquals(6, 6);
+    }
 }
