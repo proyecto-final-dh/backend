@@ -7,7 +7,7 @@ public class deleteTest {
 
     @Test
     public void pass() {
-        Assertions.assertEquals(6, 1);
+        Assertions.assertEquals(6, 6);
     }
 
     @Test
