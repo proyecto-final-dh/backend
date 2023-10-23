@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: mysql://localhost:3306/yourdatabase?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3307/petPI?useSSL=false&serverTimezone=UTC
     username: user
     password: password
   jpa:
