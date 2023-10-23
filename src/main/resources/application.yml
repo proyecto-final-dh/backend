@@ -1,1 +1,8 @@
-
+spring:
+  datasource:
+    url: mysql://localhost:3306/yourdatabase?useSSL=false&serverTimezone=UTC
+    username: user
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
