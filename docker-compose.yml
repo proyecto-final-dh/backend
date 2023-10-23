@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   db:
-    image: mysql:latest
+    image: mysql:8.0.34
     container_name: mysql-resqpet
     environment:
       MYSQL_ROOT_PASSWORD: 'password'
@@ -12,4 +12,5 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - ./src/main/resources/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./src/main/resources/01-init.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ./src/main/resources/02-data.sql:/docker-entrypoint-initdb.d/02-data.sql

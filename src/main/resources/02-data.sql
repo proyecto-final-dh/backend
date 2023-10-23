@@ -1,0 +1,16 @@
+INSERT INTO locations (id, country, city, state) VALUES (1, 'Colombia', 'Bogota', 'Bogotá');
+INSERT INTO locations (id, country, city, state) VALUES (2, 'Colombia', 'Timbio', 'Cauca');
+INSERT INTO locations (id, country, city, state) VALUES (3, 'Colombia', 'Medellin', 'Antioquia');
+INSERT INTO locations (id, country, city, state) VALUES (4, 'Colombia', 'Cali', 'Valle Del Cauca');
+INSERT INTO locations (id, country, city, state) VALUES (5, 'Colombia', 'Barranquilla', 'Atlántico');
+INSERT INTO locations (id, country, city, state) VALUES (6, 'Colombia', 'Cartagena', 'Bolívar');
+INSERT INTO locations (id, country, city, state) VALUES (7, 'Colombia', 'Palermo', 'Huila');
+INSERT INTO locations (id, country, city, state) VALUES (8, 'Colombia', 'Cucuta', 'Norte De Santander');
+INSERT INTO locations (id, country, city, state) VALUES (9, 'Colombia', 'Soledad', 'Atlántico');
+INSERT INTO locations (id, country, city, state) VALUES (10, 'Colombia', 'Pereira', 'Risaralda');
+INSERT INTO locations (id, country, city, state) VALUES (11, 'Colombia', 'Bucaramanga', 'Santander');
+INSERT INTO locations (id, country, city, state) VALUES (12, 'Colombia', 'Valledupar', 'Cesar');
+INSERT INTO locations (id, country, city, state) VALUES (13, 'Colombia', 'Ibague', 'Tolima');
+INSERT INTO locations (id, country, city, state) VALUES (14, 'Colombia', 'Villavicencio', 'Meta');
+INSERT INTO locations (id, country, city, state) VALUES (15, 'Colombia', 'Soacha', 'Cundinamarca');
+INSERT INTO locations (id, country, city, state) VALUES (16, 'Colombia', 'Santa Marta', 'Magdalena');
