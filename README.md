@@ -1,2 +1,2 @@
-# proyecto-final
+# ResQPET
 Proyecto final CTD
