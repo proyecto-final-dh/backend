@@ -17,14 +17,6 @@ public class PetService implements  IPetService{
 
     private PetRepository petRepository;
 
-    /*
-    public List<Pet> findAll(){
-        List<Pet> pets = petRepository.findAll();
-        return pets;
-    }
-
-     */
-
     public Page<Pet> findAll(Pageable pageable) throws Exception {
         try {
             return petRepository.findAll(pageable);
@@ -32,10 +24,6 @@ public class PetService implements  IPetService{
             throw new Exception("Error al recuperar las mascotas paginadas.");
         }
     }
-
-
-
-
 
     public Pet findById(Long id) throws Exception {
         try {

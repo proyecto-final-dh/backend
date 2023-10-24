@@ -7,5 +7,4 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
 
     Pet findByNameAndStatusAndSizeAndGenderAndDescription(String name, String status, String size, String gender,String description);
 
-
 }

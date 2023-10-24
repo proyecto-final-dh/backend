@@ -24,18 +24,6 @@ public class PetController {
         this.petService = petService;
     }
 
-    /*
-    @GetMapping
-    public List<Pet> getAllPets() {
-        try {
-            return petService.findAll();
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
-    }
-
-     */
-
 
     @GetMapping
     public List<Pet> getAllPets(
