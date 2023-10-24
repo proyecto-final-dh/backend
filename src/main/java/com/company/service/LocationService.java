@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
-public class LocationService {
+public class LocationService implements ILocationService{
 
 
     private final LocationRepository locationRepository;
