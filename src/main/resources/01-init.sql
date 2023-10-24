@@ -95,3 +95,5 @@ ALTER TABLE history_states
 
 ALTER TABLE history_states
     ADD FOREIGN KEY (userID) REFERENCES users(ID);
+
+
