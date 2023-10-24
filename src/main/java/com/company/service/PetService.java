@@ -3,21 +3,39 @@ package com.company.service;
 import com.company.model.entity.Pet;
 import com.company.repository.PetRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
 @Service
-public class PetService {
+public class PetService implements  IPetService{
 
     private PetRepository petRepository;
 
+    /*
     public List<Pet> findAll(){
         List<Pet> pets = petRepository.findAll();
         return pets;
     }
+
+     */
+
+    public Page<Pet> findAll(Pageable pageable) throws Exception {
+        try {
+            return petRepository.findAll(pageable);
+        } catch (Exception e) {
+            throw new Exception("Error al recuperar las mascotas paginadas.");
+        }
+    }
+
+
+
+
 
     public Pet findById(Long id) throws Exception {
         try {
