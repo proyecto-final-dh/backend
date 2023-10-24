@@ -9,6 +9,6 @@ public interface ISpeciesService {
     List<Species> getAllSpecies() throws Exception;
     Species getSpeciesById(int id) throws Exception;
     Species createSpecies(Species species);
-    //Species updateSpecies(int id, Species species);
+    Species updateSpecies(int id, Species species);
     void deleteSpecies(int id);
 }
