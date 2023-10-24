@@ -556,3 +556,5 @@ INSERT INTO breeds (speciesID, name1) VALUES
 (1, 'Siames');
 
 SET SQL_SAFE_UPDATES = 0;
+
+-- select
