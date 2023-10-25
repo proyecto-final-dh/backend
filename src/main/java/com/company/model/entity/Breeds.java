@@ -4,19 +4,29 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import org.antlr.v4.runtime.misc.NotNull;
 
 @Entity
-public class Species {
+public class Breeds {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @NotNull
     private String name1;
-    public Species() {
+
+    @ManyToOne
+    @JoinColumn(name = "speciesID")
+    private Species species;
+
+    public Breeds() {
     }
-    public Species(String name1) {
+
+    public Breeds(String name1, Species species) {
         this.name1 = name1;
+        this.species = species;
     }
 
     public int getId() {
@@ -27,13 +37,19 @@ public class Species {
         this.id = id;
     }
 
-    public String getName() {
+    public String getName1() {
         return name1;
     }
 
-    public void setName(String name) {
-        this.name1 = name;
+    public void setName1(String name1) {
+        this.name1 = name1;
     }
 
-}
+    public Species getSpecies() {
+        return species;
+    }
 
+    public void setSpecies(Species species) {
+        this.species = species;
+    }
+}
