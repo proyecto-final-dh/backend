@@ -2,6 +2,7 @@ package com.company.BreedsTest;
 
 import com.company.controller.BreedsController;
 import com.company.model.entity.Breeds;
+import com.company.model.entity.Species;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,17 @@ public class BreedsTest {
         notNull(result.getBody().getClass());
         assertTrue(result.getBody() instanceof Breeds);
         assertEquals(((Breeds) result.getBody()).getId(), 1);
+    }
+
+    @Test
+    public void testCreateSpecies() {
+
+        Species species = new Species(1,"gato");
+        Breeds newBreeds = new Breeds("prueba1", species);
+        ResponseEntity<Object> result = breedsController.createBreeds(newBreeds);
+
+        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(newBreeds, result.getBody());
+        //TODO: Borrar registro de la BD
     }
 }

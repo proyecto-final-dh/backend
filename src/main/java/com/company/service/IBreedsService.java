@@ -7,4 +7,5 @@ import java.util.List;
 public interface IBreedsService {
     List<Breeds> getAllBreeds();
     Breeds getBreedsById(int id);
+    Breeds createBreeds(Breeds breeds);
 }
