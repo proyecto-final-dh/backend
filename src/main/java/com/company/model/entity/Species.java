@@ -12,7 +12,12 @@ public class Species {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotNull
-    private String name;
+    private String name1;
+    public Species() {
+    }
+    public Species(String name1) {
+        this.name1 = name1;
+    }
 
     public int getId() {
         return id;
@@ -23,10 +28,10 @@ public class Species {
     }
 
     public String getName() {
-        return name;
+        return name1;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name1 = name;
     }
 }

@@ -1,8 +1,6 @@
 package com.company.service;
 import com.company.model.entity.Species;
 import com.company.repository.ISpeciesRepository;
-import org.hibernate.FetchNotFoundException;
-import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -37,7 +35,7 @@ public class SpeciesService implements ISpeciesService{
         if (species.getName() == null)
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Name is required");
-        if(speciesRepository.findByName(species.getName()).isPresent())
+        if(speciesRepository.findByName1(species.getName()).isPresent())
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Species already created");
         return speciesRepository.save(species);
