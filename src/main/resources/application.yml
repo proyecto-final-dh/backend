@@ -9,3 +9,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+
+resqpet:
+  app:
+    module-name: ResQPet
+    api-version: 1.0.0
