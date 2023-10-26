@@ -25,9 +25,9 @@ public class LocationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Location> findById(@PathVariable int id) {
+    public ResponseEntity<Location> findById(@PathVariable Long id) {
         try {
-            Location location = locationService.findById((long) id);
+            Location location = locationService.findById(id);
             return ResponseEntity.ok(location);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
