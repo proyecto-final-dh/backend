@@ -33,7 +33,7 @@ public class LocationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Location> findById(@PathVariable Long id) {
+    public ResponseEntity<Location> findById(@PathVariable int id) {
         try {
             Location location = locationService.findById(id);
             return ResponseEntity.ok(location);
@@ -43,10 +43,10 @@ public class LocationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Location> update(@PathVariable Long id, @RequestBody Location location) {
+    public ResponseEntity<Location> update(@PathVariable int id, @RequestBody Location location) {
         try {
             Location existLocation = locationService.findById(id);
-            if (id != null && existLocation != null) {
+            if (existLocation != null) {
                 return ResponseEntity.ok(locationService.update(id, location));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -68,7 +68,7 @@ public class LocationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable Long id) {
+    public ResponseEntity<String> deleteById(@PathVariable int id) {
         try{
             locationService.deleteById(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Location deleted");

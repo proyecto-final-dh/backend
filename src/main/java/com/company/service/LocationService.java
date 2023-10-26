@@ -19,7 +19,7 @@ public class LocationService implements ILocationService{
         return locations;
     }
 
-    public Location findById(Long id) throws Exception {
+    public Location findById(int id) throws Exception {
         try {
             Optional<Location> location = locationRepository.findById(id);
             if (location.isPresent()) {
@@ -36,10 +36,10 @@ public class LocationService implements ILocationService{
         return locationRepository.findByCountryAndCityAndState(country, city, state);
     }
 
-       public Location update(Long id, Location location) throws Exception{
-        Boolean exists = locationRepository.existsById(id);
+       public Location update(int id, Location location) throws Exception{
+        Optional<Location> exists = locationRepository.findById(id);
         try {
-            if(id != null && exists) {
+            if(exists.isPresent()) {
                 {
                     location.setId(id);
                     return locationRepository.save(location);
@@ -63,10 +63,10 @@ public class LocationService implements ILocationService{
     }
 
 
-    public void deleteById(Long id) throws Exception {
-        Boolean exists = locationRepository.existsById(id);
+    public void deleteById(int id) throws Exception {
+        Optional<Location> exists = locationRepository.findById(id);
         try {
-            if(id != null && exists) {
+            if(exists.isPresent()) {
                 {
                     locationRepository.deleteById(id);
                 }

@@ -23,7 +23,7 @@ public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private Long id;
+    private int id;
     @NotEmpty(message = "Country is mandatory")
     private String country;
     @NotEmpty(message = "City is mandatory")
