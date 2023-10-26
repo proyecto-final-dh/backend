@@ -38,4 +38,6 @@ public class Species {
     public void setName(String name) {
         this.name1 = name;
     }
+
 }
+
