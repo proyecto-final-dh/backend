@@ -57,7 +57,7 @@ public class BreedsController {
                     HttpStatus.BAD_REQUEST, ex.getMessage());
         }catch (Exception ex) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, ex.getMessage());
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         }
     }
 }
