@@ -25,27 +25,43 @@ public class PetsTest {
 
     @Test
     public void testGetAllPets() {
+        Pets newPet = new Pets("Dog", "Available", "Medium", "Male", "A friendly dog");
+        ResponseEntity<Object> result = petController.createPet(newPet);
+
+        Pets newPet2 = new Pets("Cat", "Available", "Medium", "Male", "A friendly dog");
+        ResponseEntity<Object> result2 = petController.createPet(newPet2);
+
         List<Pets> petsList = petController.getAllPets(0,9);
         System.out.println(petsList);
         assertTrue(petsList.size() != 0);
+
+        petController.deletePet(((Pets) result.getBody()).getId());
+        petController.deletePet(((Pets) result2.getBody()).getId());
     }
 
     @Test
     public void testGetPetById() {
-        int id = 1;
-        ResponseEntity<Object> result = petController.getPetById(id);
-        System.out.println(result);
-        assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertTrue(result.getBody() instanceof Pets);
-        assertEquals(((Pets) result.getBody()).getId(), 1);
+        Pets newPet = new Pets("Dog", "Available", "Medium", "Male", "A friendly dog");
+        ResponseEntity<Object> createResult = petController.createPet(newPet);
+
+        int id = ((Pets) createResult.getBody()).getId();
+
+        ResponseEntity<Object> getResult = petController.getPetById(id);
+        System.out.println(getResult);
+
+        assertEquals(HttpStatus.OK, getResult.getStatusCode());
+        assertTrue(getResult.getBody() instanceof Pets);
+        assertEquals(((Pets) getResult.getBody()).getId(), id);
+        // Eliminar la entidad después de la prueba
+        petController.deletePet(((Pets) createResult.getBody()).getId());
     }
+
 
     @Test
     public void testCreatePet() {
         Pets newPet = new Pets("Dog", "Available", "Medium", "Male", "A friendly dog");
         ResponseEntity<Object> result = petController.createPet(newPet);
 
-        System.out.println(result);
         assertEquals(HttpStatus.CREATED, result.getStatusCode());
         assertEquals(newPet, result.getBody());
 
@@ -61,20 +77,12 @@ public class PetsTest {
         int id = bodyResult.getId();
 
         Pets updatedPet = new Pets("CatUpdate", "Adopted", "Small", "Female", "A friendly and adopted cat");
-
-        // Llamada para actualizar la mascota y obtener la respuesta
         ResponseEntity<Object> resultUpdateResponse = petController.updatePet(id, updatedPet);
-
-        // Verifica que la actualización se haya realizado con éxito
         assertEquals(HttpStatus.OK, resultUpdateResponse.getStatusCode());
 
-        // Extrae la entidad Pets actualizada del cuerpo de la respuesta
         Pets resultUpdate = (Pets) resultUpdateResponse.getBody();
-
-        // Verifica que el nombre de la mascota actualizada coincida con el nombre proporcionado
         assertEquals(resultUpdate.getName1(), updatedPet.getName1());
 
-        // Cleanup: Delete the updated pet
         petController.deletePet(id);
     }
 

@@ -1,21 +1,16 @@
 package com.company.model.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import org.antlr.v4.runtime.misc.NotNull;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
-@EqualsAndHashCode
+
 @Entity
-@Table(name="pets")
 public class Pets {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private int id;
     @NotNull
     private String name1;
@@ -37,6 +32,18 @@ public class Pets {
         this.description1 = description1;
     }
 
+    public Pets(int id, String name1, String status1, String size, String gender, String description1) {
+        this.id = id;
+        this.name1 = name1;
+        this.status1 = status1;
+        this.size = size;
+        this.gender = gender;
+        this.description1 = description1;
+    }
+
+
+    public Pets() {
+    }
 
     public int getId() {
         return id;

@@ -502,16 +502,10 @@ INSERT INTO locations (id, country, city, state) VALUES
 (483, 'Colombia', 'Cota', 'Cundinamarca');
 
 
-
 -- Agrego las especies
 INSERT INTO species (name1) VALUES ('gato'), ('perro'), ('caballo');
 
--- Agrego Pet
--- INSERT INTO pets (name1, status1, size, gender, description1) VALUES ('pepe'), ('dead'),('M'),('M'), ('text...');
-
-
 -- agrego las razas de perro
-
 INSERT INTO breeds (speciesID, name1) VALUES
 (2, 'Akita Inu'),
 (2, 'Beagle'),
