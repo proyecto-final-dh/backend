@@ -18,6 +18,10 @@ public class Species {
     public Species(String name1) {
         this.name1 = name1;
     }
+    public Species(int id, String name1) {
+        this.id = id;
+        this.name1 = name1;
+    }
 
     public int getId() {
         return id;
