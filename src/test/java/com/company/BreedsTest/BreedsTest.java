@@ -6,7 +6,6 @@ import com.company.model.entity.Breeds;
 import com.company.model.entity.Species;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +56,6 @@ public class BreedsTest {
     public void testCreateBreeds() {
         ResponseEntity<Object> result = breedsController.createBreeds(newBreeds);
         assertEquals(HttpStatus.CREATED, result.getStatusCode());
-        //assertEquals(newBreeds, result.getBody());
 
         int breedId = ((Breeds) result.getBody()).getId();
         ResponseEntity<Object> resultDelete = breedsController.deleteBreeds(breedId);
