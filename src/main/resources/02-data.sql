@@ -504,7 +504,11 @@ INSERT INTO locations (id, country, city, state) VALUES
 
 
 -- Agrego las especies
-INSERT INTO species (name1) VALUES ('gato'), ('perro');
+INSERT INTO species (name1) VALUES ('gato'), ('perro'), ('caballo');
+
+-- Agrego Pet
+-- INSERT INTO pets (name1, status1, size, gender, description1) VALUES ('pepe'), ('dead'),('M'),('M'), ('text...');
+
 
 -- agrego las razas de perro
 

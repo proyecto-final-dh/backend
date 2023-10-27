@@ -1,5 +1,5 @@
 package com.company.controller;
-import com.company.model.entity.Pet;
+import com.company.model.entity.Pets;
 import com.company.service.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,12 +26,12 @@ public class PetController {
 
 
     @GetMapping
-    public List<Pet> getAllPets(
+    public List<Pets> getAllPets(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "9") int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
-            Page<Pet> petPage = petService.findAll(pageable);
+            Page<Pets> petPage = petService.findAll(pageable);
             return petPage.getContent();
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -40,10 +40,10 @@ public class PetController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getPetById(@PathVariable Long id) {
+    public ResponseEntity<Object> getPetById(@PathVariable int id) {
         try {
-            Pet pet = petService.findById(id);
-            return ResponseEntity.ok(pet);
+            Pets pets = petService.findById(id);
+            return ResponseEntity.ok(pets);
         } catch (ResponseStatusException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         } catch (Exception e) {
@@ -52,10 +52,10 @@ public class PetController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createPet(@RequestBody Pet pet) {
+    public ResponseEntity<Object> createPet(@RequestBody Pets pets) {
         try {
-            Pet newPet = petService.save(pet);
-            return new ResponseEntity<>(newPet, HttpStatus.CREATED);
+            Pets newPets = petService.save(pets);
+            return new ResponseEntity<>(newPets, HttpStatus.CREATED);
         } catch (ResponseStatusException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         } catch (Exception ex) {
@@ -64,10 +64,10 @@ public class PetController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updatePet(@PathVariable Long id, @RequestBody Pet pet) {
+    public ResponseEntity<Object> updatePet(@PathVariable int id, @RequestBody Pets pets) {
         try {
-            Pet updatedPet = petService.update(id, pet);
-            return ResponseEntity.ok(updatedPet);
+            Pets updatedPets = petService.update(id, pets);
+            return ResponseEntity.ok(updatedPets);
         } catch (ResponseStatusException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         } catch (Exception e) {
@@ -76,7 +76,7 @@ public class PetController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deletePet(@PathVariable Long id) {
+    public ResponseEntity<Object> deletePet(@PathVariable int id) {
         try {
             petService.deleteById(id);
             return ResponseEntity.noContent().build();
