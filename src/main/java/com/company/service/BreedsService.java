@@ -40,15 +40,25 @@ public class BreedsService implements IBreedsService{
         if (breeds.getName1() == null)
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Name is required");
+        if(breedsRepository.findByName1(breeds.getName1()).isPresent())
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Breed already created");
         int speciesID = breeds.getSpecies().getId();
         if (speciesID == 0)
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Species id is required");
-        if(breedsRepository.findByName1(breeds.getName1()).isPresent())
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Breed already created");
         Species species = speciesService.getSpeciesById(speciesID);
         breeds.setSpecies(species);
         return breedsRepository.save(breeds);
+    }
+
+    @Override
+    public void deleteBreeds(int id) {
+        Optional<Breeds> species = breedsRepository.findById(id);
+        if (species.isPresent()) {
+            breedsRepository.deleteById(id);
+        }else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Breed not found");
+        }
     }
 }
