@@ -65,7 +65,6 @@ public class PetsTest {
         assertEquals(HttpStatus.CREATED, result.getStatusCode());
         assertEquals(newPet, result.getBody());
 
-        // Cleanup: Delete the created pet
         petController.deletePet(((Pets) result.getBody()).getId());
     }
 
