@@ -27,12 +27,13 @@ public class BreedsTest {
     @Autowired
     private SpeciesController speciesController;
     private static Breeds newBreeds;
+    private static Species speciesId1;
     @BeforeAll
     public void setup() {
         // Configurar datos de prueba
         int speciesID = 1;
-        Species speciesId1 = (Species) speciesController.getSpeciesById(speciesID).getBody();
-        newBreeds = new Breeds("prueba1", speciesId1);
+        speciesId1 = (Species) speciesController.getSpeciesById(speciesID).getBody();
+        newBreeds = new Breeds("newBreed", speciesId1);
     }
     @AfterAll
     public void teardown() {
@@ -60,6 +61,19 @@ public class BreedsTest {
         int breedId = ((Breeds) result.getBody()).getId();
         ResponseEntity<Object> resultDelete = breedsController.deleteBreeds(breedId);
         assertEquals(HttpStatus.NO_CONTENT, resultDelete.getStatusCode());
+    }
+    @Test
+    public void testUpdateBreeds() {
+        ResponseEntity<Object> result = breedsController.createBreeds(newBreeds);
+        var bodyResult = ((Breeds) result.getBody());
+        int id = bodyResult.getId();
+
+        Breeds updatedBreeds = new Breeds("pajaroUpdate",speciesId1);
+
+        Breeds resultUpdate = breedsController.updateBreeds(id, updatedBreeds);
+        assertEquals(resultUpdate.getName1(), resultUpdate.getName1());
+
+        breedsController.deleteBreeds(id);
     }
     @Test
     public void testDeleteBreeds() {
