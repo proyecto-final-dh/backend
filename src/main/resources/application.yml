@@ -14,3 +14,7 @@ resqpet:
   app:
     module-name: ResQPet
     api-version: 1.0.0
+    
+server:
+  error:
+    include-message: always

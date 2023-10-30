@@ -22,7 +22,7 @@ public class SpeciesService implements ISpeciesService{
         return speciesRepository.findAll();
     }
 
-    public Species getSpeciesById(int id) throws Exception {
+    public Species getSpeciesById(int id) {
         Optional<Species> species = speciesRepository.findById(id);
         if (species.isPresent()) {
             return species.get();
