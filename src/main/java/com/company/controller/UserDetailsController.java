@@ -28,14 +28,18 @@ public class UserDetailsController {
     public ResponseEntity<ApiResponse<List<UserDetails>, Object>> findAll(){
         List<UserDetails> items = service.findAll();
         return responsesBuilder.buildResponse(HttpStatus.OK.value(),"Get User Details List successfully",items, null);
-
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<ApiResponse<UserDetails, Object>> findById(@PathVariable("id") String id) throws ResourceNotFoundException {
+    public ResponseEntity<ApiResponse<UserDetails, Object>> findById(@PathVariable("id") Long id) throws ResourceNotFoundException {
         UserDetails item = service.findById(id);
         return responsesBuilder.buildResponse(HttpStatus.OK.value(),"Get User Detail successfully", item,  null);
+    }
 
+    @GetMapping(path = "/user/{id}")
+    public ResponseEntity<ApiResponse<UserDetails, Object>> findByUserId(@PathVariable("id") String id) throws ResourceNotFoundException {
+        UserDetails item = service.findByUserId(id);
+        return responsesBuilder.buildResponse(HttpStatus.OK.value(),"Get User Detail successfully", item,  null);
     }
 
     @PostMapping
@@ -45,17 +49,15 @@ public class UserDetailsController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<ApiResponse<UserDetails, Object>> update(@PathVariable("id") String id, @Valid @RequestBody UserDetails user) throws ResourceNotFoundException, BadRequestException {
+    public ResponseEntity<ApiResponse<UserDetails, Object>> update(@PathVariable("id") Long id, @Valid @RequestBody SaveUserDetailsDto user) throws ResourceNotFoundException, BadRequestException {
         UserDetails response = service.update(id, user);
         return responsesBuilder.buildResponse(HttpStatus.CREATED.value(),"User Details updated successfully", response, null);
-
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<ApiResponse> deleteById(@PathVariable("id") String id) throws ResourceNotFoundException, BadRequestException {
+    public ResponseEntity<ApiResponse> deleteById(@PathVariable("id") Long id) throws ResourceNotFoundException, BadRequestException {
         service.deleteById(id);
         return responsesBuilder.buildResponse(HttpStatus.OK.value(),"User Details deleted successfully", null, null);
-
     }
 
 }

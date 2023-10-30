@@ -1,12 +1,7 @@
 package com.company.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,9 +24,12 @@ import java.util.Date;
 @Table(name = "user_details")
 public class UserDetails {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
     @NotEmpty(message = "El ID del usuario es obligatorio.")
-    @Column(name = "id", nullable=false)
-    private String id;
+    @Column(name = "user_id", nullable=false)
+    private String userId;
 
     @NotEmpty(message = "El celular es obligatorio.")
     @Column(name = "cellphone", nullable=false)
@@ -51,10 +49,16 @@ public class UserDetails {
     @Column(name = "updated_at")
     private Date updated_at;
 
-    public UserDetails(String id, String cellphone, Location location) {
-        this.id = id;
+    public UserDetails(String userId, String cellphone, Location location) {
+        this.userId = userId;
         this.cellphone = cellphone;
         this.location = location;
     }
 
+    public UserDetails(int id, String userId, String cellphone, Location location) {
+        this.id = id;
+        this.userId = userId;
+        this.cellphone = cellphone;
+        this.location = location;
+    }
 }
