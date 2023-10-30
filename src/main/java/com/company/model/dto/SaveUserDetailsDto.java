@@ -1,0 +1,24 @@
+package com.company.model.dto;
+
+import jakarta.persistence.JoinColumn;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class SaveUserDetailsDto {
+    @NotEmpty(message = "El ID del usuario es obligatorio.")
+    private String id;
+
+    @NotEmpty(message = "El celular es obligatorio.")
+    private String cellphone;
+
+    @NotNull(message = "El ID del a ubicación es obligatorio.")
+    private int location_id;
+}
