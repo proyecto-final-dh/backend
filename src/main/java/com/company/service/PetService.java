@@ -59,7 +59,7 @@ public class PetService implements  IPetService{
     }
 
     public Pets save(Pets pets) throws Exception {
-        if (pets.getName1() != null && !pets.getName1().isEmpty()) {
+        if (!pets.getName1().isEmpty()) {
             return IPetsRepository.save(pets);
         } else {
             throw new Exception("Pet Name not found");
