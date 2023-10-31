@@ -1,6 +1,8 @@
 package com.company.StoriesTest;
 
 import java.util.Date;
+import java.util.List;
+
 import com.company.controller.BreedsController;
 import com.company.controller.StoriesController;
 import com.company.model.entity.Stories;
@@ -31,5 +33,24 @@ public class StoriesTest {
         System.out.println("Id: " + ((Stories) result.getBody()).getId() + " - Date1: " + ((Stories) result.getBody()).getDate1());
         //storiesController.deleteStory(((Stories) result.getBody()).getId());
     }
+
+
+    @Test
+    public void testGetAllStories() {
+        Stories newStory = new Stories(new Date());
+        ResponseEntity<Object> result = storiesController.createStory(newStory);
+
+        Stories newStory2 = new Stories(new Date());
+        ResponseEntity<Object> result2 = storiesController.createStory(newStory2);
+
+        List<Stories> storiesList = storiesController.getAllStories();
+        System.out.println(storiesList);
+        assertTrue(storiesList.size() != 0);
+
+        //storiesController.deleteStory(((Stories) result.getBody()).getId());
+        //storiesController.deleteStory(((Stories) result2.getBody()).getId());
+    }
+
+
 
 }
