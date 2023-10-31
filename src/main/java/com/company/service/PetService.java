@@ -58,15 +58,11 @@ public class PetService implements  IPetService{
         }
     }
 
-
-
     public Pets save(Pets pets) throws Exception {
-
-        Pets ifExistsLocation = IPetsRepository.findByName1(pets.getName1());
-        if (ifExistsLocation == null) {
+        if (pets.getName1() != null && !pets.getName1().isEmpty()) {
             return IPetsRepository.save(pets);
         } else {
-            throw new Exception("That pet already exist");
+            throw new Exception("Pet Name not found");
         }
     }
 

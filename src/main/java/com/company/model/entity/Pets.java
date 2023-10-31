@@ -92,4 +92,17 @@ public class Pets {
     public void setDescription1(String description1) {
         this.description1 = description1;
     }
+
+
+    @Override
+    public String toString() {
+        return "Pets{" +
+                "id=" + id +
+                ", name1='" + name1 + '\'' +
+                ", status1='" + status1 + '\'' +
+                ", size='" + size + '\'' +
+                ", gender='" + gender + '\'' +
+                ", description1='" + description1 + '\'' +
+                '}';
+    }
 }
