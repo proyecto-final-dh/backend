@@ -23,17 +23,12 @@ public class StoriesTest {
 
     @Test
     public void testCreateStory() {
-        // Crea una instancia de la historia que se va a crear
         Date date = new Date(123, 9, 29);
         Stories newStory = new Stories(date);
-
         ResponseEntity<Object> result = storiesController.createStory(newStory);
-
         assertEquals(HttpStatus.CREATED, result.getStatusCode());
         assertEquals(newStory.getDate1(), ((Stories) result.getBody()).getDate1());
-
         System.out.println("Id: " + ((Stories) result.getBody()).getId() + " - Date1: " + ((Stories) result.getBody()).getDate1());
-
         //storiesController.deleteStory(((Stories) result.getBody()).getId());
     }
 

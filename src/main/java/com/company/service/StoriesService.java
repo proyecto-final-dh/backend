@@ -18,10 +18,13 @@ public class StoriesService implements IStoriesService {
 
     @Override
     public Stories createStories(Stories stories) {
+        System.out.println(stories);
         if (stories.getDate1() == null) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Date is required");
         }
+
+
 
         return storiesRepository.save(stories);
     }

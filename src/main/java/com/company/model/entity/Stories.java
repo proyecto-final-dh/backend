@@ -4,9 +4,24 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.util.Date;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@EqualsAndHashCode
 @Entity
+@Table(name="history_states")
 public class Stories {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,26 +29,8 @@ public class Stories {
 
     private Date date1;
 
-    public Stories() {
-    }
-
     public Stories(Date date1) {
         this.date1 = date1;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Date getDate1() {
-        return date1;
-    }
-
-    public void setDate1(Date date1) {
-        this.date1 = date1;
-    }
 }
