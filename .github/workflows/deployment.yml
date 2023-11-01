@@ -1,0 +1,34 @@
+name: Deployment
+on: 
+  push:
+    branches: [deployment]
+
+jobs:
+  build:
+    runs-on: [ubuntu-lastest]
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Build Project
+        run: mvn clean instal -DskipTests
+      - name: Login to docker Hub
+        run: docker login -u PIResQPet -p ResQPet2023* 
+      - name: Build docker Image
+        run: docker build -t piresqpet/backend
+      - name: Publish Image to DockerHub
+        run: docker push piresqpet/backend:latest
+  deploy:
+    needs: build
+    runs-on: [aws-ec2]
+    steps:
+      - name: Pull image from docker hub
+        run: docker pull piresqpet/backend:latest
+      - name: Delete old container
+        run: docker rm -f backend-resqpet 
+      - name: Run docker container
+        run: docker run -d -p 8080:8080 --name backend-resqpet piresqpet/backend
