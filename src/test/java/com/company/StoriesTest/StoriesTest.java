@@ -31,7 +31,7 @@ public class StoriesTest {
         assertEquals(HttpStatus.CREATED, result.getStatusCode());
         assertEquals(newStory.getDate1(), ((Stories) result.getBody()).getDate1());
         System.out.println("Id: " + ((Stories) result.getBody()).getId() + " - Date1: " + ((Stories) result.getBody()).getDate1());
-        //storiesController.deleteStory(((Stories) result.getBody()).getId());
+        storiesController.deleteStory(((Stories) result.getBody()).getId());
     }
 
 
@@ -47,9 +47,45 @@ public class StoriesTest {
         System.out.println(storiesList);
         assertTrue(storiesList.size() != 0);
 
-        //storiesController.deleteStory(((Stories) result.getBody()).getId());
-        //storiesController.deleteStory(((Stories) result2.getBody()).getId());
+        storiesController.deleteStory(((Stories) result.getBody()).getId());
+        storiesController.deleteStory(((Stories) result2.getBody()).getId());
     }
+
+
+    @Test
+    public void testGetStoryById() {
+        Stories newStory = new Stories(new Date());
+        ResponseEntity<Object> createResult = storiesController.createStory(newStory);
+
+        int id = ((Stories) createResult.getBody()).getId();
+
+        ResponseEntity<Object> getResult = storiesController.getStoryById(id);
+        System.out.println(getResult);
+
+        assertEquals(HttpStatus.OK, getResult.getStatusCode());
+        assertTrue(getResult.getBody() instanceof Stories);
+        assertEquals(((Stories) getResult.getBody()).getId(), id);
+
+        // Eliminar la entidad después de la prueba
+        storiesController.deleteStory(((Stories) createResult.getBody()).getId());
+    }
+
+
+
+    @Test
+    public void testDeleteStory() {
+        Stories newStory = new Stories(new Date());
+        ResponseEntity<Object> result = storiesController.createStory(newStory);
+        var bodyResult = ((Stories) result.getBody());
+        int id = bodyResult.getId();
+
+        ResponseEntity<Object> resultDelete = storiesController.deleteStory(id);
+        assertEquals(HttpStatus.NO_CONTENT, resultDelete.getStatusCode());
+    }
+
+
+
+
 
 
 

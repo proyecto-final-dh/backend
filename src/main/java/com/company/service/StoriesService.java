@@ -51,6 +51,16 @@ public class StoriesService implements IStoriesService {
     }
 
 
+    public void deleteStory(int id) {
+        Optional<Stories> story = storiesRepository.findById(id);
+        if (story.isPresent()) {
+            storiesRepository.deleteById(id);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Story not found");
+        }
+    }
+
+
 
 
 
