@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,6 +61,10 @@ public class BreedsController {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         }
+    }
+    @PutMapping("/{id}")
+    public Breeds updateBreeds(@PathVariable int id, @RequestBody Breeds updatedBreed) {
+        return breedsService.updateBreeds(id, updatedBreed);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteBreeds(@PathVariable int id) {
