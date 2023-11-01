@@ -17,7 +17,7 @@ jobs:
       - name: Build Project
         run: mvn clean install -DskipTests
       - name: Login to docker Hub
-        run: docker login -u piresqpet@gmail.com --password ResQPet2023* 
+        run: docker login -u ${{secrets.DOCKER_USERNAME}} --password ${{secrets.DOCKER_PASSWORD}}
       - name: Build docker Image
         run: docker build -t piresqpet/backend
       - name: Publish Image to DockerHub
