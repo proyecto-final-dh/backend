@@ -15,7 +15,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - name: Build Project
-        run: mvn clean instal -DskipTests
+        run: mvn clean install -DskipTests
       - name: Login to docker Hub
         run: docker login -u PIResQPet -p ResQPet2023* 
       - name: Build docker Image
