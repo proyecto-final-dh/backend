@@ -1,4 +1,4 @@
-FROM ecliplse-temurin:17-jdk-alpine
+FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
 COPY target/backend.jar backend.jar
 EXPOSE 8080
