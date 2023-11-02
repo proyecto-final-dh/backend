@@ -1,12 +1,12 @@
 package com.company.service;
 
+import org.springframework.web.server.ResponseStatusException;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import com.company.model.dto.ImageWithTitle;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import static com.company.constants.Constants.ALLOWED_IMAGE_EXTENSIONS;
 import static com.company.constants.Constants.PET_IMAGES_FOLDER;
 
 @Service
@@ -63,6 +64,12 @@ public class BucketImageService {
         List<String> urls = new ArrayList<>();
         String fileUrl = "";
         for (MultipartFile multipartFile : files) {
+
+            if(!validateImageFile(files)) {
+                throw new ResponseStatusException(
+                        org.springframework.http.HttpStatus.BAD_REQUEST, "Only images are allowed");
+            }
+
             try {
                 File file = convertMultiPartToFile(multipartFile);
                 String fileName = PET_IMAGES_FOLDER + generateFileName(multipartFile);
@@ -77,4 +84,12 @@ public class BucketImageService {
         return urls;
     }
 
+    private Boolean validateImageFile(MultipartFile[] file) {
+        for (MultipartFile f : file) {
+            if (!ALLOWED_IMAGE_EXTENSIONS.contains(f.getContentType())) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
