@@ -22,8 +22,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 public class BucketImageTest {
-//    @Autowired
-//    private BucketImagesController bucketImagesController;
     @Autowired
     private WebApplicationContext webApplicationContext;
 
