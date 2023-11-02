@@ -10,7 +10,14 @@ services:
       MYSQL_USER: 'user'
       MYSQL_PASSWORD: 'password'
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
       - ./src/main/resources/01-init.sql:/docker-entrypoint-initdb.d/01-init.sql
       - ./src/main/resources/02-data.sql:/docker-entrypoint-initdb.d/02-data.sql
+  backend:
+    image: piresqpet/backend
+    container_name: backend-resqpet
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
