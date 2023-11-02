@@ -54,6 +54,15 @@ CREATE TABLE history_states (
                                 userID INT NOT NULL
 );
 
+CREATE TABLE user_details (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id CHAR(36) UNIQUE NOT NULL,
+    location_id INT NOT NULL,
+    cellphone VARCHAR(20) NOT NULL,
+    created_at VARCHAR(20) NOT NULL,
+    updated_at VARCHAR(20) NOT NULL
+);
+
 -- Agregando Claves  forÃ¡neas
 
 -- mascotas
