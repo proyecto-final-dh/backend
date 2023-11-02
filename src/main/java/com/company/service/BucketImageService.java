@@ -8,43 +8,39 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import com.company.model.dto.ImageWithTitle;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+
+import static com.company.constants.Constants.PET_IMAGES_FOLDER;
 
 @Service
 public class BucketImageService {
 
     private S3Client s3client;
-
-    @Value("${aws.s3.bucket}")
-    private String bucketName;
-    @Value("${aws.access_key_id}")
-    private String accessKey;
-    @Value("${aws.secret_access_key}")
-    private String secretKey;
-
-    private String endpointUrl = "https://s3imagesgittravel.s3.sa-east-1.amazonaws.com";
+    String bucketName = System.getenv("BUCKET_NAME");
+    String accessKey = System.getenv("S3_ACCESS_KEY_ID");
+    String secretKey = System.getenv("S3_SECRET_ACCESS_KEY");
+    private String endpointUrl = String.format("https://%s.s3.us-east-1.amazonaws.com", bucketName);
 
     @PostConstruct
     private void initializeAmazon() {
         AwsBasicCredentials credentials = AwsBasicCredentials.create(this.accessKey, this.secretKey);
         this.s3client = S3Client.builder()
-                .region(Region.SA_EAST_1)
+                .region(Region.US_EAST_1)
                 .credentialsProvider(StaticCredentialsProvider.create(credentials))
                 .build();
     }
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
-        File convFile = new File(file.getOriginalFilename());
+        File convFile = new File(Objects.requireNonNull(file.getOriginalFilename()));
         FileOutputStream fos = new FileOutputStream(convFile);
         fos.write(file.getBytes());
         fos.close();
@@ -52,7 +48,7 @@ public class BucketImageService {
     }
 
     private String generateFileName(MultipartFile multiPart) {
-        return new Date().getTime() + "-" + multiPart.getOriginalFilename().replace(" ", "_");
+        return new Date().getTime() + "-" + Objects.requireNonNull(multiPart.getOriginalFilename()).replace(" ", "_");
     }
 
     private void uploadFileTos3bucket(String fileName, File file) {
@@ -69,7 +65,7 @@ public class BucketImageService {
         for (MultipartFile multipartFile : files) {
             try {
                 File file = convertMultiPartToFile(multipartFile);
-                String fileName = generateFileName(multipartFile);
+                String fileName = PET_IMAGES_FOLDER + generateFileName(multipartFile);
                 fileUrl = endpointUrl + "/" + fileName;
                 urls.add(fileUrl);
                 uploadFileTos3bucket(fileName, file);
@@ -81,41 +77,4 @@ public class BucketImageService {
         return urls;
     }
 
-    public List<ImageWithTitle> uploadFileWithTitle(MultipartFile[] files) {
-        List<ImageWithTitle> images = new ArrayList<>();
-        String fileUrl = "";
-        for (MultipartFile multipartFile : files) {
-            try {
-                ImageWithTitle NewImage = new ImageWithTitle();
-                File file = convertMultiPartToFile(multipartFile);
-                String fileName = generateFileName(multipartFile);
-                fileUrl = endpointUrl + "/" + fileName;
-                NewImage.setUrl(fileUrl);
-                NewImage.setTitle(multipartFile.getOriginalFilename());
-                images.add(NewImage);
-                uploadFileTos3bucket(fileName, file);
-                file.delete();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return images;
-    }
-
-    public ImageWithTitle uploadMainImage(MultipartFile mainFile) {
-        ImageWithTitle image = new ImageWithTitle();
-        String fileUrl = "";
-        try {
-            File file = convertMultiPartToFile(mainFile);
-            String fileName = generateFileName(mainFile);
-            fileUrl = endpointUrl + "/" + fileName;
-            image.setUrl(fileUrl);
-            image.setTitle(mainFile.getOriginalFilename());
-            uploadFileTos3bucket(fileName, file);
-            file.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return image;
-    }
 }

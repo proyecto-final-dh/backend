@@ -14,13 +14,6 @@ resqpet:
   app:
     module-name: ResQPet
     api-version: 1.0.0
-
-
-aws:
-  s3:
-    bucket: System.getenv("BUCKET_NAME");
-  access_key_id: System.getenv("S3_SECRET_ACCESS_KEY");
-  secret_access_key: System.getenv("S3_ACCESS_KEY_ID");
     
 server:
   error:
