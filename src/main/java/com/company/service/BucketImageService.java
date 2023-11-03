@@ -33,7 +33,7 @@ public class BucketImageService {
     private S3Client s3client;
     String bucketName = System.getenv("BUCKET_NAME");
     String accessKey = System.getenv("S3_ACCESS_KEY_ID");
-    String secretKey = System.getenv("S3_SECRET_ACCESS_KEY");
+        String secretKey = System.getenv("S3_SECRET_ACCESS_KEY");
     private String endpointUrl = String.format("https://%s.s3.us-east-1.amazonaws.com", bucketName);
 
     @PostConstruct

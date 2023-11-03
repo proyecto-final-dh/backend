@@ -555,6 +555,19 @@ INSERT INTO breeds (speciesID, name1) VALUES
 (1, 'Siberiano'),
 (1, 'Siames');
 
+-- Insertar pruebas resgistro de usuarios
+
+INSERT INTO users (first_name, last_name, locationID, phone)
+VALUES ('John', 'Doe', 1, '123-456-7890');
+INSERT INTO users (first_name, last_name, locationID, phone)
+VALUES ('Jane', 'Smith', 2, '987-654-3210');
+
+-- Insertar pruebas resgistro de mascostas
+INSERT INTO pets (name1, ownerID, breedID, status1, locationID, size, gender, description1)
+VALUES ('Luna', 2, 2, 'Activo', 4, 'Pequeño', 'Hembra', 'Luna es una gata tranquila y cariñosa.');
+INSERT INTO pets (name1, ownerID, breedID, status1, locationID, size, gender, description1)
+VALUES ('Rocky', 1, 3, 'Inactivo', 2, 'Grande', 'Macho', 'Rocky es un perro guardián leal.');
+
 SET SQL_SAFE_UPDATES = 0;
 
 -- select
