@@ -44,6 +44,13 @@ public class Pets {
     @JoinColumn(name = "breed_id")
     private Breeds breed;
 
+    @ManyToOne
+    @JoinColumn(name = "userDetails_id")
+    private UserDetails userDetails;
+
+    @ManyToOne
+    @JoinColumn(name = "location_id")
+    private Location location;
 
 
     public Pets(String name1, String status1, String size, String gender, String description1) {

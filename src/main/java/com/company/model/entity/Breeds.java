@@ -25,11 +25,6 @@ public class Breeds {
     private Species species;
 
 
-    @OneToMany(mappedBy = "breed")
-    private List<Pets> pets;
-
-
-
     public Breeds() {
     }
 
