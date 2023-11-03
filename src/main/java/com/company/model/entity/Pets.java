@@ -48,10 +48,6 @@ public class Pets {
     @JoinColumn(name = "userDetails_id")
     private UserDetails userDetails;
 
-    @ManyToOne
-    @JoinColumn(name = "location_id")
-    private Location location;
-
 
     public Pets(String name1, String status1, String size, String gender, String description1) {
         this.name1 = name1;
