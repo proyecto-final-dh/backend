@@ -15,11 +15,16 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 import static com.company.constants.Constants.ALLOWED_IMAGE_EXTENSIONS;
+import static com.company.constants.Constants.EMPTY_IMAGE;
+import static com.company.constants.Constants.INVALID_IMAGE_EXTENSION;
+import static com.company.constants.Constants.MAXIMUM_IMAGES_EXCEEDED;
+import static com.company.constants.Constants.MAXIMUM_IMAGE_SIZE_EXCEEDED;
 import static com.company.constants.Constants.PET_IMAGES_FOLDER;
 
 @Service
@@ -61,15 +66,12 @@ public class BucketImageService {
     }
 
     public List<String> uploadFile(MultipartFile[] files) {
+        validateFiles(files);
+
         List<String> urls = new ArrayList<>();
         String fileUrl = "";
+
         for (MultipartFile multipartFile : files) {
-
-            if(!validateImageFile(files)) {
-                throw new ResponseStatusException(
-                        org.springframework.http.HttpStatus.BAD_REQUEST, "Only images are allowed");
-            }
-
             try {
                 File file = convertMultiPartToFile(multipartFile);
                 String fileName = PET_IMAGES_FOLDER + generateFileName(multipartFile);
@@ -84,9 +86,36 @@ public class BucketImageService {
         return urls;
     }
 
-    private Boolean validateImageFile(MultipartFile[] file) {
-        for (MultipartFile f : file) {
+    private void validateFiles(MultipartFile[] files) {
+        if(files.length < 1) throw new ResponseStatusException(
+                org.springframework.http.HttpStatus.BAD_REQUEST, EMPTY_IMAGE);
+
+        if(files.length > 10) throw new ResponseStatusException(
+                org.springframework.http.HttpStatus.BAD_REQUEST, MAXIMUM_IMAGES_EXCEEDED);
+
+        if(!validateImageExtension(files)) {
+            throw new ResponseStatusException(
+                    org.springframework.http.HttpStatus.BAD_REQUEST, INVALID_IMAGE_EXTENSION);
+        }
+
+        if(!validateImageSize(files)) {
+            throw new ResponseStatusException(
+                    org.springframework.http.HttpStatus.BAD_REQUEST, MAXIMUM_IMAGE_SIZE_EXCEEDED);
+        }
+    }
+
+    private Boolean validateImageExtension(MultipartFile[] files) {
+        for (MultipartFile f : files) {
             if (!ALLOWED_IMAGE_EXTENSIONS.contains(f.getContentType())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private Boolean validateImageSize(MultipartFile[] files) {
+        for (MultipartFile f : files) {
+            if (f.getSize() > 1000000) {
                 return false;
             }
         }
