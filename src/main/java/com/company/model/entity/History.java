@@ -22,14 +22,14 @@ import java.util.Date;
 @EqualsAndHashCode
 @Entity
 @Table(name="history_states")
-public class Stories {
+public class History {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private Date date1;
 
-    public Stories(Date date1) {
+    public History(Date date1) {
         this.date1 = date1;
     }
 
