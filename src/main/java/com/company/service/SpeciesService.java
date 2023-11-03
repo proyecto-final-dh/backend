@@ -32,10 +32,10 @@ public class SpeciesService implements ISpeciesService{
     }
 
     public Species createSpecies(Species species) {
-        if (species.getName() == null)
+        if (species.getName1() == null)
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Name is required");
-        if(speciesRepository.findByName1(species.getName()).isPresent())
+        if(speciesRepository.findByName1(species.getName1()).isPresent())
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Species already created");
         return speciesRepository.save(species);
@@ -46,7 +46,7 @@ public class SpeciesService implements ISpeciesService{
 
         if (existingSpecies.isPresent()) {
             Species species = existingSpecies.get();
-            species.setName(updatedSpecies.getName());
+            species.setName1(updatedSpecies.getName1());
             return speciesRepository.save(species);
         } else {
             throw new ResponseStatusException(

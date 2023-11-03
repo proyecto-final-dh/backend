@@ -4,40 +4,29 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
 import org.antlr.v4.runtime.misc.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "species")
 public class Species {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotNull
+
+    @NotEmpty(message = "El nombre de la especie es obligatorio.")
     private String name1;
-    public Species() {
-    }
+
     public Species(String name1) {
         this.name1 = name1;
     }
-    public Species(int id, String name1) {
-        this.id = id;
-        this.name1 = name1;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name1;
-    }
-
-    public void setName(String name) {
-        this.name1 = name;
-    }
-
 }
-
