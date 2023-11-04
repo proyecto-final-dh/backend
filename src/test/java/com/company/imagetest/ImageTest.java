@@ -11,7 +11,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @SpringBootTest
@@ -23,9 +25,14 @@ public class ImageTest {
 
     @Test
      void testFindAll() {
+        Image image= new Image();
+        image.setPetID(1);
+        image.setUrl("urlDesdeBack");
+        imageService.save(image);
 
         List<Image> result = imageService.findAll();
         assertNotNull(result);
+        assertTrue(result.size()>0);
 
     }
 
@@ -34,7 +41,9 @@ public class ImageTest {
         Image image= new Image();
         image.setPetID(1);
         image.setUrl("urlDesdeBack");
-        imageService.save(image);
+        Image imageResponde = imageService.save(image);
+        assertNotNull(imageResponde);
+
 
     }
 

@@ -11,8 +11,6 @@ CREATE TABLE pets (
 
 );
 
-
-
 CREATE TABLE locations (
                            id INT AUTO_INCREMENT PRIMARY KEY,
                            country VARCHAR(255) NOT NULL,
@@ -38,14 +36,6 @@ CREATE TABLE pet_images (
                             url VARCHAR(2048) NOT NULL
 );
 
-CREATE TABLE users (
-                       id INT AUTO_INCREMENT PRIMARY KEY,
-                       first_name VARCHAR(255) NOT NULL,
-                       last_name VARCHAR(255) NOT NULL,
-                       locationID INT,
-                       phone VARCHAR(20) NOT NULL
-);
-
 CREATE TABLE history_states (
                                 id INT AUTO_INCREMENT PRIMARY KEY,
                                 petID INT NOT NULL,
@@ -54,26 +44,28 @@ CREATE TABLE history_states (
                                 userID INT NOT NULL
 );
 
+CREATE TABLE user_details (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id CHAR(36) UNIQUE NOT NULL,
+    location_id INT NOT NULL,
+    cellphone VARCHAR(20) NOT NULL,
+    created_at VARCHAR(20) NOT NULL,
+    updated_at VARCHAR(20) NOT NULL
+);
+
 -- Agregando Claves  forÃ¡neas
 
 -- mascotas
 
 
 ALTER TABLE pets
-    ADD FOREIGN KEY (ownerID) REFERENCES users(id) ON DELETE CASCADE;
+    ADD FOREIGN KEY (ownerID) REFERENCES user_details(id) ON DELETE CASCADE;
 
 ALTER TABLE pets
     ADD FOREIGN KEY (breedID) REFERENCES breeds(id) ;
 
-
-ALTER TABLE pets
-    ADD FOREIGN KEY (BreedID) REFERENCES breeds(id) ;
-
 ALTER TABLE pets
     ADD FOREIGN KEY (locationID) REFERENCES locations(id);
-
-ALTER TABLE pets
-    ADD FOREIGN KEY (ownerID) REFERENCES users(id) ;
 
 
 -- razas
@@ -86,14 +78,13 @@ ALTER TABLE pet_images
 
 -- usuarios
 
-ALTER TABLE users
-    ADD FOREIGN KEY (locationID) REFERENCES locations(id);
+ALTER TABLE user_details
+    ADD FOREIGN KEY (location_id) REFERENCES locations(id);
 
 -- Historial de estados
 ALTER TABLE history_states
     ADD FOREIGN KEY (petID) REFERENCES pets(ID);
 
 ALTER TABLE history_states
-    ADD FOREIGN KEY (userID) REFERENCES users(ID);
-
+    ADD FOREIGN KEY (userID) REFERENCES user_details(ID);
 

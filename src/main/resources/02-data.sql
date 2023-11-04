@@ -557,10 +557,11 @@ INSERT INTO breeds (speciesID, name1) VALUES
 
 -- Insertar pruebas resgistro de usuarios
 
-INSERT INTO users (first_name, last_name, locationID, phone)
-VALUES ('John', 'Doe', 1, '123-456-7890');
-INSERT INTO users (first_name, last_name, locationID, phone)
-VALUES ('Jane', 'Smith', 2, '987-654-3210');
+INSERT INTO user_details (user_id, location_id, cellphone, created_at, updated_at) VALUES
+('a3f1e25e-5b89-4032-8d7a-9899b0ee0bde', 1, '555-1234-5678', '2023-11-03 10:00:00', '2023-11-03 10:00:00'),
+('b4g2f36f-6c98-5043-9e8b-aa99c1ee1bfc', 2, '555-9876-5432', '2023-11-03 10:05:00', '2023-11-03 10:05:00'),
+('c5h3g47g-7d09-6054-af9c-bb88d2ff2cfd', 3, '555-5643-5890', '2023-11-03 10:10:00', '2023-11-03 10:10:00');
+
 
 -- Insertar pruebas resgistro de mascostas
 INSERT INTO pets (name1, ownerID, breedID, status1, locationID, size, gender, description1)
