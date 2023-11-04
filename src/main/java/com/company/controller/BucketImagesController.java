@@ -1,4 +1,4 @@
-package com.company.controller;//package com.grupo4.hotels.controller;
+package com.company.controller;
 
 import com.company.service.BucketImageService;
 import org.springframework.beans.factory.annotation.Autowired;
