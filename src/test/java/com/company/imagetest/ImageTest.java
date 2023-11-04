@@ -1,9 +1,12 @@
 package com.company.imagetest;
 
 import com.company.model.entity.Image;
+import com.company.repository.IImageRepository;
 import com.company.service.IImageService;
 import com.company.service.ImageService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -14,6 +17,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 @SpringBootTest
@@ -23,12 +28,22 @@ public class ImageTest {
     @Autowired
     IImageService imageService;
 
+
+
+    IImageRepository imageRepository;
+    @BeforeEach
+    public void init (){
+        imageRepository= mock(IImageRepository.class);
+
+    }
+
+
     @Test
      void testFindAll() {
         Image image= new Image();
-        image.setPetID(1);
+        image.setPetID(4);
         image.setUrl("urlDesdeBack");
-        imageService.save(image);
+        when(imageRepository.findAll()).thenReturn(List.of(image));
 
         List<Image> result = imageService.findAll();
         assertNotNull(result);
@@ -39,7 +54,7 @@ public class ImageTest {
     @Test
     void testSave(){
         Image image= new Image();
-        image.setPetID(1);
+        image.setPetID(4);
         image.setUrl("urlDesdeBack");
         Image imageResponde = imageService.save(image);
         assertNotNull(imageResponde);
