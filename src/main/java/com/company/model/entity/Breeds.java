@@ -6,7 +6,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import org.antlr.v4.runtime.misc.NotNull;
+
+import java.util.List;
 
 @Entity
 public class Breeds {
@@ -20,6 +23,7 @@ public class Breeds {
     @ManyToOne
     @JoinColumn(name = "speciesID")
     private Species species;
+
 
     public Breeds() {
     }
