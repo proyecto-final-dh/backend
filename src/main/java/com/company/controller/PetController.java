@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -85,5 +86,14 @@ public class PetController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the pet");
         }
+    }
+
+    @GetMapping("/filter")
+    public List<Pets> filterPets(@RequestParam(required = false) String location,
+                                @RequestParam(required = false) String species,
+                                @RequestParam(required = false) String breed,
+                                @RequestParam(required = false) String size) {
+
+        return petService.filterPets(location, species, breed, size);
     }
 }
