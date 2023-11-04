@@ -90,7 +90,7 @@ public class BucketImageService {
         if(files.length < 1) throw new ResponseStatusException(
                 org.springframework.http.HttpStatus.BAD_REQUEST, EMPTY_IMAGE);
 
-        if(files.length > 10) throw new ResponseStatusException(
+        if(files.length > 5) throw new ResponseStatusException(
                 org.springframework.http.HttpStatus.BAD_REQUEST, MAXIMUM_IMAGES_EXCEEDED);
 
         if(!validateImageExtension(files)) {
