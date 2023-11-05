@@ -1,7 +1,10 @@
 package com.company.service;
 
+import com.company.model.entity.Location;
 import com.company.model.entity.Pets;
+import com.company.model.entity.UserDetails;
 import com.company.repository.IPetsRepository;
+import jakarta.persistence.criteria.Join;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -78,28 +81,36 @@ public class PetService implements  IPetService{
 
     }
 
-    @Override
-    public List<Pets> filterPets(String location, String species, String breed, String size) {
-        Specification<Pets> spec = buildSpecification(location, species, breed, size);
-        return IPetsRepository.findAll(spec);
+    public Page<Pets> filterPets(String location, String species, String breed, String size, Pageable pageable) throws Exception {
+        try {
+            Specification<Pets> spec = buildSpecification(location, species, breed, size);
+            return IPetsRepository.findAll(spec, pageable);
+        } catch (Exception e) {
+            throw new Exception("Error al filtrar mascotas");
+        }
     }
 
     private Specification<Pets> buildSpecification(String location, String species, String breed, String size) {
         Specification<Pets> spec = Specification.where(null);
 
         if (location != null && !location.isEmpty()) {
-            spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("locationID"), Long.parseLong(location)));
+            spec = spec.and((root, query, cb) -> {
+                Join<Pets, UserDetails> userDetailsJoin = root.join("userDetails");
+                Join<UserDetails, Location> locationJoin = userDetailsJoin.join("location");
+                // Utilizamos el operador '%' para buscar registros que contengan la subcadena
+                String likeExpression = "%" + location + "%";
+                return cb.like(locationJoin.get("city"), likeExpression);
+            });
         }
 
         if (species != null && !species.isEmpty()) {
             spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("species"), species));
+                    cb.equal(root.get("breed").get("species").get("name"), species));
         }
 
         if (breed != null && !breed.isEmpty()) {
             spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("breedID"), Long.parseLong(breed)));
+                    cb.equal(root.get("breed").get("name"), breed));
         }
 
         if (size != null && !size.isEmpty()) {
