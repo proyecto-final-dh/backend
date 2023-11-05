@@ -46,11 +46,11 @@ public class PetService implements  IPetService{
 
         if (existingPet.isPresent()) {
             Pets pets = existingPet.get();
-            pets.setName1(updatedPets.getName1());
-            pets.setStatus1(updatedPets.getStatus1());
+            pets.setName(updatedPets.getName());
+            pets.setStatus(updatedPets.getStatus());
             pets.setGender(updatedPets.getGender());
             pets.setSize(updatedPets.getSize());
-            pets.setDescription1(updatedPets.getDescription1());
+            pets.setDescription(updatedPets.getDescription());
 
             return IPetsRepository.save(pets);
         } else {
@@ -60,7 +60,7 @@ public class PetService implements  IPetService{
     }
 
     public Pets save(Pets pets) throws Exception {
-        if (!pets.getName1().isEmpty()) {
+        if (!pets.getName().isEmpty()) {
             return IPetsRepository.save(pets);
         } else {
             throw new Exception("Pet Name not found");
