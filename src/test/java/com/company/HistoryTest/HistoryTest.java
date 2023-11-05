@@ -23,7 +23,7 @@ public class HistoryTest {
     private HistoryController historyController;
 
     @Test
-    public void testCreateStory() {
+    public void testCreateHistory() {
         Date date = new Date(123, 9, 29);
         History newStory = new History(date);
         ResponseEntity<Object> result = historyController.createHistory(newStory);
@@ -35,7 +35,7 @@ public class HistoryTest {
 
 
     @Test
-    public void testGetAllStories() {
+    public void testGetAllHistories() {
         History newStory = new History(new Date());
         ResponseEntity<Object> result = historyController.createHistory(newStory);
 
@@ -52,7 +52,7 @@ public class HistoryTest {
 
 
     @Test
-    public void testGetStoryById() {
+    public void testGetHistoryById() {
         History newStory = new History(new Date());
         ResponseEntity<Object> createResult = historyController.createHistory(newStory);
 
@@ -72,7 +72,7 @@ public class HistoryTest {
 
 
     @Test
-    public void testDeleteStory() {
+    public void testDeleteHistory() {
         History newStory = new History(new Date());
         ResponseEntity<Object> result = historyController.createHistory(newStory);
         var bodyResult = ((History) result.getBody());
