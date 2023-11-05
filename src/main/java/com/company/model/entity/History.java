@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -27,10 +29,22 @@ public class History {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private Date date1;
+    private Date date;
 
-    public History(Date date1) {
-        this.date1 = date1;
+    @ManyToOne
+    @JoinColumn(name = "pet_id")
+    private Pets pet;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserDetails userDetails;
+
+    private String status;
+
+
+
+    public History(Date date) {
+        this.date = date;
     }
 
 }

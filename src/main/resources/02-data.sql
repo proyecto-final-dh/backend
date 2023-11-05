@@ -503,10 +503,10 @@ INSERT INTO locations (id, country, city, state) VALUES
 
 
 -- Agrego las especies
-INSERT INTO species (name1) VALUES ('gato'), ('perro'), ('caballo');
+INSERT INTO species (name) VALUES ('gato'), ('perro'), ('caballo');
 
 -- agrego las razas de perro
-INSERT INTO breeds (speciesID, name1) VALUES
+INSERT INTO breeds (species_id, name) VALUES
 (2, 'Akita Inu'),
 (2, 'Beagle'),
 (2, 'Bichon Frise'),
@@ -542,7 +542,7 @@ INSERT INTO breeds (speciesID, name1) VALUES
 
 -- ingreso las razas de gatos
 
-INSERT INTO breeds (speciesID, name1) VALUES
+INSERT INTO breeds (species_id, name) VALUES
 (1, 'Angora turco'),
 (1, 'Azul ruso'),
 (1, 'Bengali'),
