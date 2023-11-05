@@ -553,6 +553,23 @@ INSERT INTO breeds (speciesID, name1) VALUES
 (1, 'Siberiano'),
 (1, 'Siames');
 
+-- ingreso de user-details --
+INSERT INTO tu_tabla (user_id, location_id, cellphone, created_at, updated_at)
+VALUES
+    ('usuario1', 1, '555-1111', '2023-11-05', '2023-11-05'),
+    ('usuario2', 2, '555-2222', '2023-11-05', '2023-11-05'),
+    ('usuario3', 3, '555-3333', '2023-11-05', '2023-11-05'),
+    ('usuario4', 4, '555-4444', '2023-11-05', '2023-11-05'),
+    ('usuario5', 5, '555-5555', '2023-11-05', '2023-11-05'),
+    ('usuario6', 6, '555-6666', '2023-11-05', '2023-11-05'),
+    ('usuario7', 7, '555-7777', '2023-11-05', '2023-11-05'),
+    ('usuario8', 8, '555-8888', '2023-11-05', '2023-11-05'),
+    ('usuario9', 9, '555-9999', '2023-11-05', '2023-11-05'),
+    ('usuario10', 10, '555-1010', '2023-11-05', '2023-11-05');
+
+-- ingreso de mascotas --
+
+
 SET SQL_SAFE_UPDATES = 0;
 
 -- select
