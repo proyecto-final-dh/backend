@@ -71,7 +71,7 @@ public class BreedsTest {
         Breeds updatedBreeds = new Breeds("pajaroUpdate",speciesId1);
 
         Breeds resultUpdate = breedsController.updateBreeds(id, updatedBreeds);
-        assertEquals(resultUpdate.getName1(), updatedBreeds.getName1());
+        assertEquals(resultUpdate.getName(), updatedBreeds.getName());
 
         breedsController.deleteBreeds(id);
     }

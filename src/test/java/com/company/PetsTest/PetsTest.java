@@ -80,7 +80,7 @@ public class PetsTest {
         assertEquals(HttpStatus.OK, resultUpdateResponse.getStatusCode());
 
         Pets resultUpdate = (Pets) resultUpdateResponse.getBody();
-        assertEquals(resultUpdate.getName1(), updatedPet.getName1());
+        assertEquals(resultUpdate.getName(), updatedPet.getName());
 
         petController.deletePet(id);
     }
