@@ -35,7 +35,7 @@ public class SpeciesService implements ISpeciesService{
         if (species.getName() == null)
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Name is required");
-        if(speciesRepository.findByName1(species.getName()).isPresent())
+        if(speciesRepository.findByName(species.getName()).isPresent())
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Species already created");
         return speciesRepository.save(species);
