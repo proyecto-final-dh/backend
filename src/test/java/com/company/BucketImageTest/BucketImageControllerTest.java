@@ -44,6 +44,7 @@ public class BucketImageControllerTest {
         MockHttpServletResponse response = mockMvc.perform(delete("/storage/delete/{fileName}", "testImage.jpg"))
                 .andReturn().getResponse();
 
-        // Verificar que la respuesta es un estado HTTP 500assert response.getStatus() == HttpStatus.INTERNAL_SERVER_ERROR.value();
+        // Verificar que la respuesta es un estado HTTP 500
+        assert response.getStatus() == HttpStatus.INTERNAL_SERVER_ERROR.value();
     }
 }

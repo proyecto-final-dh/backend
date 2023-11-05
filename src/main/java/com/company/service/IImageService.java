@@ -13,4 +13,8 @@ public interface IImageService {
 
     void deleteById(Integer id);
 
+
+
+
+
 }

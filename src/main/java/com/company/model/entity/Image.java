@@ -28,7 +28,7 @@ public class Image {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "petID")
+    @JoinColumn(name = "pet_id")
     private Pets pet;
     private String url;
     private String title;

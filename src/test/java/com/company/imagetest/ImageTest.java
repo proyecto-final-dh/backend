@@ -69,7 +69,7 @@ public class ImageTest {
         image.setUrl("urlDesdeBack");
 
         // Act
-        //when(imageRepository.save(image)).thenReturn(image);
+        when(imageRepository.save(image)).thenReturn(image);
         Image imageResponde = imageService.save(image);
         System.out.println(imageResponde.getId());
         // Assert

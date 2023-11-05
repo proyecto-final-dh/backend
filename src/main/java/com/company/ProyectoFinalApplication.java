@@ -1,7 +1,9 @@
 package com.company;
 
+import com.company.repository.IImageRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -20,7 +22,9 @@ public class ProyectoFinalApplication {
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(ProyectoFinalApplication.class, args);
+		ApplicationContext context= SpringApplication.run(ProyectoFinalApplication.class, args);
+
+		context.getBean(IImageRepository.class).deleteById(6);
 	}
 
 }

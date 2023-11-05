@@ -553,6 +553,18 @@ INSERT INTO breeds (species_id, name) VALUES
 (1, 'Siberiano'),
 (1, 'Siames');
 
+-- usuarios para probar
+INSERT INTO user_details (user_id, location_id, cellphone, created_at, updated_at) VALUES
+('a0f5b1c3-d5e7-4c8a-bb6f-06627eede3ad', 1, '123-456-7890', '2023-11-05 08:30:00', '2023-11-05 08:30:00'),
+('b1e6d2c4-e6f8-5d9b-cc7f-07738ffde4bc', 2, '098-765-4321', '2023-11-05 08:45:00', '2023-11-05 08:45:00');
+
+-- mascotas
+INSERT INTO pets (name, owner_id, breed_id, status, size, gender, description) VALUES
+('Buddy', 1, 1, 'Healthy', 'Medium', 'Male', 'Friendly and loves to play fetch.'),
+('Luna', 2, 2, 'Adopted', 'Small', 'Female', 'Quiet and loves to cuddle.');
+
 SET SQL_SAFE_UPDATES = 0;
+
+
 
 -- select
