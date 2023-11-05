@@ -1,8 +1,8 @@
 CREATE TABLE pets (
                       id INT AUTO_INCREMENT PRIMARY KEY,
                       name VARCHAR(255) NOT NULL,
-                      owner_id INT,
-                      breed_id int,
+                      owner_id INT NOT NULL,
+                      breed_id int NOT NULL,
                       status varchar(20),
                       size varchar(50),
                       gender varchar(20),
