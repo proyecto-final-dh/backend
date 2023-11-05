@@ -46,7 +46,6 @@ public class Pets {
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
-    @JoinColumn(name = "ownerID")
     private UserDetails userDetails;
 
 

@@ -31,7 +31,7 @@ public class MascotaServiceTest {
     public void testGuardarMascotaSinUserReal() {
         // Crear una instancia de Mascota
         Pets petTest = new Pets();
-        petTest.setName1("Firulais");
+        petTest.setName("Firulais");
 
         // Crear una instancia simulada de User
         UserDetails userMock = mock(UserDetails.class);
