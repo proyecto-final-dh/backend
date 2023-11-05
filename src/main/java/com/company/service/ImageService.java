@@ -31,4 +31,9 @@ public class ImageService implements IImageService {
         imageRepository.deleteById(id);
 
     }
+
+    @Override
+    public List<Image> findByPetId(Integer petID) {
+        return imageRepository.findByPetId(petID);
+    }
 }

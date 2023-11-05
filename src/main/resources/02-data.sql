@@ -563,6 +563,13 @@ INSERT INTO pets (name, owner_id, breed_id, status, size, gender, description) V
 ('Buddy', 1, 1, 'Healthy', 'Medium', 'Male', 'Friendly and loves to play fetch.'),
 ('Luna', 2, 2, 'Adopted', 'Small', 'Female', 'Quiet and loves to cuddle.');
 
+INSERT INTO pet_images (pet_id, url, title) VALUES
+(1, 'https://example.com/images/pets/fluffy-kitten.jpg', 'Fluffy Kitten'),
+(2, 'https://example.com/images/pets/puppy.jpg', 'Playful Puppy'),
+(1, 'https://example.com/images/pets/parrot.jpg', 'Colorful Dog'),
+(1, 'https://example.com/images/pets/goldfish.jpg', 'Goldfish Swimming'),
+(2, 'https://example.com/images/pets/bunny.jpg', 'Cute Cat');
+
 SET SQL_SAFE_UPDATES = 0;
 
 

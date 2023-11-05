@@ -13,7 +13,7 @@ public interface IImageService {
 
     void deleteById(Integer id);
 
-
+    List<Image> findByPetId(Integer petID);
 
 
 

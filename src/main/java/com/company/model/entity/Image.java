@@ -1,5 +1,6 @@
 package com.company.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,6 +29,7 @@ public class Image {
     private int id;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "pet_id")
     private Pets pet;
     private String url;
