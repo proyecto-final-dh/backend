@@ -4,19 +4,14 @@ import com.company.model.entity.Image;
 import com.company.model.entity.Pets;
 import com.company.repository.IImageRepository;
 import com.company.repository.IPetsRepository;
-import com.company.service.IImageService;
 import com.company.service.ImageService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,24 +26,21 @@ import static org.mockito.Mockito.when;
 public class ImageTest {
     @InjectMocks
     ImageService imageService;
+
     @Mock
     IImageRepository imageRepository;
 
     private Pets petTest;
 
-
     @Autowired
-    private IPetsRepository mascotaRepository;
+    private IPetsRepository petsRepository;
 
     @BeforeEach
     void setUp() {
         //MockitoAnnotations.openMocks(this); // Inicializa los mocks y los injectMocks
 
-        // Inicializa la mascota para usarla en todos los tests
-        petTest = new Pets();
-        petTest.setId(1);
-        petTest.setName1("Firulais");
 
+        petTest = petsRepository.findAll().get(0);
     }
 
 
@@ -77,13 +69,15 @@ public class ImageTest {
         image.setUrl("urlDesdeBack");
 
         // Act
-        when(imageRepository.save(image)).thenReturn(image);
+        //when(imageRepository.save(image)).thenReturn(image);
         Image imageResponde = imageService.save(image);
-
+        System.out.println(imageResponde.getId());
         // Assert
         assertNotNull(imageResponde);
         assertEquals(imageResponde.getPet(), image.getPet());
     }
+
+
 
 
 }

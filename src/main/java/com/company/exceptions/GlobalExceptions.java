@@ -54,4 +54,6 @@ public class GlobalExceptions {
         return responsesBuilder.buildResponse(HttpStatus.NOT_ACCEPTABLE.value(),ex.getMessage(), "",errors);
     }
 
+
+
 }

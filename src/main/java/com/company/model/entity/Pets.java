@@ -41,11 +41,11 @@ public class Pets {
 
 
     @ManyToOne
-    @JoinColumn(name = "breed_id")
+    @JoinColumn(name = "breedID")
     private Breeds breed;
 
     @ManyToOne
-    @JoinColumn(name = "userDetails_id")
+    @JoinColumn(name = "ownerID")
     private UserDetails userDetails;
 
 
