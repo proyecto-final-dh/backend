@@ -9,13 +9,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "breeds")
@@ -24,15 +23,17 @@ public class Breeds {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+
     @NotEmpty(message = "El nombre de la raza es obligatorio.")
-    private String name1;
+    private String name;
+
 
     @ManyToOne
-    @JoinColumn(name = "speciesID")
+    @JoinColumn(name = "species_id")
     private Species species;
 
-    public Breeds(String name1, Species species) {
-        this.name1 = name1;
+    public Breeds(String name, Species species) {
+        this.name = name;
         this.species = species;
     }
 }

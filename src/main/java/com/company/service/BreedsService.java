@@ -55,7 +55,7 @@ public class BreedsService implements IBreedsService {
             validateNameBreed(id, updatedBreeds, "PUT");
             Species species = speciesService.getSpeciesById(updatedBreeds.getSpecies().getId());
             Breeds breedsDB = existingBreeds.get();
-            breedsDB.setName1(updatedBreeds.getName1());
+            breedsDB.setName(updatedBreeds.getName());
             breedsDB.setSpecies(species);
             return breedsRepository.save(breedsDB);
         } else {
@@ -64,7 +64,7 @@ public class BreedsService implements IBreedsService {
     }
 
     private void validatePayload(Breeds breeds) {
-        if (breeds.getName1() == null) {
+        if (breeds.getName() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is required");
         }
         int speciesID = breeds.getSpecies().getId();
@@ -81,12 +81,12 @@ public class BreedsService implements IBreedsService {
         boolean conflict = false;
         if ("POST".equals(req)) {
             //POST: Valida que el nombre no se encuentre en la BD
-            if (breedsRepository.findByName1(breeds.getName1()).isPresent()) {
+            if (breedsRepository.findByName(breeds.getName()).isPresent()) {
                 conflict = true;
             }
         } else {
             //PUT: Valida que el nombre no se encuentre en la BD bajo otro id de registro
-            Optional<Breeds> existingBreedsWithName = breedsRepository.findByName1(breeds.getName1());
+            Optional<Breeds> existingBreedsWithName = breedsRepository.findByName(breeds.getName());
             if (existingBreedsWithName.isPresent()) {
                 Breeds existingBreeds = existingBreedsWithName.get();
                 if (existingBreeds.getId() != id) {

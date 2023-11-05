@@ -1,50 +1,53 @@
 package com.company.model.entity;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.Data;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import jakarta.persistence.*;
 
-
 @Entity
-
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Getter
-@Setter
 @Table(name = "pets")
+
 public class Pets {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotEmpty(message = "El nombre de la mascota es obligatorio.")
-    private String name1;
 
-    private String status1;
+    @NotEmpty(message = "El nombre de la mascota es obligatorio.")
+    private String name;
+
+
+    private String status;
 
     private String size;
 
     private String gender;
 
-    private String description1;
+    private String description;
 
 
-    public Pets(String name1, String status1, String size, String gender, String description1) {
-        this.name1 = name1;
-        this.status1 = status1;
+    @ManyToOne
+    @JoinColumn(name = "breed_id")
+    private Breeds breed;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private UserDetails userDetails;
+
+
+    public Pets(String name, String status, String size, String gender, String description) {
+        this.name = name;
+        this.status = status;
         this.size = size;
         this.gender = gender;
-        this.description1 = description1;
+        this.description = description;
     }
 
 }

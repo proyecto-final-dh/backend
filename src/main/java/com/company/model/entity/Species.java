@@ -6,15 +6,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
-import org.antlr.v4.runtime.misc.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "species")
@@ -24,9 +21,10 @@ public class Species {
     private int id;
 
     @NotEmpty(message = "El nombre de la especie es obligatorio.")
-    private String name1;
+    private String name;
 
-    public Species(String name1) {
-        this.name1 = name1;
+    public Species(String name) {
+        this.name = name;
     }
+
 }
