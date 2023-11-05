@@ -62,7 +62,19 @@ public class PetController {
         } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
+    }
 
+    @GetMapping("/owner/{id}")
+    public List<Pets> getByOwner(@PathVariable int id,
+                                    @RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "9") int size) {
+        try {
+            Pageable pageable = PageRequest.of(page,size);
+            Page<Pets> petPage = petService.findByOwner(id,pageable);
+            return petPage.getContent();
+        } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
     }
 
     @PostMapping

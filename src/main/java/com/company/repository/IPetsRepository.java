@@ -18,4 +18,10 @@ public interface IPetsRepository extends JpaRepository<Pets, Integer> {
             "(SELECT ud.id FROM petPI.user_details AS ud WHERE ud.location_id = :id )", nativeQuery = true)
     Page<Pets> findByLocation(@Param("id") int id, Pageable pageable);
 
+    @Query(value = "SELECT pets.* " +
+            "FROM petPI.pets AS pets " +
+            "WHERE pets.user_details_id = :id ", nativeQuery = true)
+    Page<Pets> findByOwner(@Param("id") int id, Pageable pageable);
+
+
 }
