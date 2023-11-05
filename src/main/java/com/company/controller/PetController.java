@@ -51,6 +51,20 @@ public class PetController {
         }
     }
 
+    @GetMapping("/locations/{id}")
+    public List<Pets> getByLocation(@PathVariable int id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size) {
+        try {
+            Pageable pageable = PageRequest.of(page,size);
+            Page<Pets> petPage = petService.findByLocation(id,pageable);
+            return petPage.getContent();
+        } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+
+    }
+
     @PostMapping
     public ResponseEntity<Object> createPet(@RequestBody Pets pets) {
         try {

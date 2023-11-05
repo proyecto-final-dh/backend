@@ -77,5 +77,12 @@ public class PetService implements  IPetService{
 
     }
 
+    public Page<Pets> findByLocation(int id, Pageable pageable) throws Exception {
+        try {
+            return IPetsRepository.findByLocation(id, pageable);
+        } catch (Exception e) {
+            throw new Exception("Error al recuperar las mascotas paginadas.");
+        }
+    }
 
 }
