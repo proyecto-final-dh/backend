@@ -29,15 +29,15 @@ public class Pets {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotNull
-    private String name1;
+    private String name;
 
-    private String status1;
+    private String status;
 
     private String size;
 
     private String gender;
 
-    private String description1;
+    private String description;
 
 
     @ManyToOne
@@ -45,15 +45,15 @@ public class Pets {
     private Breeds breed;
 
     @ManyToOne
-    @JoinColumn(name = "userDetails_id")
+    @JoinColumn(name = "owner_id")
     private UserDetails userDetails;
 
 
-    public Pets(String name1, String status1, String size, String gender, String description1) {
-        this.name1 = name1;
-        this.status1 = status1;
+    public Pets(String name, String status, String size, String gender, String description) {
+        this.name = name;
+        this.status = status;
         this.size = size;
         this.gender = gender;
-        this.description1 = description1;
+        this.description = description;
     }
 }
