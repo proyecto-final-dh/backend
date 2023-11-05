@@ -1,13 +1,16 @@
 package com.company.imagetest;
 
 import com.company.model.entity.Image;
+import com.company.model.entity.Pets;
 import com.company.repository.IImageRepository;
+import com.company.repository.IPetsRepository;
 import com.company.service.IImageService;
 import com.company.service.ImageService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -31,11 +34,29 @@ public class ImageTest {
     @Mock
     IImageRepository imageRepository;
 
+    private Pets petTest;
+
+
+    @Autowired
+    private IPetsRepository mascotaRepository;
+
+    @BeforeEach
+    void setUp() {
+        //MockitoAnnotations.openMocks(this); // Inicializa los mocks y los injectMocks
+
+        // Inicializa la mascota para usarla en todos los tests
+        petTest = new Pets();
+        petTest.setId(1);
+        petTest.setName1("Firulais");
+
+    }
+
+
     @Test
      void testFindAll() {
         // Arrange
         Image image= new Image();
-        image.setPetID(1);
+        image.setPet(petTest);
         image.setUrl("url");
 
         // Act
@@ -52,7 +73,7 @@ public class ImageTest {
     void testSave(){
         // Arrange
         Image image= new Image();
-        image.setPetID(4);
+        image.setPet(petTest);
         image.setUrl("urlDesdeBack");
 
         // Act
@@ -61,7 +82,7 @@ public class ImageTest {
 
         // Assert
         assertNotNull(imageResponde);
-        assertEquals(imageResponde.getPetID(), image.getPetID());
+        assertEquals(imageResponde.getPet(), image.getPet());
     }
 
 

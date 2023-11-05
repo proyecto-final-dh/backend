@@ -11,4 +11,6 @@ public interface IImageService {
     List<Image> findAll();
     Image save(Image image);
 
+    void deleteById(Integer id);
+
 }

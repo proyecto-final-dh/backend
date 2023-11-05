@@ -33,6 +33,7 @@ CREATE TABLE breeds (
 CREATE TABLE pet_images (
                             id INT AUTO_INCREMENT PRIMARY KEY,
                             petID int,
+                            tittle varchar(30),
                             url VARCHAR(2048) NOT NULL
 );
 

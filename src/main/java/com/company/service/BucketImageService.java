@@ -1,11 +1,13 @@
 package com.company.service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
@@ -121,4 +123,22 @@ public class BucketImageService {
         }
         return true;
     }
+
+    public void deleteImage(String fileName) {
+        try {
+            // Construir el objeto de solicitud de eliminación
+            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(PET_IMAGES_FOLDER + fileName)
+                    .build();
+
+            // Eliminar el objeto del bucket S3
+            s3client.deleteObject(deleteObjectRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(
+                    org.springframework.http.HttpStatus.BAD_REQUEST, MAXIMUM_IMAGE_SIZE_EXCEEDED);
+        }
+    }
 }
+

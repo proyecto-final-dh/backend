@@ -11,4 +11,5 @@ public class Constants {
     public static final String MAXIMUM_IMAGES_EXCEEDED = "No more than 5 images can be uploaded";
     public static final String MAXIMUM_IMAGE_SIZE_EXCEEDED = "No more than 1MB per image is allowed";
     public static final String EMPTY_IMAGE = "Images can not be empty";
+    public static final String DELETE_IMAGE = "Error deleting image from S3";
 }
