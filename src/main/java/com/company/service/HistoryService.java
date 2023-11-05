@@ -40,7 +40,7 @@ public class HistoryService implements IHistoryService {
     @Override
     public History createHistory(History history) {
         System.out.println(history);
-        if (history.getDate1() == null) {
+        if (history.getDate() == null) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Date is required");
         }
@@ -64,7 +64,7 @@ public class HistoryService implements IHistoryService {
 
         if (existingHistory.isPresent()) {
             History history = existingHistory.get();
-            history.setDate1(updatedHistory.getDate1());
+            history.setDate(updatedHistory.getDate());
 
             return historyRepository.save(history);
         } else {

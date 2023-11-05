@@ -28,8 +28,8 @@ public class HistoryTest {
         History newStory = new History(date);
         ResponseEntity<Object> result = historyController.createHistory(newStory);
         assertEquals(HttpStatus.CREATED, result.getStatusCode());
-        assertEquals(newStory.getDate1(), ((History) result.getBody()).getDate1());
-        System.out.println("Id: " + ((History) result.getBody()).getId() + " - Date1: " + ((History) result.getBody()).getDate1());
+        assertEquals(newStory.getDate(), ((History) result.getBody()).getDate());
+        System.out.println("Id: " + ((History) result.getBody()).getId() + " - Date: " + ((History) result.getBody()).getDate());
         historyController.deleteHistory(((History) result.getBody()).getId());
     }
 
@@ -98,9 +98,9 @@ public class HistoryTest {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
-        String fechaActualFormateada = dateFormat.format(resultUpdate.getDate1());
+        String fechaActualFormateada = dateFormat.format(resultUpdate.getDate());
 
-        String fechaEsperadaFormateada = dateFormat.format(updatedHistory.getDate1());
+        String fechaEsperadaFormateada = dateFormat.format(updatedHistory.getDate());
         assertEquals(fechaEsperadaFormateada, fechaActualFormateada);
 
         historyController.deleteHistory(id);
