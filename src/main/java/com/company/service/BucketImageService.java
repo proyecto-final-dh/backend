@@ -1,5 +1,6 @@
 package com.company.service;
 
+import com.company.model.dto.ImageWithTitle;
 import org.springframework.web.server.ResponseStatusException;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -15,7 +16,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -85,6 +85,35 @@ public class BucketImageService {
         }
         return urls;
     }
+
+    public List<ImageWithTitle> uploadFileWithTitle(MultipartFile[] files) {
+        validateFiles(files);
+
+        List<ImageWithTitle> images = new ArrayList<>();
+
+        for (MultipartFile multipartFile : files) {
+            try {
+                ImageWithTitle NewImage = new ImageWithTitle();
+                String fileUrl = "";
+
+                File file = convertMultiPartToFile(multipartFile);
+                String fileName = PET_IMAGES_FOLDER + generateFileName(multipartFile);
+                fileUrl = endpointUrl + "/" + fileName;
+
+                NewImage.setUrl(fileUrl);
+                NewImage.setTitle(multipartFile.getOriginalFilename());
+                images.add(NewImage);
+
+                uploadFileTos3bucket(fileName, file);
+                file.delete();
+            } catch (Exception e) {
+                throw new ResponseStatusException(
+                        org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            }
+        }
+        return images;
+    }
+
 
     private void validateFiles(MultipartFile[] files) {
         if(files.length < 1) throw new ResponseStatusException(

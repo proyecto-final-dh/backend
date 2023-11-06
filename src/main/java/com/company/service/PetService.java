@@ -1,21 +1,32 @@
 package com.company.service;
 
+import com.company.model.dto.ImageWithTitle;
+import com.company.model.dto.PetWithImagesDto;
+import com.company.model.entity.Image;
 import com.company.model.entity.Pets;
+import com.company.repository.IImageRepository;
 import com.company.repository.IPetsRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
+
+import static com.company.utils.Mapper.mapPetToPetWithImages;
 
 @AllArgsConstructor
 @Service
 public class PetService implements  IPetService{
 
     private IPetsRepository IPetsRepository;
+    private BucketImageService bucketImageService;
+    private IImageRepository imageRepository;
 
     public Page<Pets> findAll(Pageable pageable) throws Exception {
         try {
@@ -63,6 +74,26 @@ public class PetService implements  IPetService{
         } else {
             throw new Exception("Pet Name not found");
         }
+    }
+
+    @Override
+    @Transactional
+    public PetWithImagesDto saveWithImages(Pets pet, MultipartFile[] images) {
+        Pets savedPet = IPetsRepository.save(pet);
+        List<ImageWithTitle> savedImages = bucketImageService.uploadFileWithTitle(images);
+
+        List<Image> imagesToSave = savedImages.stream().map(image -> {
+            Image newImage = new Image();
+            newImage.setUrl(image.getUrl());
+            newImage.setTitle(image.getTitle());
+            newImage.setPetID(savedPet.getId());
+            return newImage;
+        }).toList();
+
+        imageRepository.saveAll(imagesToSave);
+
+        return mapPetToPetWithImages(savedPet, savedImages);
+
     }
 
     public void deleteById(int id) throws Exception {
