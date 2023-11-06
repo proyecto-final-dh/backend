@@ -1,7 +1,6 @@
 package com.company.controller;
 
 import com.company.model.dto.CreatePetDto;
-import com.company.model.dto.PetWithImagesDto;
 import com.company.model.entity.Pets;
 import com.company.service.PetService;
 import com.company.utils.ResponsesBuilder;
