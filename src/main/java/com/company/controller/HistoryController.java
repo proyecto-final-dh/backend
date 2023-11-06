@@ -1,7 +1,9 @@
 package com.company.controller;
 
+import com.company.model.dto.SaveHistoryDto;
 import com.company.model.entity.History;
 import com.company.service.HistoryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,8 @@ public class HistoryController {
         this.historyService = historyService;
     }
 
+
+    /*
     @PostMapping
     public ResponseEntity<Object> createHistory(@RequestBody History story) {
         try {
@@ -40,6 +44,17 @@ public class HistoryController {
                     HttpStatus.INTERNAL_SERVER_ERROR, "Error while creating the history");
         }
     }
+
+
+     */
+
+
+    @PostMapping
+    public ResponseEntity<Object> createHistory(@Valid @RequestBody SaveHistoryDto item) {
+        History response = historyService.createHistory(item);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
 
 
     @GetMapping

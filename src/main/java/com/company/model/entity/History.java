@@ -35,9 +35,11 @@ public class History {
     @JoinColumn(name = "pet_id")
     private Pets pet;
 
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserDetails userDetails;
+
 
     private String status;
 
