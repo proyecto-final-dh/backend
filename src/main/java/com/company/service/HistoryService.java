@@ -30,7 +30,6 @@ public class HistoryService implements IHistoryService {
     }
 
 
-
     public List<History> getAllHistory() {
         return historyRepository.findAll();
     }
@@ -46,7 +45,6 @@ public class HistoryService implements IHistoryService {
     }
 
 
-
     public History createHistory(SaveHistoryDto item) {
 
         Optional<Pets> pet = petsRepository.findById(item.getPetId());
@@ -54,13 +52,10 @@ public class HistoryService implements IHistoryService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "mascota no encontrada");
         }
 
-
         Optional<UserDetails> userDetails = userDetailsRepository.findById(item.getUserDetailsId());
         if (userDetails.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "usuario no encontrado");
         }
-
-
 
         History newItem = new History(item.getDate());
         newItem.setPet(pet.get());
@@ -69,24 +64,6 @@ public class HistoryService implements IHistoryService {
 
         return historyRepository.save(newItem);
     }
-
-
-
-
-
-    /*
-    @Override
-    public History createHistory(History history) {
-        System.out.println(history);
-        if (history.getDate() == null) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Date is required");
-        }
-
-        return historyRepository.save(history);
-    }
-
-     */
 
 
     public void deleteHistory(int id) {
@@ -112,6 +89,4 @@ public class HistoryService implements IHistoryService {
                     HttpStatus.BAD_REQUEST, "History with ID " + id + " does not exist");
         }
     }
-
-
 }

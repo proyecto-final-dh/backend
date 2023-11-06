@@ -30,25 +30,6 @@ public class HistoryController {
     }
 
 
-    /*
-    @PostMapping
-    public ResponseEntity<Object> createHistory(@RequestBody History story) {
-        try {
-            History newStory = historyService.createHistory(story);
-            return new ResponseEntity<>(newStory, HttpStatus.CREATED);
-        } catch (ResponseStatusException ex) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, ex.getMessage());
-        } catch (Exception ex) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Error while creating the history");
-        }
-    }
-
-
-     */
-
-
     @PostMapping
     public ResponseEntity<Object> createHistory(@Valid @RequestBody SaveHistoryDto item) {
         History response = historyService.createHistory(item);

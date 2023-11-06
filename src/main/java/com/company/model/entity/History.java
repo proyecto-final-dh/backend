@@ -44,7 +44,6 @@ public class History {
     private String status;
 
 
-
     public History(Date date) {
         this.date = date;
     }
