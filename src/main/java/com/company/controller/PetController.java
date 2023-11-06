@@ -1,8 +1,10 @@
 package com.company.controller;
 
+import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.PetWithImagesDto;
 import com.company.model.entity.Pets;
 import com.company.service.PetService;
+import com.company.utils.ResponsesBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,15 +26,19 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+import static com.company.constants.Constants.PET_CREATED;
+
 @RestController
 @RequestMapping("/pets")
 public class PetController {
 
     private final PetService petService;
+    private final ResponsesBuilder responsesBuilder;
 
     @Autowired
-    public PetController(PetService petService) {
+    public PetController(PetService petService, ResponsesBuilder responsesBuilder) {
         this.petService = petService;
+        this.responsesBuilder = responsesBuilder;
     }
 
 
@@ -75,9 +81,9 @@ public class PetController {
     }
 
     @PostMapping("/withImages")
-    public ResponseEntity<PetWithImagesDto> createPetWithImages(@RequestPart("post") Pets pet,
-                                                                @RequestPart(value = "image", required = true) MultipartFile[] images) throws Exception {
-        return ResponseEntity.ok(petService.saveWithImages(pet, images));
+    public ResponseEntity createPetWithImages(@RequestPart("post") CreatePetDto pet,
+                                              @RequestPart(value = "image", required = true) MultipartFile[] images) {
+        return responsesBuilder.buildResponse(HttpStatus.CREATED.value(), PET_CREATED, petService.saveWithImages(pet, images), null);
     }
 
     @PutMapping("/{id}")

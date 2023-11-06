@@ -1,11 +1,17 @@
 package com.company.service;
 
+import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.ImageWithTitle;
 import com.company.model.dto.PetWithImagesDto;
+import com.company.model.entity.Breeds;
 import com.company.model.entity.Image;
 import com.company.model.entity.Pets;
+import com.company.model.entity.UserDetails;
+import com.company.repository.IBreedsRepository;
 import com.company.repository.IImageRepository;
 import com.company.repository.IPetsRepository;
+import com.company.repository.IUserDetailsRepository;
+import com.company.service.interfaces.IPetService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,15 +24,25 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 
+import static com.company.constants.Constants.BREED_NOT_FOUND;
+import static com.company.constants.Constants.OWNER_NOT_FOUND;
+import static com.company.constants.Constants.PET_BREED_REQUIRED;
+import static com.company.constants.Constants.PET_GENDER_REQUIRED;
+import static com.company.constants.Constants.PET_NAME_REQUIRED;
+import static com.company.constants.Constants.PET_OWNER_REQUIRED;
+import static com.company.constants.Constants.PET_SIZE_REQUIRED;
+import static com.company.utils.Mapper.mapCreatePetDtoToPet;
 import static com.company.utils.Mapper.mapPetToPetWithImages;
 
 @AllArgsConstructor
 @Service
-public class PetService implements  IPetService{
+public class PetService implements IPetService {
 
     private IPetsRepository IPetsRepository;
     private BucketImageService bucketImageService;
     private IImageRepository imageRepository;
+    private IBreedsRepository breedsRepository;
+    private IUserDetailsRepository userDetailsRepository;
 
     public Page<Pets> findAll(Pageable pageable) throws Exception {
         try {
@@ -78,8 +94,15 @@ public class PetService implements  IPetService{
 
     @Override
     @Transactional
-    public PetWithImagesDto saveWithImages(Pets pet, MultipartFile[] images) {
-        Pets savedPet = IPetsRepository.save(pet);
+    public PetWithImagesDto saveWithImages(CreatePetDto pet, MultipartFile[] images) {
+        validateBasicPetData(pet);
+
+        Pets fullPet = mapCreatePetDtoToPet(pet);
+
+        fullPet.setBreed(validateBreeds(pet.getBreed_id()));
+        fullPet.setUserDetails(validateUserDetails(pet.getOwner_id()));
+
+        Pets savedPet = IPetsRepository.save(fullPet);
         List<ImageWithTitle> savedImages = bucketImageService.uploadFileWithTitle(images);
 
         List<Image> imagesToSave = savedImages.stream().map(image -> {
@@ -105,6 +128,42 @@ public class PetService implements  IPetService{
         }
 
 
+    }
+
+    private Breeds validateBreeds(int id) {
+        Optional<Breeds> breeds = breedsRepository.findById(id);
+        if (breeds.isPresent()) {
+            return breeds.get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, BREED_NOT_FOUND);
+        }
+    }
+
+    private UserDetails validateUserDetails(int id) {
+        Optional<UserDetails> userDetails = userDetailsRepository.findById(id);
+        if (userDetails.isPresent()) {
+            return userDetails.get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, OWNER_NOT_FOUND);
+        }
+    }
+
+    private void validateBasicPetData(CreatePetDto pet){
+        if (pet.getName() == null || pet.getName().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_NAME_REQUIRED);
+        }
+        if (pet.getGender() == null || pet.getGender().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_GENDER_REQUIRED);
+        }
+        if (pet.getSize() == null || pet.getSize().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_SIZE_REQUIRED);
+        }
+        if (pet.getOwner_id() == null || pet.getOwner_id() < 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_OWNER_REQUIRED);
+        }
+        if (pet.getBreed_id() == null || pet.getBreed_id() < 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_BREED_REQUIRED);
+        }
     }
 
 
