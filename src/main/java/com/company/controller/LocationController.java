@@ -2,7 +2,7 @@ package com.company.controller;
 
 import com.company.model.dto.SaveLocationDTO;
 import com.company.model.entity.Location;
-import com.company.service.ILocationService;
+import com.company.service.interfaces.ILocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
