@@ -1,16 +1,14 @@
 package com.company.model.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PetWithImagesDto {
-    private int id;
+public class CreatePetDto {
     private String name;
     private String status;
     private String size;
@@ -18,5 +16,4 @@ public class PetWithImagesDto {
     private String description;
     private Integer breed_id;
     private Integer owner_id;
-    private List<ImageWithTitle> images;
 }
