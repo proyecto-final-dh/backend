@@ -62,7 +62,6 @@ public class HistoryController {
     }
 
 
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteHistory(@PathVariable int id) {
         try {
