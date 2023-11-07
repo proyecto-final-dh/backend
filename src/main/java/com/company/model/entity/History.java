@@ -29,20 +29,22 @@ public class History {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private Date date1;
+    private Date date;
 
     @ManyToOne
     @JoinColumn(name = "pet_id")
     private Pets pet;
 
     @ManyToOne
-    @JoinColumn(name = "userDetails_id")
+    @JoinColumn(name = "user_id")
     private UserDetails userDetails;
 
+    private String status;
 
 
-    public History(Date date1) {
-        this.date1 = date1;
+
+    public History(Date date) {
+        this.date = date;
     }
 
 }

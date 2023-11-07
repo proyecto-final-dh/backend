@@ -12,15 +12,15 @@ public class Species {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotNull
-    private String name1;
+    private String name;
     public Species() {
     }
-    public Species(String name1) {
-        this.name1 = name1;
+    public Species(String name) {
+        this.name = name;
     }
-    public Species(int id, String name1) {
+    public Species(int id, String name) {
         this.id = id;
-        this.name1 = name1;
+        this.name = name;
     }
 
     public int getId() {
@@ -32,11 +32,11 @@ public class Species {
     }
 
     public String getName() {
-        return name1;
+        return name;
     }
 
     public void setName(String name) {
-        this.name1 = name;
+        this.name = name;
     }
 
 }

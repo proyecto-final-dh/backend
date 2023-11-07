@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface IPetsRepository extends JpaRepository<Pets, Integer> {
 
-    Pets findByName1(String name1);
+    Pets findByName(String name);
 
 
     @Query(value = "SELECT pets.* " +

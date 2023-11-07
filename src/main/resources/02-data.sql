@@ -503,10 +503,10 @@ INSERT INTO locations (id, country, city, state) VALUES
 
 
 -- Agrego las especies
-INSERT INTO species (name1) VALUES ('gato'), ('perro'), ('caballo');
+INSERT INTO species (name) VALUES ('gato'), ('perro'), ('caballo');
 
 -- agrego las razas de perro
-INSERT INTO breeds (speciesID, name1) VALUES
+INSERT INTO breeds (species_id, name) VALUES
 (2, 'Akita Inu'),
 (2, 'Beagle'),
 (2, 'Bichon Frise'),
@@ -542,7 +542,7 @@ INSERT INTO breeds (speciesID, name1) VALUES
 
 -- ingreso las razas de gatos
 
-INSERT INTO breeds (speciesID, name1) VALUES
+INSERT INTO breeds (species_id, name) VALUES
 (1, 'Angora turco'),
 (1, 'Azul ruso'),
 (1, 'Bengali'),
@@ -552,6 +552,179 @@ INSERT INTO breeds (speciesID, name1) VALUES
 (1, 'Ragdoll'),
 (1, 'Siberiano'),
 (1, 'Siames');
+
+-- ingreso de user-details --
+INSERT INTO user_details (user_id, location_id, cellphone, created_at, updated_at)
+VALUES
+    ('b1c7d38f-6a92-412d-9e81', 1, '555-1111', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
+    ('d0e4f6a5-3c78-8421-9eaa', 2, '555-2222', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
+    ('f9e2d5c1-6b47-129d-8a8e', 3, '555-3333', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
+    ('9c4e2f5a1-7b8c-3d2e-1f8a', 4, '555-4444', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
+    ('e1a3f2b5-4c7d-8e2d-9a8a', 5, '555-5555', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
+    ('2f1d3a5e-6b8c4d2-1e9-8a9e', 6, '555-6666', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
+    ('a9e2f5d1-c7b8-1e2d-8a7a', 7, '555-7777', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
+    ('5b1c7e9d2-4c3d8-2e1d-1a9a', 8, '555-8888', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
+    ('1a2e3f5d7-6b8c-4d3e-2f1a', 9, '555-9999', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
+    ('8f9e2d5c1-7b8c4d2-1e2d', 10, '555-1010', '2023-11-05 00:00:00', '2023-11-05 00:00:00');
+
+-- ingreso de mascotas --
+INSERT INTO pets (name, owner_id, breed_id, status, size, gender, description)
+VALUES
+    ('Buddy', 1, 21, 'adoptado', 'Mediano', 'Macho', N'Buddy es un perro cariñoso y juguetón que adora correr por el parque.'),
+    ('Luna', 2, 32, 'adoptado', N'Pequeño', 'Hembra', 'Luna es una gatita elegante y curiosa que le encanta explorar la casa.'),
+    ('Max', 3, 21, 'adoptado', 'Grande', 'Macho', 'Max es un perro grande y amigable que siempre está listo para pasear.'),
+    ('Molly', 4, 21, 'adoptado', 'Mediano', 'Hembra', N'Molly es una perrita dulce y leal que adora estar en compañía de su familia.'),
+    ('Rocky', 5, 15, 'adoptado', N'Pequeño', 'Macho', N'Rocky es un perro pequeño pero valiente que protege a su familia en todo momento.'),
+    ('Bella', 6, 18, 'adoptado', 'Grande', 'Hembra', 'Bella es una perrita grande y gentil que disfruta de largos paseos en el parque.'),
+    ('Charlie', 7, 14, 'adoptado', 'Mediano', 'Macho', 'Charlie es un perro amigable y enérgico que siempre está lleno de energía.'),
+    ('Daisy', 8, 3, 'adoptado', N'Pequeño', 'Hembra', N'Daisy es una perrita pequeña y traviesa que adora jugar con sus juguetes.'),
+    ('Cooper', 9, 21, 'adoptado', 'Grande', 'Macho', 'Cooper es un perro grande y protector que siempre cuida de su familia.'),
+    ('Zoe', 10, 36, 'adoptado', 'Mediano', 'Hembra', N'Zoe es una gatita cariñosa y juguetona que ama los mimos y caricias.'),
+    ('Pirata', 1, 37, 'adopcion', N'Pequeño', 'Macho', 'Pirata es un gatito curioso y aventurero que está buscando un hogar.'),
+    ('Misty', 2, 29, 'adopcion', 'Grande', 'Hembra', 'Misty es una perra grande y dulce que merece una familia amorosa.'),
+    ('Leo', 3, 7, 'adopcion', 'Mediano', 'Macho', 'Leo es un perro activo y juguetón que necesita un lugar donde correr y jugar.'),
+    ('Lucky', 4, 1, 'adopcion', N'Pequeño', 'Hembra', 'Lucky es una perrita afortunada en busca de un hogar cálido y cariñoso.'),
+    ('Oliver', 5, 19, 'adopcion', 'Grande', 'Macho', 'Oliver es un perro grande y noble que se lleva bien con todos.'),
+    ('Sasha', 6, 18, 'adopcion', 'Mediano', 'Hembra', N'Sasha es una perra mediana y cariñosa que te dará mucho amor.'),
+    ('Teddy', 7, 31, 'adopcion', N'Pequeño', 'Macho', N'Teddy es un perrito pequeño y tierno en busca de un compañero fiel.'),
+    ('Bentley', 8, 4, 'adopcion', 'Grande', 'Hembra', 'Bentley es una perra grande y leal que te protegerá siempre.'),
+    ('Milo', 9, 21, 'adopcion', 'Mediano', 'Macho', 'Milo es un perro mediano y juguetón que alegrará tu hogar.'),
+    ('Lucio', 10, 3, 'adopcion', N'Pequeño', 'Macho', N'Lucio es un perrito pequeño y encantador que te hará sonreír.');
+
+-- ingreso de fotos de mascotas --
+
+INSERT INTO pet_images (pet_id, url, title)
+VALUES
+-- Mascota 1
+    (1, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045454/4/?bust=1698597087&width=720', 'Imagen 1'),
+    (1, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045454/3/?bust=1698597086&width=720', 'Imagen 2'),
+    (1, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045454/2/?bust=1698597076&width=720', 'Imagen 3'),
+    (1, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045454/1/?bust=1698597077&width=720', 'Imagen 4'),
+    (1, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045454/1/?bust=1698597077&width=720', 'Imagen 5'),
+-- Mascota 2
+    (2, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69418255/1/?bust=1698501917&width=720', 'Imagen 1'),
+    (2, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69418255/2/?bust=1698854774&width=720', 'Imagen 2'),
+    (2, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69418255/3/?bust=1698847518&width=720', 'Imagen 3'),
+    (2, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69418255/4/?bust=1698933933&width=720', 'Imagen 4'),
+    (2, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69418255/5/?bust=1698933933&width=720', 'Imagen 5'),
+-- Mascota 3
+    (3, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045445/1/?bust=1698597059&width=720', 'Imagen 1'),
+    (3, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045445/2/?bust=1698597059&width=720', 'Imagen 2'),
+    (3, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045445/3/?bust=1698597059&width=720', 'Imagen 3'),
+    (3, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045445/4/?bust=1698597059&width=720', 'Imagen 4'),
+    (3, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045445/5/?bust=1698597059&width=720', 'Imagen 5'),
+-- Mascota 4
+    (4, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045446/1/?bust=1698597070&width=720', 'Imagen 1'),
+    (4, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045446/2/?bust=1698799846&width=720', 'Imagen 2'),
+    (4, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045446/3/?bust=1698799977&width=720', 'Imagen 3'),
+    (4, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045446/4/?bust=1698799848&width=720', 'Imagen 4'),
+    (4, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045446/5/?bust=1698800002&width=720', 'Imagen 5'),
+-- Mascota 5
+    (5, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045436/1/?bust=1698597050&width=720', 'Imagen 1'),
+    (5, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045436/2/?bust=1698597051&width=720', 'Imagen 2'),
+    (5, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045436/3/?bust=1698799913&width=720', 'Imagen 3'),
+    (5, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045436/4/?bust=1698800130&width=720', 'Imagen 4'),
+    (5, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045436/5/?bust=1698799989&width=720', 'Imagen 5'),
+-- Mascota 6
+    (6, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045439/1/?bust=1698597081&width=720', 'Imagen 1'),
+    (6, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045439/2/?bust=1698799979&width=720', 'Imagen 2'),
+    (6, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045439/3/?bust=1698800125&width=720', 'Imagen 3'),
+    (6, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045439/5/?bust=1698800003&width=720', 'Imagen 4'),
+    (6, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045439/6/?bust=1698799908&width=720', 'Imagen 5'),
+-- Mascota 7
+    (7, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045464/1/?bust=1698597080&width=720', 'Imagen 1'),
+    (7, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045464/2/?bust=1698800122&width=720', 'Imagen 2'),
+    (7, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045464/3/?bust=1698799998&width=720', 'Imagen 3'),
+    (7, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045464/4/?bust=1698799976&width=720', 'Imagen 4'),
+    (7, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045464/6/?bust=1698800001&width=720', 'Imagen 5'),
+-- Mascota 8
+    (8, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045459/1/?bust=1698597058&width=720', 'Imagen 1'),
+    (8, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045459/2/?bust=1698800005&width=720', 'Imagen 2'),
+    (8, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045459/3/?bust=1698799789&width=720', 'Imagen 3'),
+    (8, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045459/4/?bust=1698800005&width=720', 'Imagen 4'),
+    (8, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045459/5/?bust=1698799912&width=720', 'Imagen 5'),
+-- Mascota 9
+    (9, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045461/1/?bust=1698597056&width=720', 'Imagen 1'),
+    (9, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045461/2/?bust=1698791459&width=720', 'Imagen 2'),
+    (9, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045461/4/?bust=1698800127&width=720', 'Imagen 3'),
+    (9, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045461/5/?bust=1698799987&width=720', 'Imagen 4'),
+    (9, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045461/6/?bust=1698800126&width=720', 'Imagen 5'),
+-- Mascota 10
+    (10, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69133416/1/?bust=1698844493&width=720', 'Imagen 1'),
+    (10, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69133416/2/?bust=1698854779&width=720', 'Imagen 2'),
+    (10, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69133416/3/?bust=1698847511&width=720', 'Imagen 3'),
+    (10, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69133416/4/?bust=1698847511&width=720', 'Imagen 4'),
+    (10, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69133416/5/?bust=1698847512&width=720', 'Imagen 5'),
+-- Mascota 11
+    (11, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69515906/1/?bust=1698854779&width=720', 'Imagen 1'),
+    (11, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69515906/2/?bust=1698854779&width=720', 'Imagen 2'),
+    (11, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69515906/3/?bust=1698854780&width=720', 'Imagen 3'),
+    (11, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69515906/4/?bust=1698854780&width=720', 'Imagen 4'),
+    (11, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69515906/5/?bust=1698854780&width=720', 'Imagen 5'),
+-- Mascota 12
+    (12, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/65065165/1/?bust=1698847518&width=720', 'Imagen 1'),
+    (12, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/65065165/2/?bust=1698854774&width=720', 'Imagen 2'),
+    (12, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/65065165/3/?bust=1698933935&width=720', 'Imagen 3'),
+    (12, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/65065165/4/?bust=1698937537&width=720', 'Imagen 4'),
+    (12, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/65065165/6/?bust=1698937537&width=720', 'Imagen 5'),
+-- Mascota 13
+    (13, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/64757649/1/?bust=1698415534&width=720', 'Imagen 1'),
+    (13, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/64757649/2/?bust=1698933936&width=720', 'Imagen 2'),
+    (13, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/64757649/3/?bust=1698933936&width=720', 'Imagen 3'),
+    (13, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/64757649/4/?bust=1698847511&width=720', 'Imagen 4'),
+    (13, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/64757649/5/?bust=1698854773&width=720', 'Imagen 5'),
+-- Mascota 14
+    (14, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045460/1/?bust=1698597096&width=720', 'Imagen 1'),
+    (14, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045460/2/?bust=1698800110&width=720', 'Imagen 2'),
+    (14, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045460/3/?bust=1698799901&width=720', 'Imagen 3'),
+    (14, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045460/4/?bust=1698799993&width=720', 'Imagen 4'),
+    (14, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045460/5/?bust=1698799901&width=720', 'Imagen 5'),
+-- Mascota 15
+    (15, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59235659/1/?bust=1698415533&width=720', 'Imagen 1'),
+    (15, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59235659/2/?bust=1698933933&width=720', 'Imagen 2'),
+    (15, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59235659/3/?bust=1698933934&width=720', 'Imagen 3'),
+    (15, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59235659/4/?bust=1698933936&width=720', 'Imagen 4'),
+    (15, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/59235659/5/?bust=1698854774&width=720', 'Imagen 5'),
+-- Mascota 16
+    (16, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/60224467/1/?bust=1698415537&width=720', 'Imagen 1'),
+    (16, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/60224467/3/?bust=1698854773&width=720', 'Imagen 2'),
+    (16, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/60224467/4/?bust=1698937533&width=720', 'Imagen 3'),
+    (16, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/60224467/5/?bust=1698937534&width=720', 'Imagen 4'),
+    (16, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/60224467/6/?bust=1698937534&width=720', 'Imagen 5'),
+-- Mascota 17
+    (17, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/68789426/1/?bust=1694200095&width=720', 'Imagen 1'),
+    (17, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/68789426/2/?bust=1694200096&width=720', 'Imagen 2'),
+    (17, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/68789426/3/?bust=1694200096&width=720', 'Imagen 3'),
+    (17, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/68789426/4/?bust=1694200097&width=720', 'Imagen 4'),
+    (17, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/68789426/5/?bust=1694200097&width=720', 'Imagen 5'),
+-- Mascota 18
+    (18, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/56318224/5/?bust=1676938978&width=720', 'Imagen 1'),
+    (18, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/56318224/1/?bust=1657814255&width=720', 'Imagen 2'),
+    (18, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/56318224/2/?bust=1657817318&width=720', 'Imagen 3'),
+    (18, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/56318224/3/?bust=1658195045&width=720', 'Imagen 4'),
+    (18, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/56318224/4/?bust=1658195155&width=720', 'Imagen 5'),
+-- Mascota 19
+    (19, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/54158510/4/?bust=1657538915&width=720', 'Imagen 1'),
+    (19, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/54158510/1/?bust=1657414162&width=720', 'Imagen 2'),
+    (19, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/54158510/2/?bust=1641753917&width=720', 'Imagen 3'),
+    (19, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/54158510/3/?bust=1657414166&width=720', 'Imagen 4'),
+    (19, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/54158510/5/?bust=1657538915&width=720', 'Imagen 5'),
+-- Mascota 20
+    (20, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/50762899/1/?bust=1698945326&width=720', 'Imagen 1'),
+    (20, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/50762899/2/?bust=1699028432&width=720', 'Imagen 2'),
+    (20, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/50762899/3/?bust=1699028436&width=720', 'Imagen 3'),
+    (20, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/50762899/4/?bust=1699020930&width=720', 'Imagen 4'),
+    (20, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/50762899/5/?bust=1699128942&width=720', 'Imagen 5');
+
+
+-- ingreso de historial --
+INSERT INTO history_states ( pet_id, date, status,user_id) VALUES
+    (1, CURRENT_DATE(), 'adoptado',1 ),
+    (1, CURRENT_DATE(), 'adopcion',2),
+    (13, CURRENT_DATE(), 'adoptado',3),
+    (5, CURRENT_DATE(), 'adopcion',4),
+    (7, CURRENT_DATE(), 'adoptado',5);
+
 
 SET SQL_SAFE_UPDATES = 0;
 
