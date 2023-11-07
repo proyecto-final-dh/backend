@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:mysql://db.ctd.academy:3306/pi21023c01_GRUPO7?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
-    username: pi21023c01_GRUPO7
-    password: PeiQu3ki
+    username: BACKEND_USERNAME
+    password: BACKEND_PASSWORD
   jpa:
     hibernate:
       ddl-auto: update
