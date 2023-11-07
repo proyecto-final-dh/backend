@@ -15,11 +15,16 @@ public interface IPetsRepository extends JpaRepository<Pets, Integer> {
     @Query(value = "SELECT pets.* " +
             "FROM petPI.pets AS pets " +
             "WHERE pets.owner_id IN " +
-            "(SELECT ud.id FROM petPI.user_details AS ud WHERE ud.location_id = :id )", nativeQuery = true)
+            "(SELECT ud.id FROM petPI.user_details AS ud WHERE ud.location_id = :id )",
+            countQuery = "SELECT COUNT(*) FROM petPI.pets AS pets " +
+                    "WHERE pets.owner_id IN " +
+                    "(SELECT ud.id FROM petPI.user_details AS ud WHERE ud.location_id = :id )", nativeQuery = true)
     Page<Pets> findByLocation(@Param("id") int id, Pageable pageable);
 
     @Query(value = "SELECT pets.* " +
             "FROM petPI.pets AS pets " +
+            "WHERE pets.owner_id = :id ",
+            countQuery = "SELECT COUNT(*) FROM petPI.pets AS pets " +
             "WHERE pets.owner_id = :id ", nativeQuery = true)
     Page<Pets> findByOwner(@Param("id") int id, Pageable pageable);
 
