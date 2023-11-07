@@ -1,11 +1,11 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3307/petPI?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
-    username: user
-    password: password
+    url: jdbc:mysql://db.ctd.academy:3306/${BACKEND_DB}?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+    username: ${BACKEND_USERNAME}
+    password: ${BACKEND_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
@@ -14,8 +14,7 @@ resqpet:
   app:
     module-name: ResQPet
     api-version: 1.0.0
-    
+
 server:
-  port: 8081
   error:
     include-message: always
