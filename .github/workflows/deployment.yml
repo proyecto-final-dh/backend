@@ -26,11 +26,11 @@ jobs:
         run: docker push piresqpet/backend:latest
   deploy:
     needs: build
-    runs-on: [ubuntu-latest]
+    runs-on: [ec2-aws]
     steps:
       - name: Pull image from docker hub
         run: docker pull piresqpet/backend:latest
       - name: Delete old container
         run: docker rm -f backend-resqpet
       - name: Run docker container
-        run: docker run -e BACKEND_USERNAME='${{secrets.BACKEND_USERNAME}}' -e BACKEND_PASSWORD='${{secrets.BACKEND_PASSWORD}}' -e BACKEND_BD='${{secrets.BACKEND_BD}}' -d -p 8080:8080 --name backend-resqpet piresqpet/backend
+        run: docker run -e BACKEND_USERNAME=${{secrets.BACKEND_USERNAME}} -e BACKEND_PASSWORD=${{secrets.BACKEND_PASSWORD}} -e BACKEND_BD=${{secrets.BACKEND_BD}} -d -p 8080:8080 --name backend-resqpet piresqpet/backend
