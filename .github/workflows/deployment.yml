@@ -33,4 +33,4 @@ jobs:
       - name: Delete old container
         run: docker rm -f backend-resqpet
       - name: Run docker container
-        run: docker run -e BACKEND_USERNAME -e backend_password -e backend_db -d -p 8080:8080 --name backend-resqpet piresqpet/backend
+        run: docker run -e ${{secrets.BACKEND_USERNAME}}  -e ${{secrets.BACKEND_PASSWORD}}  -e ${{secrets.BACKEND_BD}}  -d -p 8080:8080 --name backend-resqpet piresqpet/backend
