@@ -1,5 +1,6 @@
 package com.company.service;
 
+import com.company.enums.PetStatus;
 import com.company.model.entity.Pets;
 import com.company.repository.IPetsRepository;
 import lombok.AllArgsConstructor;
@@ -76,5 +77,13 @@ public class PetService implements  IPetService{
 
     }
 
+    @Override
+    public Page<Pets> findByStatus(PetStatus status, Pageable pageable) throws Exception {
+        try {
+            return IPetsRepository.findByStatus(status, pageable);
+        } catch (Exception e) {
+            throw new Exception("Error al recuperar las mascotas por status.");
+        }
+    }
 
 }
