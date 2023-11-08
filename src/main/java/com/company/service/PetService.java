@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -106,7 +105,6 @@ public class PetService implements  IPetService{
             spec = spec.and((root, query, cb) -> {
                 Join<Pets, UserDetails> userDetailsJoin = root.join("userDetails");
                 Join<UserDetails, Location> locationJoin = userDetailsJoin.join("location");
-                // Utilizamos el operador '%' para buscar registros que contengan la subcadena
                 String likeExpression = "%" + location + "%";
                 return cb.like(locationJoin.get("city"), likeExpression);
             });
