@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -75,6 +76,35 @@ public class ImageTest {
         // Assert
         assertNotNull(imageResponde);
         assertEquals(imageResponde.getPet(), image.getPet());
+    }
+
+    @Test
+    void testByPetId(){
+        int petId = petTest.getId();
+        // Crear imágenes de prueba
+        Image image1 = new Image();
+        image1.setId(1);
+        image1.setPet(petTest);
+        image1.setUrl("http://example.com/image1.jpg");
+        image1.setTitle("Test Image 1");
+
+        Image image2 = new Image();
+        image2.setId(2);
+        image2.setPet(petTest);
+        image2.setUrl("http://example.com/image2.jpg");
+        image2.setTitle("Test Image 2");
+
+        List<Image> expectedImages = Arrays.asList(image1, image2);
+
+        // Configurar el mock para devolver las imágenes esperadas
+        when(imageRepository.findByPetId(petId)).thenReturn(expectedImages);
+
+        // Ejecutar el servicio que usa el método mockeado
+        List<Image> actualImages = imageService.findByPetId(petId);
+
+        // Verificar los resultados
+        assertEquals(expectedImages, actualImages, "Las imágenes devueltas deben coincidir con las esperadas.");
+
     }
 
 
