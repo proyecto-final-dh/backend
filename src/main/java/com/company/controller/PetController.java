@@ -79,7 +79,7 @@ public class PetController {
         }
     }
 
-    @PostMapping("/withImages")
+    @PostMapping("/with-images")
     public ResponseEntity createPetWithImages(@RequestPart("post") CreatePetDto pet,
                                               @RequestPart(value = "image", required = true) MultipartFile[] images) {
         return responsesBuilder.buildResponse(HttpStatus.CREATED.value(), PET_CREATED, petService.saveWithImages(pet, images), null);

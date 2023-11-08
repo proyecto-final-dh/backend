@@ -62,7 +62,7 @@ public class PetIntegrationTest {
         MockPart postPart = new MockPart("post", petJson.getBytes());
         postPart.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.multipart("/pets/withImages")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.multipart("/pets/with-images")
                         .file(file)
                         .part(postPart)
                         .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))

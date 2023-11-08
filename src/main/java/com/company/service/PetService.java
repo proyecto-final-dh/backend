@@ -135,7 +135,7 @@ public class PetService implements IPetService {
         if (breeds.isPresent()) {
             return breeds.get();
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, BREED_NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, BREED_NOT_FOUND);
         }
     }
 
@@ -144,7 +144,7 @@ public class PetService implements IPetService {
         if (userDetails.isPresent()) {
             return userDetails.get();
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, OWNER_NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, OWNER_NOT_FOUND);
         }
     }
 
