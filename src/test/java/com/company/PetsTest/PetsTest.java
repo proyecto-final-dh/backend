@@ -1,9 +1,15 @@
 package com.company.PetsTest;
 
 import com.company.controller.PetController;
+import com.company.enums.PetStatus;
+import com.company.model.entity.Breeds;
 import com.company.model.entity.Pets;
+import com.company.model.entity.Species;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -15,23 +21,31 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PetsTest {
 
     @Autowired
     private PetController petController;
 
-    @BeforeEach
-    public void setup() {}
+    private static Pets newPet;
+    private static Pets newPet2;
+
+    @BeforeAll
+    public void setup() {
+        newPet =  new Pets("Dog", PetStatus.EN_ADOPCION, "Medium", "Male", "A friendly dog");
+        newPet2 = new Pets("Cat", PetStatus.EN_ADOPCION, "Medium", "Male", "A friendly cat");
+    }
+    @AfterAll
+    public void teardown() {
+        newPet = null;
+    }
 
     @Test
     public void testGetAllPets() {
-        Pets newPet = new Pets("Dog", "Available", "Medium", "Male", "A friendly dog");
         ResponseEntity<Object> result = petController.createPet(newPet);
-
-        Pets newPet2 = new Pets("Cat", "Available", "Medium", "Male", "A friendly dog");
         ResponseEntity<Object> result2 = petController.createPet(newPet2);
 
-        List<Pets> petsList = petController.getAllPets(0,9);
+        List<Pets> petsList = petController.getAllPets(0,9).getContent();
         System.out.println(petsList);
         assertTrue(petsList.size() != 0);
 
@@ -41,7 +55,6 @@ public class PetsTest {
 
     @Test
     public void testGetPetById() {
-        Pets newPet = new Pets("Dog", "Available", "Medium", "Male", "A friendly dog");
         ResponseEntity<Object> createResult = petController.createPet(newPet);
 
         int id = ((Pets) createResult.getBody()).getId();
@@ -56,10 +69,8 @@ public class PetsTest {
         petController.deletePet(((Pets) createResult.getBody()).getId());
     }
 
-
     @Test
     public void testCreatePet() {
-        Pets newPet = new Pets("Dog", "Available", "Medium", "Male", "A friendly dog");
         ResponseEntity<Object> result = petController.createPet(newPet);
 
         assertEquals(HttpStatus.CREATED, result.getStatusCode());
@@ -70,25 +81,22 @@ public class PetsTest {
 
     @Test
     public void testUpdatePet() {
-        Pets newPet = new Pets("Cat4", "Available", "Small", "Female", "A playful cat");
         ResponseEntity<Object> result = petController.createPet(newPet);
         var bodyResult = ((Pets) result.getBody());
         int id = bodyResult.getId();
 
-        Pets updatedPet = new Pets("CatUpdate", "Adopted", "Small", "Female", "A friendly and adopted cat");
+        Pets updatedPet = new Pets("CatUpdate", PetStatus.EN_ADOPCION, "Small", "Female", "A friendly and adopted cat");
         ResponseEntity<Object> resultUpdateResponse = petController.updatePet(id, updatedPet);
         assertEquals(HttpStatus.OK, resultUpdateResponse.getStatusCode());
 
         Pets resultUpdate = (Pets) resultUpdateResponse.getBody();
-        assertEquals(resultUpdate.getName1(), updatedPet.getName1());
+        assertEquals(resultUpdate.getName(), updatedPet.getName());
 
         petController.deletePet(id);
     }
 
-
     @Test
     public void testDeletePet() {
-        Pets newPet = new Pets("Rabbit", "Available", "Small", "Male", "A cute rabbit");
         ResponseEntity<Object> result = petController.createPet(newPet);
         var bodyResult = ((Pets) result.getBody());
         int id = bodyResult.getId();

@@ -12,14 +12,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BreedsService implements IBreedsService{
+public class BreedsService implements IBreedsService {
     private final IBreedsRepository breedsRepository;
     private final ISpeciesService speciesService;
+
     @Autowired
     public BreedsService(IBreedsRepository breedsRepository, ISpeciesService speciesService) {
         this.breedsRepository = breedsRepository;
         this.speciesService = speciesService;
     }
+
     @Override
     public List<Breeds> getAllBreeds() {
         return breedsRepository.findAll();
@@ -37,28 +39,74 @@ public class BreedsService implements IBreedsService{
 
     @Override
     public Breeds createBreeds(Breeds breeds) {
-        if (breeds.getName1() == null)
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Name is required");
-        if(breedsRepository.findByName1(breeds.getName1()).isPresent())
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Breed already created");
-        int speciesID = breeds.getSpecies().getId();
-        if (speciesID == 0)
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Species id is required");
-        Species species = speciesService.getSpeciesById(speciesID);
+        validatePayload(breeds);
+        validateNameBreed(0, breeds, "POST");
+
+        Species species = speciesService.getSpeciesById(breeds.getSpecies().getId());
         breeds.setSpecies(species);
         return breedsRepository.save(breeds);
     }
 
     @Override
+    public Breeds updateBreeds(int id, Breeds updatedBreeds) {
+        Optional<Breeds> existingBreeds = breedsRepository.findById(id);
+        if (existingBreeds.isPresent()) {
+            validatePayload(updatedBreeds);
+            validateNameBreed(id, updatedBreeds, "PUT");
+            Species species = speciesService.getSpeciesById(updatedBreeds.getSpecies().getId());
+            Breeds breedsDB = existingBreeds.get();
+            breedsDB.setName(updatedBreeds.getName());
+            breedsDB.setSpecies(species);
+            return breedsRepository.save(breedsDB);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Breed does not exist");
+        }
+    }
+
+    private void validatePayload(Breeds breeds) {
+        if (breeds.getName() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is required");
+        }
+        int speciesID = breeds.getSpecies().getId();
+        if (speciesID == 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Species id is required");
+        }
+        Species species = speciesService.getSpeciesById(speciesID);
+        if (species == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Species does not exist");
+        }
+    }
+
+    private void validateNameBreed(int id, Breeds breeds, String req) {
+        boolean conflict = false;
+        if ("POST".equals(req)) {
+            //POST: Valida que el nombre no se encuentre en la BD
+            if (breedsRepository.findByName(breeds.getName()).isPresent()) {
+                conflict = true;
+            }
+        } else {
+            //PUT: Valida que el nombre no se encuentre en la BD bajo otro id de registro
+            Optional<Breeds> existingBreedsWithName = breedsRepository.findByName(breeds.getName());
+            if (existingBreedsWithName.isPresent()) {
+                Breeds existingBreeds = existingBreedsWithName.get();
+                if (existingBreeds.getId() != id) {
+                    conflict = true;
+                }
+            }
+        }
+        if (conflict) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Breed already created");
+        }
+    }
+
+    @Override
     public void deleteBreeds(int id) {
-        Optional<Breeds> species = breedsRepository.findById(id);
-        if (species.isPresent()) {
+        Optional<Breeds> breeds = breedsRepository.findById(id);
+        if (breeds.isPresent()) {
             breedsRepository.deleteById(id);
-        }else{
+        } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Breed not found");
         }
     }
 }
+

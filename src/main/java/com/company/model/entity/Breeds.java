@@ -15,17 +15,18 @@ public class Breeds {
     private int id;
 
     @NotNull
-    private String name1;
+    private String name;
 
     @ManyToOne
-    @JoinColumn(name = "speciesID")
+    @JoinColumn(name = "species_id")
     private Species species;
+
 
     public Breeds() {
     }
 
-    public Breeds(String name1, Species species) {
-        this.name1 = name1;
+    public Breeds(String name, Species species) {
+        this.name = name;
         this.species = species;
     }
 
@@ -37,12 +38,12 @@ public class Breeds {
         this.id = id;
     }
 
-    public String getName1() {
-        return name1;
+    public String getName() {
+        return name;
     }
 
-    public void setName1(String name1) {
-        this.name1 = name1;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Species getSpecies() {

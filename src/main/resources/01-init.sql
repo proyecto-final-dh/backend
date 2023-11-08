@@ -1,13 +1,12 @@
 CREATE TABLE pets (
-                      ID INT AUTO_INCREMENT PRIMARY KEY,
-                      name1 VARCHAR(255) NOT NULL,
-                      ownerID INT ,
-                      breedID int,
-                      status1 varchar(20) ,
-                      locationID INT,
+                      id INT AUTO_INCREMENT PRIMARY KEY,
+                      name VARCHAR(255) NOT NULL,
+                      owner_id INT,
+                      breed_id int,
+                      status varchar(20),
                       size varchar(50),
                       gender varchar(20),
-                      description1 TEXT
+                      description TEXT
 
 );
 
@@ -22,78 +21,67 @@ CREATE TABLE locations (
 
 CREATE TABLE species (
                          id INT AUTO_INCREMENT PRIMARY KEY,
-                         name1 VARCHAR(255) NOT NULL
+                         name VARCHAR(255) NOT NULL
 );
 
 
 CREATE TABLE breeds (
                         id INT AUTO_INCREMENT PRIMARY KEY,
-                        speciesID INT NOT NULL,
-                        name1 VARCHAR(255) NOT NULL
+                        species_id INT NOT NULL,
+                        name VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE pet_images (
                             id INT AUTO_INCREMENT PRIMARY KEY,
-                            petID int,
-                            url VARCHAR(2048) NOT NULL
+                            pet_id int,
+                            url VARCHAR(2048) NOT NULL,
+                            title VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE users (
-                       id INT AUTO_INCREMENT PRIMARY KEY,
-                       first_name VARCHAR(255) NOT NULL,
-                       last_name VARCHAR(255) NOT NULL,
-                       locationID INT,
-                       phone VARCHAR(20) NOT NULL
-);
 
 CREATE TABLE history_states (
                                 id INT AUTO_INCREMENT PRIMARY KEY,
-                                petID INT NOT NULL,
-                                date1 DATE NOT NULL,
-                                status1 varchar(29),
-                                userID INT NOT NULL
+                                pet_id INT NOT NULL,
+                                date DATE NOT NULL,
+                                status varchar(29),
+                                user_id INT NOT NULL
+);
+
+CREATE TABLE user_details (
+                              id INT AUTO_INCREMENT PRIMARY KEY,
+                              user_id CHAR(36) UNIQUE NOT NULL,
+                              location_id INT NOT NULL,
+                              cellphone VARCHAR(20) NOT NULL,
+                              created_at VARCHAR(30) NOT NULL,
+                              updated_at VARCHAR(30) NOT NULL
 );
 
 -- Agregando Claves  forÃ¡neas
 
 -- mascotas
-
+ALTER TABLE pets
+    ADD FOREIGN KEY (owner_id) REFERENCES user_details(id) ON DELETE CASCADE;
 
 ALTER TABLE pets
-    ADD FOREIGN KEY (ownerID) REFERENCES users(id) ON DELETE CASCADE;
-
-ALTER TABLE pets
-    ADD FOREIGN KEY (breedID) REFERENCES breeds(id) ;
-
-
-ALTER TABLE pets
-    ADD FOREIGN KEY (BreedID) REFERENCES breeds(id) ;
-
-ALTER TABLE pets
-    ADD FOREIGN KEY (locationID) REFERENCES locations(id);
-
-ALTER TABLE pets
-    ADD FOREIGN KEY (ownerID) REFERENCES users(id) ;
-
+    ADD FOREIGN KEY (breed_id) REFERENCES breeds(id);
 
 -- razas
 ALTER TABLE breeds
-    ADD FOREIGN KEY (speciesID) REFERENCES species(id) ON DELETE CASCADE;
+    ADD FOREIGN KEY (species_id) REFERENCES species(id) ON DELETE CASCADE;
 
 -- imagenes de mascota
 ALTER TABLE pet_images
-    ADD FOREIGN KEY (petID) REFERENCES pets(id) ON DELETE CASCADE;
+    ADD FOREIGN KEY (pet_id) REFERENCES pets(id) ON DELETE CASCADE;
 
 -- usuarios
-
-ALTER TABLE users
-    ADD FOREIGN KEY (locationID) REFERENCES locations(id);
+ALTER TABLE user_details
+    ADD FOREIGN KEY (location_id) REFERENCES locations(id);
 
 -- Historial de estados
 ALTER TABLE history_states
-    ADD FOREIGN KEY (petID) REFERENCES pets(ID);
+    ADD FOREIGN KEY (pet_id) REFERENCES pets(id);
 
 ALTER TABLE history_states
-    ADD FOREIGN KEY (userID) REFERENCES users(ID);
+    ADD FOREIGN KEY (user_id) REFERENCES user_details(id);
 
 

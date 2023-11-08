@@ -46,8 +46,8 @@ public class SpeciesTest {
 
         assertEquals(HttpStatus.CREATED, result.getStatusCode());
         assertEquals(newSpecies, result.getBody());
-        System.out.println( "Id: " + ((Species) result.getBody()).getId() + " - Name1: " + ((Species) result.getBody()).getName() );
-        speciesController.deleteSpecies(((Species) result.getBody()).getId());
+        System.out.println( "Id: " + ((Species) result.getBody()).getId() + " - Name: " + ((Species) result.getBody()).getName() );
+        //speciesController.deleteSpecies(((Species) result.getBody()).getId());
     }
 
 
