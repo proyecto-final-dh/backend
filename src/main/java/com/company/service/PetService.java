@@ -9,7 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @AllArgsConstructor
 @Service
@@ -75,6 +79,67 @@ public class PetService implements  IPetService{
 
 
     }
+
+    public List<Pets> findPetsRecommendations(int petId, int limit) throws Exception {
+        Optional<Pets> petOptional = IPetsRepository.findById(petId);
+
+        if (petOptional.isPresent()) {
+
+
+            // Listas para almacenar resultados únicos
+            List<Pets> recommendations = new ArrayList<>();
+            Set<Pets> uniqueRecommendations = new HashSet<>();
+
+            // Agregar resultados de la primera consulta a la lista
+            recommendations.addAll(IPetsRepository.findPetsRecommendationsAll(petId));
+            uniqueRecommendations.addAll(recommendations);
+
+            // Verificar si ya se alcanzó el límite
+            if (recommendations.size() < limit) {
+                int remainingLimit = limit - recommendations.size();
+
+                // Agregar resultados de la segunda consulta a la lista
+                List<Pets> specieStatusRecommendations = IPetsRepository.findPetsRecommendationsSpecieStatus(petId);
+                for (Pets pet : specieStatusRecommendations) {
+                    if (uniqueRecommendations.add(pet)) {
+                        recommendations.add(pet);
+                        remainingLimit--;
+                    }
+                    if (remainingLimit <= 0) {
+                        break;
+                    }
+                }
+            }
+
+            // Verificar nuevamente si ya se alcanzó el límite
+            if (recommendations.size() < limit) {
+                int remainingLimit = limit - recommendations.size();
+
+                // Agregar resultados de la tercera consulta a la lista
+                List<Pets> statusRecommendations = IPetsRepository.findPetsRecommendationsStatus(petId);
+                for (Pets pet : statusRecommendations) {
+                    if (uniqueRecommendations.add(pet)) {
+                        recommendations.add(pet);
+                        remainingLimit--;
+                    }
+                    if (remainingLimit <= 0) {
+                        break;
+                    }
+                }
+            }
+
+            // Limitar la lista final al tamaño especificado
+            recommendations = recommendations.subList(0, Math.min(recommendations.size(), limit));
+
+            return recommendations;
+        } else {
+            throw new Exception("Error al recuperar las mascotas paginadas.");
+        }
+    }
+
+
+
+
 
 
 }

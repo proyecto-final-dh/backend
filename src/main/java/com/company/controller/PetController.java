@@ -86,4 +86,21 @@ public class PetController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the pet");
         }
     }
+
+
+
+    @GetMapping("/recommendation/{id}")
+    public List<Pets> getPetsRecommendation(@PathVariable int id,@RequestParam(name = "limit", required = false) int limit)
+    {
+        try {
+            return petService.findPetsRecommendations(id,limit);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+
+
+
+
 }
