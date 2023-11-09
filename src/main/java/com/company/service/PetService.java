@@ -84,15 +84,21 @@ public class PetService implements  IPetService{
         Optional<Pets> petOptional = IPetsRepository.findById(petId);
 
         if (petOptional.isPresent()) {
-
+            Pets pet = petOptional.get();
 
             // Listas para almacenar resultados únicos
             List<Pets> recommendations = new ArrayList<>();
             Set<Pets> uniqueRecommendations = new HashSet<>();
 
             // Agregar resultados de la primera consulta a la lista
-            recommendations.addAll(IPetsRepository.findPetsRecommendationsAll(petId));
-            uniqueRecommendations.addAll(recommendations);
+            List<Pets> recommendationsAll = IPetsRepository.findPetsRecommendationsAll(petId);
+            for (Pets petResult : recommendationsAll) {
+                if (petResult.getId() != pet.getId()) {
+                    if (uniqueRecommendations.add(petResult)) {
+                        recommendations.add(petResult);
+                    }
+                }
+            }
 
             // Verificar si ya se alcanzó el límite
             if (recommendations.size() < limit) {
@@ -100,10 +106,12 @@ public class PetService implements  IPetService{
 
                 // Agregar resultados de la segunda consulta a la lista
                 List<Pets> specieStatusRecommendations = IPetsRepository.findPetsRecommendationsSpecieStatus(petId);
-                for (Pets pet : specieStatusRecommendations) {
-                    if (uniqueRecommendations.add(pet)) {
-                        recommendations.add(pet);
-                        remainingLimit--;
+                for (Pets petResult : specieStatusRecommendations) {
+                    if (petResult.getId() != pet.getId()) {
+                        if (uniqueRecommendations.add(petResult)) {
+                            recommendations.add(petResult);
+                            remainingLimit--;
+                        }
                     }
                     if (remainingLimit <= 0) {
                         break;
@@ -117,10 +125,12 @@ public class PetService implements  IPetService{
 
                 // Agregar resultados de la tercera consulta a la lista
                 List<Pets> statusRecommendations = IPetsRepository.findPetsRecommendationsStatus(petId);
-                for (Pets pet : statusRecommendations) {
-                    if (uniqueRecommendations.add(pet)) {
-                        recommendations.add(pet);
-                        remainingLimit--;
+                for (Pets petResult : statusRecommendations) {
+                    if (petResult.getId() != pet.getId()) {
+                        if (uniqueRecommendations.add(petResult)) {
+                            recommendations.add(petResult);
+                            remainingLimit--;
+                        }
                     }
                     if (remainingLimit <= 0) {
                         break;
@@ -136,6 +146,8 @@ public class PetService implements  IPetService{
             throw new Exception("Error al recuperar las mascotas paginadas.");
         }
     }
+
+
 
 
 
