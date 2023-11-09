@@ -86,11 +86,9 @@ public class PetService implements  IPetService{
         if (petOptional.isPresent()) {
             Pets pet = petOptional.get();
 
-            // Listas para almacenar resultados únicos
             List<Pets> recommendations = new ArrayList<>();
             Set<Pets> uniqueRecommendations = new HashSet<>();
 
-            // Agregar resultados de la primera consulta a la lista
             List<Pets> recommendationsAll = IPetsRepository.findPetsRecommendationsAll(petId);
             for (Pets petResult : recommendationsAll) {
                 if (petResult.getId() != pet.getId()) {
@@ -100,7 +98,6 @@ public class PetService implements  IPetService{
                 }
             }
 
-            // Verificar si ya se alcanzó el límite
             if (recommendations.size() < limit) {
                 int remainingLimit = limit - recommendations.size();
 
@@ -119,7 +116,6 @@ public class PetService implements  IPetService{
                 }
             }
 
-            // Verificar nuevamente si ya se alcanzó el límite
             if (recommendations.size() < limit) {
                 int remainingLimit = limit - recommendations.size();
 
@@ -138,12 +134,11 @@ public class PetService implements  IPetService{
                 }
             }
 
-            // Limitar la lista final al tamaño especificado
             recommendations = recommendations.subList(0, Math.min(recommendations.size(), limit));
 
             return recommendations;
         } else {
-            throw new Exception("Error al recuperar las mascotas paginadas.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found");
         }
     }
 
