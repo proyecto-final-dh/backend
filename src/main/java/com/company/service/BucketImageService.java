@@ -1,5 +1,9 @@
 package com.company.service;
 
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -7,15 +11,11 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import jakarta.annotation.PostConstruct;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -30,11 +30,16 @@ import static com.company.constants.Constants.PET_IMAGES_FOLDER;
 @Service
 public class BucketImageService {
 
+    @Value("${bucket.name}")
+    private String bucketName;
+    @Value("${bucket.accessKey}")
+    private String accessKey;
+    @Value("${bucket.secretKey}")
+    private String secretKey;
+    @Value("${bucket.url}")
+    private String endpointUrl;
+
     private S3Client s3client;
-    String bucketName = System.getenv("BUCKET_NAME");
-    String accessKey = System.getenv("S3_ACCESS_KEY_ID");
-        String secretKey = System.getenv("S3_SECRET_ACCESS_KEY");
-    private String endpointUrl = String.format("https://%s.s3.us-east-1.amazonaws.com", bucketName);
 
     @PostConstruct
     private void initializeAmazon() {
@@ -87,18 +92,18 @@ public class BucketImageService {
     }
 
     private void validateFiles(MultipartFile[] files) {
-        if(files.length < 1) throw new ResponseStatusException(
+        if (files.length < 1) throw new ResponseStatusException(
                 org.springframework.http.HttpStatus.BAD_REQUEST, EMPTY_IMAGE);
 
-        if(files.length > 5) throw new ResponseStatusException(
+        if (files.length > 5) throw new ResponseStatusException(
                 org.springframework.http.HttpStatus.BAD_REQUEST, MAXIMUM_IMAGES_EXCEEDED);
 
-        if(!validateImageExtension(files)) {
+        if (!validateImageExtension(files)) {
             throw new ResponseStatusException(
                     org.springframework.http.HttpStatus.BAD_REQUEST, INVALID_IMAGE_EXTENSION);
         }
 
-        if(!validateImageSize(files)) {
+        if (!validateImageSize(files)) {
             throw new ResponseStatusException(
                     org.springframework.http.HttpStatus.BAD_REQUEST, MAXIMUM_IMAGE_SIZE_EXCEEDED);
         }

@@ -5,26 +5,22 @@ import com.company.exceptions.ResourceNotFoundException;
 import com.company.model.dto.SaveUserDetailsDto;
 import com.company.model.entity.UserDetails;
 import com.company.service.UserDetailsService;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
-class UserDetailsServiceTest {
+public class UserDetailsServiceTest {
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -35,7 +31,7 @@ class UserDetailsServiceTest {
     void save() throws ResourceNotFoundException, BadRequestException {
         SaveUserDetailsDto userDetailsDto = new SaveUserDetailsDto("userId1", "1234567890", 1);
         UserDetails savedUserDetails = userDetailsService.save(userDetailsDto);
-        assertTrue(savedUserDetails.getId()>0);
+        assertTrue(savedUserDetails.getId() > 0);
         assertNotEquals(0, savedUserDetails.getId());
 
         // Delete the user
