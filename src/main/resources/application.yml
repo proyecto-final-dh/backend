@@ -19,3 +19,9 @@ server:
   port: 8081
   error:
     include-message: always
+
+security:
+  oauth2:
+    resource-server:
+      jwt:
+        jwk-set-uri: http://localhost:8080/realms/prueba-reino/protocol/openid-connect/certs

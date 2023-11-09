@@ -1,5 +1,6 @@
 package com.company.config.security;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -9,9 +10,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
@@ -21,6 +19,8 @@ import java.util.Arrays;
 public class SecurityConfiguration {
 
 
+    @Value("${security.oauth2.resourceserver.jwt.jwk-set-uri}")
+    private String jwkSetUri;
 
         @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -46,11 +46,11 @@ public class SecurityConfiguration {
     }
 
 
-    @Bean
+
+
+
     public JwtDecoder jwtDecoder() {
-        return NimbusJwtDecoder.withJwkSetUri("http://localhost:8080/realms/prueba-reino/protocol/openid-connect/certs").build();
-
-
+        return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
     }
 
 

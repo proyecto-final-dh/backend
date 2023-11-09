@@ -8,11 +8,13 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +30,7 @@ public class JwtAuthenticationConverter implements Converter<Jwt, AbstractAuthen
     objectMapper.registerModule(new JavaTimeModule());
     resourcesRoles.addAll(extractRoles("resource_access", objectMapper.readTree(objectMapper.writeValueAsString(jwt)).get("claims")));
     resourcesRoles.addAll(extractRolesRealmAccess("realm_access", objectMapper.readTree(objectMapper.writeValueAsString(jwt)).get("claims")));
-    resourcesRoles.addAll(extractGroups("groups", objectMapper.readTree(objectMapper.writeValueAsString(jwt)).get("claims")));
+    resourcesRoles.addAll(extractIdUser("sub", objectMapper.readTree(objectMapper.writeValueAsString(jwt)).get("claims")));
     return resourcesRoles;
   }
 
@@ -61,21 +63,22 @@ public class JwtAuthenticationConverter implements Converter<Jwt, AbstractAuthen
     return authorityList;
   }
 
-  private static List<GrantedAuthority> extractGroups(String route, JsonNode jwt) {
-    Set<String> rolesWithPrefix = new HashSet<>();
+  private static List<GrantedAuthority> extractIdUser(String route,JsonNode jwt) {
+    // Extraer el valor del campo 'sub'.
+    String userId = jwt.path("sub").asText();
 
-    jwt.path(route)
-            .elements()
-            .forEachRemaining(e ->  rolesWithPrefix.add("GROUP_" + e.asText()));
-    ;
+    // Crear la lista de GrantedAuthority con el ID del usuario.
+    GrantedAuthority authority = new SimpleGrantedAuthority("ID_" + userId);
 
-    final List<GrantedAuthority> authorityList =
-            AuthorityUtils.createAuthorityList(rolesWithPrefix.toArray(new String[0]));
-
-    return authorityList;
+    // Devolver una lista con esa única autoridad.
+    return Collections.singletonList(authority);
   }
+
+
+
   public JwtAuthenticationConverter() {
   }
+
 
   public AbstractAuthenticationToken convert(final Jwt source) {
     Collection<GrantedAuthority> authorities = null;
