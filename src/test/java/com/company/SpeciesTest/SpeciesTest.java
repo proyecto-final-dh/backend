@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.notNull;
 
 @SpringBootTest
-@ActiveProfiles("dev")
 public class SpeciesTest {
 
     @Autowired

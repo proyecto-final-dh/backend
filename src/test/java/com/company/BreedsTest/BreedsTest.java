@@ -22,7 +22,6 @@ import static org.mockito.ArgumentMatchers.notNull;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ActiveProfiles("dev")
 public class BreedsTest {
     @Autowired
     private BreedsController breedsController;
