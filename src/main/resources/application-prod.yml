@@ -3,12 +3,6 @@ spring:
     url: jdbc:mysql://db.ctd.academy:3306/${BACKEND_DB}?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
     username: ${BACKEND_USERNAME}
     password: ${BACKEND_PASSWORD}
-
-bucketName: ${BUCKET_NAME}
-accessKey: ${S3_ACCESS_KEY_ID}
-secretKey: ${S3_SECRET_ACCESS_KEY}
-endpointUrl: https://${BUCKET_NAME}.s3.us-east-1.amazonaws.com
-
   jpa:
     hibernate:
       ddl-auto: none
@@ -16,6 +10,11 @@ endpointUrl: https://${BUCKET_NAME}.s3.us-east-1.amazonaws.com
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
+
+bucket:
+  name: ${BUCKET_NAME}
+  accessKey: ${S3_ACCESS_KEY_ID}
+  secretKey: ${S3_SECRET_ACCESS_KEY}
 
 resqpet:
   app:
@@ -25,4 +24,4 @@ resqpet:
 server:
   error:
     include-message: always
-
+  port: 8080
