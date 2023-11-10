@@ -12,5 +12,5 @@ public interface IPetService {
     Pets save(Pets pets) throws Exception;
     void deleteById(int id) throws Exception;
     Page<Pets> findByStatus(PetStatus status, Pageable pageable) throws Exception;
-    Page<Pets> filterPets(String location, String species, String breed, String size, Pageable pageable) throws Exception;
+    Page<Pets> filterPets(String location, String species, Integer breed, String size, Pageable pageable) throws Exception;
 }
