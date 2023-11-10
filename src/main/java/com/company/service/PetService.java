@@ -7,6 +7,7 @@ import com.company.model.entity.UserDetails;
 import com.company.repository.IPetsRepository;
 import jakarta.persistence.criteria.Join;
 import lombok.AllArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -89,16 +90,20 @@ public class PetService implements  IPetService{
             throw new Exception("Error al recuperar las mascotas por status.");
         }
     }
-    public Page<Pets> filterPets(String location, String species, String breed, String size, Pageable pageable) throws Exception {
+
+    @Override
+    public Page<Pets> filterPets(String location, String species, Integer breedId, String size, String status, Pageable pageable) throws Exception {
         try {
-            Specification<Pets> spec = buildSpecification(location, species, breed, size);
+            Specification<Pets> spec = buildSpecification(location, species, breedId, size, status);
+
             return IPetsRepository.findAll(spec, pageable);
         } catch (Exception e) {
             throw new Exception("Error al filtrar mascotas");
         }
     }
 
-    private Specification<Pets> buildSpecification(String location, String species, String breed, String size) {
+
+    private Specification<Pets> buildSpecification(String location, String species, Integer breedId, String size, String status) {
         Specification<Pets> spec = Specification.where(null);
 
         if (location != null && !location.isEmpty()) {
@@ -115,9 +120,9 @@ public class PetService implements  IPetService{
                     cb.equal(root.get("breed").get("species").get("name"), species));
         }
 
-        if (breed != null && !breed.isEmpty()) {
+        if (breedId != null) {
             spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("breed").get("name"), breed));
+                    cb.equal(root.get("breed").get("id"), breedId));
         }
 
         if (size != null && !size.isEmpty()) {
@@ -125,8 +130,17 @@ public class PetService implements  IPetService{
                     cb.equal(root.get("size"), size));
         }
 
+
+        if (status != null && !status.isEmpty()) {
+            PetStatus petStatus = PetStatus.valueOf(status);
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("status"), petStatus));
+        }
+
         return spec;
     }
+
+
 
 
 }
