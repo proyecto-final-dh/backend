@@ -4,7 +4,6 @@ import com.company.model.dto.SaveLocationDTO;
 import com.company.model.entity.Location;
 import com.company.service.ILocationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,21 +25,9 @@ public class LocationController {
     @Autowired
     private ILocationService locationService;
 
-    @Value("${bucket.name}")
-    private String bucketName;
-    @Value("${bucket.accessKey}")
-    private String accessKey;
-    @Value("${bucket.secretKey}")
-    private String secretKey;
-
     @GetMapping
     public ResponseEntity<List<Location>> findAll() {
         List<Location> locations = locationService.findAll();
-
-        System.out.println("bucketName: " + bucketName);
-        System.out.println("accessKey: " + accessKey);
-        System.out.println("secretKey: " + secretKey);
-
         return ResponseEntity.ok(locations);
 
     }
@@ -90,4 +77,3 @@ public class LocationController {
         }
     }
 }
-
