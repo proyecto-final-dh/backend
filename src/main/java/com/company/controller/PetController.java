@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/pets")
@@ -65,8 +67,8 @@ public class PetController {
 
     @GetMapping("/locations/{id}")
     public List<Pets> getByLocation(@PathVariable int id,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "9") int size) {
+                                    @RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "9") int size) {
         try {
             Pageable pageable = PageRequest.of(page,size);
             Page<Pets> petPage = petService.findByLocation(id,pageable);
