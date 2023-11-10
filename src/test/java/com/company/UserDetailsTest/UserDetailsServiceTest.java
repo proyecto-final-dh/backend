@@ -33,6 +33,9 @@ public class UserDetailsServiceTest {
         UserDetails savedUserDetails = userDetailsService.save(userDetailsDto);
         assertTrue(savedUserDetails.getId() > 0);
         assertNotEquals(0, savedUserDetails.getId());
+
+        // Delete the user
+        userDetailsService.deleteById((long) savedUserDetails.getId());
     }
 
     @Test
@@ -47,21 +50,30 @@ public class UserDetailsServiceTest {
     @Order(3)
     void findById() throws ResourceNotFoundException, BadRequestException {
         SaveUserDetailsDto userDetailsDto = new SaveUserDetailsDto("userId2", "9876543210", 2);
-        userDetailsService.save(userDetailsDto);
-        UserDetails foundUserDetails1 = userDetailsService.findById(1L);
-        UserDetails foundUserDetails2 = userDetailsService.findById(2L);
-        assertEquals("userId1", foundUserDetails1.getUserId());
-        assertEquals("userId2", foundUserDetails2.getUserId());
+        UserDetails savedUser = userDetailsService.save(userDetailsDto);
+        UserDetails foundUserDetails = userDetailsService.findById((long) savedUser.getId());
+        assertEquals("userId2", foundUserDetails.getUserId());
+        assertEquals("9876543210", foundUserDetails.getCellphone());
+        assertEquals(2, foundUserDetails.getLocation().getId());
+
+        // Delete the user
+        userDetailsService.deleteById((long) savedUser.getId());
     }
 
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Order(4)
     void findByUserId() throws ResourceNotFoundException, BadRequestException {
-        UserDetails foundUserDetails1 = userDetailsService.findByUserId("userId1");
-        UserDetails foundUserDetails2 = userDetailsService.findByUserId("userId2");
-        assertEquals(1, foundUserDetails1.getLocation().getId());
-        assertEquals(2, foundUserDetails2.getLocation().getId());
+        SaveUserDetailsDto userDetailsDto = new SaveUserDetailsDto("idToFind", "9876543210", 2);
+        userDetailsService.save(userDetailsDto);
+
+        UserDetails foundUserDetails = userDetailsService.findByUserId("idToFind");
+
+        assertEquals(userDetailsDto.getLocationId(), foundUserDetails.getLocation().getId());
+        assertEquals(userDetailsDto.getCellphone(), foundUserDetails.getCellphone());
+
+        // Delete the user
+        userDetailsService.deleteById((long) foundUserDetails.getId());
     }
 
 
@@ -69,23 +81,34 @@ public class UserDetailsServiceTest {
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Order(5)
     void update() throws ResourceNotFoundException, BadRequestException {
-        UserDetails userDetailsToUpdate = userDetailsService.findById(1L);
-        SaveUserDetailsDto newUser = new SaveUserDetailsDto(userDetailsToUpdate.getUserId(), userDetailsToUpdate.getCellphone(), userDetailsToUpdate.getLocation().getId());
-        newUser.setLocationId(9);
-        userDetailsService.update(1L, newUser);
-        UserDetails foundedUser = userDetailsService.findByUserId("userId1");
-        assertEquals(9, foundedUser.getLocation().getId());
+        SaveUserDetailsDto userDetailsDto = new SaveUserDetailsDto("userToUpdate", "9876543210", 2);
+        UserDetails savedUser = userDetailsService.save(userDetailsDto);
+
+        UserDetails userDetailsToUpdate = userDetailsService.findById((long) savedUser.getId());
+
+        SaveUserDetailsDto newUser = new SaveUserDetailsDto("UpdatedUser", "1234567890", 9);
+        userDetailsService.update((long) savedUser.getId(), newUser);
+
+        UserDetails foundedUser = userDetailsService.findByUserId(newUser.getUserId());
+
+        assertEquals(newUser.getLocationId(), foundedUser.getLocation().getId());
+        assertEquals(newUser.getCellphone(), foundedUser.getCellphone());
+        assertEquals(newUser.getUserId(), foundedUser.getUserId());
+
+        // Delete the user
+        userDetailsService.deleteById((long) savedUser.getId());
     }
 
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     @Order(6)
     void deleteById() throws ResourceNotFoundException, BadRequestException {
-        userDetailsService.deleteById(1L);
-        Throwable exception1 = assertThrows(ResourceNotFoundException.class, () -> userDetailsService.findById(1L));
-        userDetailsService.deleteById(2L);
-        Throwable exception2 = assertThrows(ResourceNotFoundException.class, () -> userDetailsService.findById(2L));
-        assertEquals("Usuario con ID " + 1 + " no existe.", exception1.getMessage());
-        assertEquals("Usuario con ID " + 2 + " no existe.", exception2.getMessage());
+        SaveUserDetailsDto userDetailsDto = new SaveUserDetailsDto("userToDelete", "1234567890", 1);
+        UserDetails savedUser = userDetailsService.save(userDetailsDto);
+
+        userDetailsService.deleteById((long) savedUser.getId());
+        Throwable exception1 = assertThrows(ResourceNotFoundException.class, () -> userDetailsService.findById((long) savedUser.getId()));
+
+        assertEquals("Usuario con ID " + savedUser.getId() + " no existe.", exception1.getMessage());
     }
 }
