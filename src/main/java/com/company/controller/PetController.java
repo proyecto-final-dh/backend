@@ -1,4 +1,5 @@
 package com.company.controller;
+import com.company.enums.PetStatus;
 import com.company.model.entity.Pets;
 import com.company.service.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/pets")
@@ -26,18 +25,31 @@ public class PetController {
 
 
     @GetMapping
-    public List<Pets> getAllPets(
+    public Page<Pets> getAllPets(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "9") int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
             Page<Pets> petPage = petService.findAll(pageable);
-            return petPage.getContent();
+            return petPage;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
+    @GetMapping("/status")
+    public Page<Pets> getPetsByStatus(
+            @RequestParam PetStatus status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<Pets> petPage = petService .findByStatus(status,pageable);
+            return petPage;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getPetById(@PathVariable int id) {
@@ -112,4 +124,27 @@ public class PetController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the pet");
         }
     }
+
+    @GetMapping("/filter")
+    public ResponseEntity<Object> filterPets(
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) String species,
+            @RequestParam(required = false, name = "breed_id") Integer breedId,
+            @RequestParam(required = false, name = "pet_size") String petSize,
+            @RequestParam(required = false) String status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size) throws Exception {
+
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<Pets> filteredPets = petService.filterPets(location, species, breedId, petSize, status, pageable);
+            return ResponseEntity.ok(filteredPets);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+
+
+
 }
