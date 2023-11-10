@@ -1,5 +1,6 @@
 package com.company.model.dto;
 
+import com.company.enums.PetStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.List;
 public class PetWithImagesDto {
     private int id;
     private String name;
-    private String status;
+    private PetStatus status;
     private String size;
     private String gender;
     private String description;

@@ -1,6 +1,10 @@
 package com.company.service;
 
 import com.company.model.dto.ImageWithTitle;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -30,11 +34,16 @@ import static com.company.constants.Constants.PET_IMAGES_FOLDER;
 @Service
 public class BucketImageService {
 
+    @Value("${bucket.name}")
+    private String bucketName;
+    @Value("${bucket.accessKey}")
+    private String accessKey;
+    @Value("${bucket.secretKey}")
+    private String secretKey;
+    @Value("${bucket.url}")
+    private String endpointUrl;
+
     private S3Client s3client;
-    String bucketName = System.getenv("BUCKET_NAME");
-    String accessKey = System.getenv("S3_ACCESS_KEY_ID");
-        String secretKey = System.getenv("S3_SECRET_ACCESS_KEY");
-    private String endpointUrl = String.format("https://%s.s3.us-east-1.amazonaws.com", bucketName);
 
     @PostConstruct
     private void initializeAmazon() {

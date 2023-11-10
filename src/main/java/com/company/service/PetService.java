@@ -5,6 +5,8 @@ import com.company.model.dto.ImageWithTitle;
 import com.company.model.dto.PetWithImagesDto;
 import com.company.model.entity.Breeds;
 import com.company.model.entity.Image;
+import com.company.enums.PetStatus;
+import com.company.model.entity.Location;
 import com.company.model.entity.Pets;
 import com.company.model.entity.UserDetails;
 import com.company.repository.IBreedsRepository;
@@ -13,8 +15,10 @@ import com.company.repository.IPetsRepository;
 import com.company.repository.IUserDetailsRepository;
 import com.company.service.interfaces.IPetService;
 import jakarta.transaction.Transactional;
+import jakarta.persistence.criteria.Join;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
@@ -130,6 +134,26 @@ public class PetService implements IPetService {
 
     }
 
+    @Override
+    public Page<Pets> findByStatus(PetStatus status, Pageable pageable) throws Exception {
+        try {
+            return IPetsRepository.findByStatus(status, pageable);
+        } catch (Exception e) {
+            throw new Exception("Error al recuperar las mascotas por status.");
+        }
+    }
+
+    @Override
+    public Page<Pets> filterPets(String location, String species, Integer breedId, String size, String status, Pageable pageable) throws Exception {
+        try {
+            Specification<Pets> spec = buildSpecification(location, species, breedId, size, status);
+
+            return IPetsRepository.findAll(spec, pageable);
+        } catch (Exception e) {
+            throw new Exception("Error al filtrar mascotas");
+        }
+    }
+
     private Breeds validateBreeds(int id) {
         Optional<Breeds> breeds = breedsRepository.findById(id);
         if (breeds.isPresent()) {
@@ -166,5 +190,41 @@ public class PetService implements IPetService {
         }
     }
 
+    private Specification<Pets> buildSpecification(String location, String species, Integer breedId, String size, String status) {
+        Specification<Pets> spec = Specification.where(null);
+
+        if (location != null && !location.isEmpty()) {
+            spec = spec.and((root, query, cb) -> {
+                Join<Pets, UserDetails> userDetailsJoin = root.join("userDetails");
+                Join<UserDetails, Location> locationJoin = userDetailsJoin.join("location");
+                String likeExpression = "%" + location + "%";
+                return cb.like(locationJoin.get("city"), likeExpression);
+            });
+        }
+
+        if (species != null && !species.isEmpty()) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("breed").get("species").get("name"), species));
+        }
+
+        if (breedId != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("breed").get("id"), breedId));
+        }
+
+        if (size != null && !size.isEmpty()) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("size"), size));
+        }
+
+
+        if (status != null && !status.isEmpty()) {
+            PetStatus petStatus = PetStatus.valueOf(status);
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("status"), petStatus));
+        }
+
+        return spec;
+    }
 
 }
