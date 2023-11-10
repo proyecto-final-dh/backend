@@ -99,8 +99,8 @@ public class PetService implements IPetService {
 
         Pets fullPet = mapCreatePetDtoToPet(pet);
 
-        fullPet.setBreed(validateBreeds(pet.getBreed_id()));
-        fullPet.setUserDetails(validateUserDetails(pet.getOwner_id()));
+        fullPet.setBreed(validateBreeds(pet.getBreedId()));
+        fullPet.setUserDetails(validateUserDetails(pet.getOwnerId()));
 
         Pets savedPet = IPetsRepository.save(fullPet);
         List<ImageWithTitle> savedImages = bucketImageService.uploadFileWithTitle(images);
@@ -158,10 +158,10 @@ public class PetService implements IPetService {
         if (pet.getSize() == null || pet.getSize().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_SIZE_REQUIRED);
         }
-        if (pet.getOwner_id() == null || pet.getOwner_id() < 1) {
+        if (pet.getOwnerId() == null || pet.getOwnerId() < 1) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_OWNER_REQUIRED);
         }
-        if (pet.getBreed_id() == null || pet.getBreed_id() < 1) {
+        if (pet.getBreedId() == null || pet.getBreedId() < 1) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_BREED_REQUIRED);
         }
     }

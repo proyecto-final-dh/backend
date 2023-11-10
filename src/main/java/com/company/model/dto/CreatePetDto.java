@@ -1,5 +1,7 @@
 package com.company.model.dto;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,12 +9,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CreatePetDto {
     private String name;
     private String status;
     private String size;
     private String gender;
     private String description;
-    private Integer breed_id;
-    private Integer owner_id;
+    private Integer breedId;
+    private Integer ownerId;
 }

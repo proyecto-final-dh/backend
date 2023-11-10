@@ -86,8 +86,8 @@ public class PetIntegrationTest {
         pet.setName("Dog");
         pet.setGender("M");
         pet.setSize("Large");
-        pet.setOwner_id(1);
-        pet.setBreed_id(1);
+        pet.setOwnerId(1);
+        pet.setBreedId(1);
 
         return pet;
     }
