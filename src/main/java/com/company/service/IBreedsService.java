@@ -1,7 +1,6 @@
 package com.company.service;
 
 import com.company.model.entity.Breeds;
-import com.company.model.entity.Species;
 
 import java.util.List;
 
