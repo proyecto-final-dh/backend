@@ -8,6 +8,7 @@ public class Constants {
 
     // ERROR MESSAGES
 
+
     // IMAGE ERRORS
     public static final String INVALID_IMAGE_EXTENSION = "Only images are allowed";
     public static final String MAXIMUM_IMAGES_EXCEEDED = "No more than 5 images can be uploaded";
@@ -30,5 +31,4 @@ public class Constants {
 
     // CREATION
     public static final String PET_CREATED = "Pet created successfully";
-
 }
