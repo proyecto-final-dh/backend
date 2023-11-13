@@ -1,6 +1,7 @@
 package com.company.model.dto;
 
-import com.company.enums.PetStatus;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,14 +11,15 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class PetWithImagesDto {
     private int id;
     private String name;
-    private PetStatus status;
+    private String statusId;
     private String size;
     private String gender;
     private String description;
-    private Integer breed_id;
-    private Integer owner_id;
+    private Integer breedId;
+    private Integer ownerId;
     private List<ImageWithTitle> images;
 }

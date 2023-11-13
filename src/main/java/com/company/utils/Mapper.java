@@ -1,5 +1,6 @@
 package com.company.utils;
 
+import com.company.enums.PetStatus;
 import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.ImageWithTitle;
 import com.company.model.dto.PetWithImagesDto;
@@ -12,12 +13,12 @@ public class Mapper {
         PetWithImagesDto petWithImagesDto = new PetWithImagesDto();
         petWithImagesDto.setId(pet.getId());
         petWithImagesDto.setName(pet.getName());
-        petWithImagesDto.setStatus(pet.getStatus());
+        petWithImagesDto.setStatusId(pet.getStatus().getId());
         petWithImagesDto.setSize(pet.getSize());
         petWithImagesDto.setGender(pet.getGender());
         petWithImagesDto.setDescription(pet.getDescription());
-        petWithImagesDto.setBreed_id(pet.getBreed().getId());
-        petWithImagesDto.setOwner_id(pet.getUserDetails().getId());
+        petWithImagesDto.setBreedId(pet.getBreed().getId());
+        petWithImagesDto.setOwnerId(pet.getUserDetails().getId());
         petWithImagesDto.setImages(images);
         return petWithImagesDto;
     }
@@ -25,7 +26,7 @@ public class Mapper {
     public static Pets mapCreatePetDtoToPet(CreatePetDto createPetDto) {
         Pets pet = new Pets();
         pet.setName(createPetDto.getName());
-        pet.setStatus(createPetDto.getStatus());
+        pet.setStatus(PetStatus.getStatusById(createPetDto.getStatusId()));
         pet.setSize(createPetDto.getSize());
         pet.setGender(createPetDto.getGender());
         pet.setDescription(createPetDto.getDescription());

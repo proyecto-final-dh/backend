@@ -35,6 +35,7 @@ import static com.company.constants.Constants.PET_GENDER_REQUIRED;
 import static com.company.constants.Constants.PET_NAME_REQUIRED;
 import static com.company.constants.Constants.PET_OWNER_REQUIRED;
 import static com.company.constants.Constants.PET_SIZE_REQUIRED;
+import static com.company.constants.Constants.PET_STATUS_REQUIRED;
 import static com.company.utils.Mapper.mapCreatePetDtoToPet;
 import static com.company.utils.Mapper.mapPetToPetWithImages;
 
@@ -187,6 +188,9 @@ public class PetService implements IPetService {
         }
         if (pet.getBreedId() == null || pet.getBreedId() < 1) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_BREED_REQUIRED);
+        }
+        if(pet.getStatusId() == null || pet.getStatusId().isEmpty() || !PetStatus.isValidStatus(pet.getStatusId())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_STATUS_REQUIRED);
         }
     }
 

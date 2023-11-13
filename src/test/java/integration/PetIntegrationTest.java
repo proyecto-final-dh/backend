@@ -23,6 +23,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
 
+import static com.company.enums.PetStatus.MASCOTA_PROPIA;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -88,6 +89,7 @@ public class PetIntegrationTest {
         pet.setSize("Large");
         pet.setOwnerId(1);
         pet.setBreedId(1);
+        pet.setStatusId(MASCOTA_PROPIA.getId());
 
         return pet;
     }
