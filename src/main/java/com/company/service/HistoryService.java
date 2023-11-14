@@ -49,12 +49,12 @@ public class HistoryService implements IHistoryService {
 
         Optional<Pets> pet = petsRepository.findById(item.getPetId());
         if (pet.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "mascota no encontrada");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found");
         }
 
         Optional<UserDetails> userDetails = userDetailsRepository.findById(item.getUserDetailsId());
         if (userDetails.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "usuario no encontrado");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
 
         History newItem = new History(item.getDate());

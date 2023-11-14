@@ -53,10 +53,8 @@ public class HistoryTest {
         History createdHistory = historyService.createHistory(historyDto);
         assertNotNull(createdHistory);
         assertTrue(createdHistory.getId() > 0);
+        historyService.deleteHistory(createdHistory.getId());
     }
-
-
-
 
     @Test
     public void testGetAllStories() {
@@ -74,10 +72,6 @@ public class HistoryTest {
         historyController.deleteHistory(((History) result2.getBody()).getId());
     }
 
-
-
-
-
     @Test
     public void testGetStoryById() {
         SaveHistoryDto historyDto = new SaveHistoryDto(new Date(), 1, 1);
@@ -92,14 +86,8 @@ public class HistoryTest {
         assertTrue(getResult.getBody() instanceof History);
         assertEquals(((History) getResult.getBody()).getId(), id);
 
-        // Eliminar la entidad después de la prueba
         historyController.deleteHistory(((History) createResult.getBody()).getId());
     }
-
-
-
-
-
 
     @Test
     public void testDeleteStory() {
@@ -111,9 +99,6 @@ public class HistoryTest {
         ResponseEntity<Object> resultDelete = historyController.deleteHistory(id);
         assertEquals(HttpStatus.NO_CONTENT, resultDelete.getStatusCode());
     }
-
-
-
 
     @Test
     public void testUpdateHistory() {
@@ -129,15 +114,10 @@ public class HistoryTest {
         History resultUpdate = (History) updateResult.getBody();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-
         String fechaActualFormateada = dateFormat.format(resultUpdate.getDate());
-
         String fechaEsperadaFormateada = dateFormat.format(updatedHistory.getDate());
         assertEquals(fechaEsperadaFormateada, fechaActualFormateada);
 
         historyController.deleteHistory(id);
     }
-
-
-
 }
