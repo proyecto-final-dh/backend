@@ -16,7 +16,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.company.constants.Constants.LOCATION_NOT_FOUND;
 import static com.company.constants.Constants.OWNER_NOT_FOUND;
@@ -85,6 +89,75 @@ public class PetService implements  IPetService{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found");
         }
     }
+
+
+    public List<Pets> findPetsRecommendations(int petId, int limit) throws Exception {
+        Optional<Pets> petOptional = IPetsRepository.findById(petId);
+
+        if (petOptional.isPresent()) {
+            Pets pet = petOptional.get();
+
+            List<Pets> recommendations = new ArrayList<>();
+            Set<Pets> uniqueRecommendations = new HashSet<>();
+
+            List<Pets> recommendationsAll = IPetsRepository.findPetsRecommendationsAll(petId);
+            for (Pets petResult : recommendationsAll) {
+                if (petResult.getId() != pet.getId()) {
+                    if (uniqueRecommendations.add(petResult)) {
+                        recommendations.add(petResult);
+                    }
+                }
+            }
+
+            if (recommendations.size() < limit) {
+                int remainingLimit = limit - recommendations.size();
+
+                // Agregar resultados de la segunda consulta a la lista
+                List<Pets> specieStatusRecommendations = IPetsRepository.findPetsRecommendationsSpecieStatus(petId);
+                for (Pets petResult : specieStatusRecommendations) {
+                    if (petResult.getId() != pet.getId()) {
+                        if (uniqueRecommendations.add(petResult)) {
+                            recommendations.add(petResult);
+                            remainingLimit--;
+                        }
+                    }
+                    if (remainingLimit <= 0) {
+                        break;
+                    }
+                }
+            }
+
+            if (recommendations.size() < limit) {
+                int remainingLimit = limit - recommendations.size();
+
+                // Agregar resultados de la tercera consulta a la lista
+                List<Pets> statusRecommendations = IPetsRepository.findPetsRecommendationsStatus(petId);
+                for (Pets petResult : statusRecommendations) {
+                    if (petResult.getId() != pet.getId()) {
+                        if (uniqueRecommendations.add(petResult)) {
+                            recommendations.add(petResult);
+                            remainingLimit--;
+                        }
+                    }
+                    if (remainingLimit <= 0) {
+                        break;
+                    }
+                }
+            }
+
+            recommendations = recommendations.subList(0, Math.min(recommendations.size(), limit));
+
+            return recommendations;
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found");
+        }
+    }
+
+
+
+
+
+
 
     @Override
     public Page<Pets> findByStatus(PetStatus status, Pageable pageable) throws Exception {
@@ -179,5 +252,6 @@ public class PetService implements  IPetService{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,LOCATION_NOT_FOUND);
         }
     }
+
 
 }

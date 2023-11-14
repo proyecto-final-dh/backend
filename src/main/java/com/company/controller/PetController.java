@@ -127,6 +127,22 @@ public class PetController {
         }
     }
 
+
+
+    @GetMapping("/recommendation/{id}")
+    public List<Pets> getPetsRecommendation(@PathVariable int id,@RequestParam(name = "limit", required = false) int limit)
+    {
+        try {
+            return petService.findPetsRecommendations(id,limit);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+
+
+
+
     @GetMapping("/filter")
     public ResponseEntity<Object> filterPets(
             @RequestParam(required = false) String location,
@@ -145,8 +161,5 @@ public class PetController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
-
-
-
 
 }
