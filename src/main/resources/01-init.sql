@@ -48,12 +48,12 @@ CREATE TABLE history_states (
 );
 
 CREATE TABLE user_details (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id CHAR(36) UNIQUE NOT NULL,
-    location_id INT NOT NULL,
-    cellphone VARCHAR(20) NOT NULL,
-    created_at VARCHAR(30) NOT NULL,
-    updated_at VARCHAR(30) NOT NULL
+                              id INT AUTO_INCREMENT PRIMARY KEY,
+                              user_id CHAR(36) UNIQUE NOT NULL,
+                              location_id INT NOT NULL,
+                              cellphone VARCHAR(20) NOT NULL,
+                              created_at VARCHAR(30) NOT NULL,
+                              updated_at VARCHAR(30) NOT NULL
 );
 
 -- Agregando Claves  forÃ¡neas

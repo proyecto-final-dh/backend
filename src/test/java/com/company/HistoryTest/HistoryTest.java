@@ -24,8 +24,8 @@ import org.springframework.http.ResponseEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import static org.mockito.ArgumentMatchers.notNull;
+
 
 @SpringBootTest
 public class HistoryTest {
