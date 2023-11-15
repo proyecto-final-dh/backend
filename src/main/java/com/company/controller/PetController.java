@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 import static com.company.constants.Constants.PET_CREATED;
 
 @RestController
@@ -79,6 +81,32 @@ public class PetController {
         }
     }
 
+    @GetMapping("/locations/{id}")
+    public List<Pets> getByLocation(@PathVariable int id,
+                                    @RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "9") int size) {
+        try {
+            Pageable pageable = PageRequest.of(page,size);
+            Page<Pets> petPage = petService.findByLocation(id,pageable);
+            return petPage.getContent();
+        } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    @GetMapping("/owner/{id}")
+    public List<Pets> getByOwner(@PathVariable int id,
+                                    @RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "9") int size) {
+        try {
+            Pageable pageable = PageRequest.of(page,size);
+            Page<Pets> petPage = petService.findByOwner(id,pageable);
+            return petPage.getContent();
+        } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
     @PostMapping
     public ResponseEntity<Object> createPet(@RequestBody Pets pets) {
         try {
@@ -124,6 +152,16 @@ public class PetController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the pet");
+        }
+    }
+
+    @GetMapping("/recommendation/{id}")
+    public List<Pets> getPetsRecommendation(@PathVariable int id,@RequestParam(name = "limit", required = false) int limit)
+    {
+        try {
+            return petService.findPetsRecommendations(id,limit);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 

@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import com.company.model.entity.Pets;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface IPetService {
     Page<Pets> findAll(Pageable pageable) throws Exception;
     Pets findById(int id) throws Exception;
@@ -16,6 +18,11 @@ public interface IPetService {
     PetWithImagesDto saveOwnPetWithImages(CreatePetDto pet, MultipartFile[] images) throws Exception;
     PetWithImagesDto saveAdoptivePetWithImages(CreatePetDto pet, MultipartFile[] images) throws Exception;
     void deleteById(int id) throws Exception;
+
+    List<Pets> findPetsRecommendations(int petId, int limit) throws Exception;
+    Page<Pets> findByLocation(int id, Pageable pageable) throws Exception;
+    Page<Pets> findByOwner(int id, Pageable pageable) throws Exception;
     Page<Pets> findByStatus(PetStatus status, Pageable pageable) throws Exception;
     Page<Pets> filterPets(String location, String species, Integer breed, String size,String status, Pageable pageable) throws Exception;
+
 }

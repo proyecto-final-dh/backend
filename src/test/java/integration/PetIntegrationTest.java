@@ -23,7 +23,6 @@ import org.springframework.web.context.WebApplicationContext;
 import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
 
-import static com.company.enums.PetStatus.MASCOTA_PROPIA;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -122,6 +121,40 @@ public class PetIntegrationTest {
         petsRepository.deleteById(responsePet.getId());
     }
 
+    @Test
+    public void getPetsByOwner() throws Exception {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/pets/owner/1"))
+
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String jsonResponse = result.getResponse().getContentAsString();
+        JsonNode jsonNode = objectMapper.readTree(jsonResponse);
+
+
+        assertTrue(jsonNode.isArray() && jsonNode.size() > 0);
+    }
+
+
+    @Test
+    public void getPetsByLocation() throws Exception {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/pets/locations/1"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String jsonResponse = result.getResponse().getContentAsString();
+        JsonNode jsonNode = objectMapper.readTree(jsonResponse);
+
+
+        assertTrue(jsonNode.isArray() && jsonNode.size() > 0);
+    }
+
     private CreatePetDto createCreatePetDto() {
 
         CreatePetDto pet = new CreatePetDto();
@@ -130,6 +163,7 @@ public class PetIntegrationTest {
         pet.setSize("Large");
         pet.setOwnerId(1);
         pet.setBreedId(1);
+        pet.setDescription("Descripción");
 
         return pet;
     }
@@ -141,4 +175,6 @@ public class PetIntegrationTest {
         JsonNode jsonNode = objectMapper.readTree(responseString);
         return jsonNode.get(node);
     }
+
 }
+
