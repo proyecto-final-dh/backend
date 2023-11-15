@@ -32,8 +32,8 @@ public class PetsTest {
 
     @BeforeAll
     public void setup() {
-        newPet =  new Pets("Dog", PetStatus.EN_ADOPCION, "Medium", "Male", "A friendly dog");
-        newPet2 = new Pets("Cat", PetStatus.EN_ADOPCION, "Medium", "Male", "A friendly cat");
+        newPet =  new Pets("Dog", PetStatus.EN_ADOPCION, "Medium", "Male", "A friendly dog",2);
+        newPet2 = new Pets("Cat", PetStatus.EN_ADOPCION, "Medium", "Male", "A friendly cat",3);
     }
     @AfterAll
     public void teardown() {
@@ -85,7 +85,7 @@ public class PetsTest {
         var bodyResult = ((Pets) result.getBody());
         int id = bodyResult.getId();
 
-        Pets updatedPet = new Pets("CatUpdate", PetStatus.EN_ADOPCION, "Small", "Female", "A friendly and adopted cat");
+        Pets updatedPet = new Pets("CatUpdate", PetStatus.EN_ADOPCION, "Small", "Female", "A friendly and adopted cat", 3);
         ResponseEntity<Object> resultUpdateResponse = petController.updatePet(id, updatedPet);
         assertEquals(HttpStatus.OK, resultUpdateResponse.getStatusCode());
 
