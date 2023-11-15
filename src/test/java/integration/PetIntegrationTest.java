@@ -23,7 +23,6 @@ public class PetIntegrationTest {
     private MockMvc mockMvc;
 
 
-
     @Test
     public void getPetsRecommendation() throws Exception {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
@@ -31,13 +30,6 @@ public class PetIntegrationTest {
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/pets/recommendation/1?limit=3"))
 
-    @Test
-    public void getPetsByOwner() throws Exception {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/pets/owner/1"))
-
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -48,24 +40,40 @@ public class PetIntegrationTest {
         assertTrue(jsonNode.isArray() && jsonNode.size() > 0);
     }
 
+        @Test
+        public void getPetsByOwner () throws Exception {
+            this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+            ObjectMapper objectMapper = new ObjectMapper();
 
-    @Test
-    public void getPetsByLocation() throws Exception {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        ObjectMapper objectMapper = new ObjectMapper();
+            MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/pets/owner/1"))
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/pets/locations/1"))
-                .andExpect(status().isOk())
-                .andReturn();
+                    .andExpect(status().isOk())
+                    .andReturn();
 
-        String jsonResponse = result.getResponse().getContentAsString();
-        JsonNode jsonNode = objectMapper.readTree(jsonResponse);
+            String jsonResponse = result.getResponse().getContentAsString();
+            JsonNode jsonNode = objectMapper.readTree(jsonResponse);
 
 
-        assertTrue(jsonNode.isArray() && jsonNode.size() > 0);
+            assertTrue(jsonNode.isArray() && jsonNode.size() > 0);
+        }
+
+
+        @Test
+        public void getPetsByLocation () throws Exception {
+            this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/pets/locations/1"))
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            String jsonResponse = result.getResponse().getContentAsString();
+            JsonNode jsonNode = objectMapper.readTree(jsonResponse);
+
+
+            assertTrue(jsonNode.isArray() && jsonNode.size() > 0);
+        }
+
+
     }
 
-
-}
-
-}
