@@ -45,7 +45,48 @@ public class PetIntegrationTest {
     }
 
     @Test
-    public void createPetWithImage() throws Exception {
+    public void createOwnPetWithImage() throws Exception {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        CreatePetDto pet = createCreatePetDto();
+        pet.setGender(null);
+        pet.setSize(null);
+        pet.setDescription(null);
+        pet.setGender(null);
+
+        MockMultipartFile file = new MockMultipartFile(
+                "image",
+                "image.png",
+                MediaType.IMAGE_PNG_VALUE,
+                new FileInputStream("src/test/resources/images/image.png").readAllBytes()
+        );
+
+        String petJson = objectMapper.writeValueAsString(pet);
+
+        MockPart postPart = new MockPart("post", petJson.getBytes());
+        postPart.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.multipart("/pets/own-with-images")
+                        .file(file)
+                        .part(postPart)
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        JsonNode dataJson = getJsonNode("data", result);
+        PetWithImagesDto responsePet = objectMapper.treeToValue(dataJson, PetWithImagesDto.class);
+
+        assertEquals(pet.getName(), responsePet.getName());
+        assertFalse(responsePet.getImages().isEmpty());
+        assertTrue(responsePet.getId() > 0);
+
+        // Eliminar la entidad después de la prueba
+        petsRepository.deleteById(responsePet.getId());
+    }
+
+    @Test
+    public void createAdoptivePetWithImage() throws Exception {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -63,7 +104,7 @@ public class PetIntegrationTest {
         MockPart postPart = new MockPart("post", petJson.getBytes());
         postPart.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.multipart("/pets/with-images")
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.multipart("/pets/adoptive-with-images")
                         .file(file)
                         .part(postPart)
                         .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))
@@ -89,7 +130,6 @@ public class PetIntegrationTest {
         pet.setSize("Large");
         pet.setOwnerId(1);
         pet.setBreedId(1);
-        pet.setStatusId(MASCOTA_PROPIA.getId());
 
         return pet;
     }

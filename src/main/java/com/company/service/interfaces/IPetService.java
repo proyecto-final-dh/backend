@@ -13,7 +13,8 @@ public interface IPetService {
     Pets findById(int id) throws Exception;
     Pets update(int id, Pets pets) throws Exception;
     Pets save(Pets pets) throws Exception;
-    PetWithImagesDto saveWithImages(CreatePetDto pet, MultipartFile[] images) throws Exception;
+    PetWithImagesDto saveOwnPetWithImages(CreatePetDto pet, MultipartFile[] images) throws Exception;
+    PetWithImagesDto saveAdoptivePetWithImages(CreatePetDto pet, MultipartFile[] images) throws Exception;
     void deleteById(int id) throws Exception;
     Page<Pets> findByStatus(PetStatus status, Pageable pageable) throws Exception;
     Page<Pets> filterPets(String location, String species, Integer breed, String size,String status, Pageable pageable) throws Exception;

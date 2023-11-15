@@ -31,11 +31,11 @@ import java.util.Optional;
 import static com.company.constants.Constants.BREED_NOT_FOUND;
 import static com.company.constants.Constants.OWNER_NOT_FOUND;
 import static com.company.constants.Constants.PET_BREED_REQUIRED;
+import static com.company.constants.Constants.PET_DESCRIPTION_REQUIRED;
 import static com.company.constants.Constants.PET_GENDER_REQUIRED;
 import static com.company.constants.Constants.PET_NAME_REQUIRED;
 import static com.company.constants.Constants.PET_OWNER_REQUIRED;
 import static com.company.constants.Constants.PET_SIZE_REQUIRED;
-import static com.company.constants.Constants.PET_STATUS_REQUIRED;
 import static com.company.utils.Mapper.mapCreatePetDtoToPet;
 import static com.company.utils.Mapper.mapPetToPetWithImages;
 
@@ -99,29 +99,46 @@ public class PetService implements IPetService {
 
     @Override
     @Transactional
-    public PetWithImagesDto saveWithImages(CreatePetDto pet, MultipartFile[] images) {
-        validateBasicPetData(pet);
+    public PetWithImagesDto saveOwnPetWithImages(CreatePetDto pet, MultipartFile[] images) {
+        validateBasicPetData(pet, false);
 
         Pets fullPet = mapCreatePetDtoToPet(pet);
 
         fullPet.setBreed(validateBreeds(pet.getBreedId()));
         fullPet.setUserDetails(validateUserDetails(pet.getOwnerId()));
+        fullPet.setStatus(PetStatus.MASCOTA_PROPIA);
 
         Pets savedPet = IPetsRepository.save(fullPet);
+
+        if(images == null || images.length == 0){
+            return mapPetToPetWithImages(savedPet, null);
+        }
+
         List<ImageWithTitle> savedImages = bucketImageService.uploadFileWithTitle(images);
 
-        List<Image> imagesToSave = savedImages.stream().map(image -> {
-            Image newImage = new Image();
-            newImage.setUrl(image.getUrl());
-            newImage.setTitle(image.getTitle());
-            newImage.setPetID(savedPet.getId());
-            return newImage;
-        }).toList();
+        List<ImageWithTitle> returnImages = saveImagesInDatabase(savedImages, savedPet.getId());
 
-        imageRepository.saveAll(imagesToSave);
+        return mapPetToPetWithImages(savedPet, returnImages);
+    }
 
-        return mapPetToPetWithImages(savedPet, savedImages);
+    @Override
+    @Transactional
+    public PetWithImagesDto saveAdoptivePetWithImages(CreatePetDto pet, MultipartFile[] images) {
+        validateBasicPetData(pet, true);
 
+        Pets fullPet = mapCreatePetDtoToPet(pet);
+
+        fullPet.setBreed(validateBreeds(pet.getBreedId()));
+        fullPet.setUserDetails(validateUserDetails(pet.getOwnerId()));
+        fullPet.setStatus(PetStatus.EN_ADOPCION);
+
+        Pets savedPet = IPetsRepository.save(fullPet);
+
+        List<ImageWithTitle> savedImages = bucketImageService.uploadFileWithTitle(images);
+
+        List<ImageWithTitle> returnImages = saveImagesInDatabase(savedImages, savedPet.getId());
+
+        return mapPetToPetWithImages(savedPet, returnImages);
     }
 
     public void deleteById(int id) throws Exception {
@@ -173,15 +190,9 @@ public class PetService implements IPetService {
         }
     }
 
-    private void validateBasicPetData(CreatePetDto pet){
+    private void validateBasicPetData(CreatePetDto pet, boolean isForAdoption) {
         if (pet.getName() == null || pet.getName().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_NAME_REQUIRED);
-        }
-        if (pet.getGender() == null || pet.getGender().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_GENDER_REQUIRED);
-        }
-        if (pet.getSize() == null || pet.getSize().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_SIZE_REQUIRED);
         }
         if (pet.getOwnerId() == null || pet.getOwnerId() < 1) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_OWNER_REQUIRED);
@@ -189,9 +200,39 @@ public class PetService implements IPetService {
         if (pet.getBreedId() == null || pet.getBreedId() < 1) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_BREED_REQUIRED);
         }
-        if(pet.getStatusId() == null || pet.getStatusId().isEmpty() || !PetStatus.isValidStatus(pet.getStatusId())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_STATUS_REQUIRED);
+
+        if (isForAdoption) {
+            if (pet.getGender() == null || pet.getGender().isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_GENDER_REQUIRED);
+            }
+            if (pet.getSize() == null || pet.getSize().isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_SIZE_REQUIRED);
+            }
+            // TODO: Revalidate this case
+            if(pet.getDescription() == null || pet.getDescription().isEmpty()){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_DESCRIPTION_REQUIRED);
+            }
         }
+    }
+
+    private List<ImageWithTitle> saveImagesInDatabase(List<ImageWithTitle> images, int petId) {
+        List<Image> imagesToSave = images.stream().map(image -> {
+            Image newImage = new Image();
+            newImage.setUrl(image.getUrl());
+            newImage.setTitle(image.getTitle());
+            newImage.setPetID(petId);
+            return newImage;
+        }).toList();
+
+        List<Image> savedImages = imageRepository.saveAll(imagesToSave);
+
+        return savedImages.stream().map(image -> {
+            ImageWithTitle newImage = new ImageWithTitle();
+            newImage.setId(image.getId());
+            newImage.setUrl(image.getUrl());
+            newImage.setTitle(image.getTitle());
+            return newImage;
+        }).toList();
     }
 
     private Specification<Pets> buildSpecification(String location, String species, Integer breedId, String size, String status) {

@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import java.util.Arrays;
 
+@Getter
 public enum PetStatus {
     MASCOTA_PROPIA("MASCOTA_PROPIA", "Mascota propia"),
     EN_ADOPCION("EN_ADOPCION", "En adopción"),
@@ -14,9 +15,7 @@ public enum PetStatus {
         this.name = name;
     }
 
-    @Getter
     private String id;
-    @Getter
     private String name;
 
     public static boolean isValidStatus(String status) {

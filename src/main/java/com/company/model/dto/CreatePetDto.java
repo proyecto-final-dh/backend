@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CreatePetDto {
     private String name;
-    private String statusId;
     private String size;
     private String gender;
     private String description;

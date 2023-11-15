@@ -91,10 +91,16 @@ public class PetController {
         }
     }
 
-    @PostMapping("/with-images")
-    public ResponseEntity createPetWithImages(@RequestPart("post") CreatePetDto pet,
-                                              @RequestPart(value = "image", required = true) MultipartFile[] images) {
-        return responsesBuilder.buildResponse(HttpStatus.CREATED.value(), PET_CREATED, petService.saveWithImages(pet, images), null);
+    @PostMapping("/own-with-images")
+    public ResponseEntity createOwnPetWithImages(@RequestPart("post") CreatePetDto pet,
+                                                 @RequestPart(value = "image", required = false) MultipartFile[] images) {
+        return responsesBuilder.buildResponse(HttpStatus.CREATED.value(), PET_CREATED, petService.saveOwnPetWithImages(pet, images), null);
+    }
+
+    @PostMapping("/adoptive-with-images")
+    public ResponseEntity createAdoptivePetWithImages(@RequestPart("post") CreatePetDto pet,
+                                                      @RequestPart(value = "image") MultipartFile[] images) {
+        return responsesBuilder.buildResponse(HttpStatus.CREATED.value(), PET_CREATED, petService.saveAdoptivePetWithImages(pet, images), null);
     }
 
     @PutMapping("/{id}")
