@@ -23,13 +23,21 @@ public class PetIntegrationTest {
     private MockMvc mockMvc;
 
 
-
     @Test
     public void getPetsRecommendation() throws Exception {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         ObjectMapper objectMapper = new ObjectMapper();
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/pets/recommendation/1?limit=3"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String jsonResponse = result.getResponse().getContentAsString();
+        JsonNode jsonNode = objectMapper.readTree(jsonResponse);
+
+        assertTrue(jsonNode.isArray() && jsonNode.size() > 0);
+    }
+    
 
     @Test
     public void getPetsByOwner() throws Exception {
@@ -64,8 +72,5 @@ public class PetIntegrationTest {
 
         assertTrue(jsonNode.isArray() && jsonNode.size() > 0);
     }
-
-
-}
 
 }
