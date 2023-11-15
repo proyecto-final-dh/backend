@@ -7,7 +7,7 @@ CREATE TABLE pets (
                       size varchar(50),
                       gender varchar(20),
                       description TEXT
-
+                      age INT
 );
 
 
