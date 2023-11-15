@@ -578,26 +578,26 @@ VALUES
 -- ingreso de mascotas --
 INSERT INTO pets (name, owner_id, breed_id, status, size, gender, description)
 VALUES
-    (N'Buddy', 1, 21, 'MASCOTA_PROPIA', N'Mediano', 'Macho', N'Buddy es un perro cariñoso y juguetón que adora correr por el parque.'),
-    (N'Luna', 2, 32, 'MASCOTA_PROPIA', N'Pequeño', 'Hembra', N'Luna es una gatita elegante y curiosa que le encanta explorar la casa.'),
-    (N'Max', 3, 21, 'MASCOTA_PROPIA', N'Grande', 'Macho', N'Max es un perro grande y amigable que siempre está listo para pasear.'),
-    (N'Molly', 4, 21, 'EN_ADOPCION', N'Mediano', 'Hembra', N'Molly es una perrita dulce y leal que adora estar en compañía de su familia.'),
-    (N'Rocky', 5, 15, 'EN_ADOPCION', N'Pequeño', 'Macho', N'Rocky es un perro pequeño pero valiente que protege a su familia en todo momento.'),
-    (N'Bella', 6, 18, 'EN_ADOPCION', N'Grande', 'Hembra', N'Bella es una perrita grande y gentil que disfruta de largos paseos en el parque.'),
-    (N'Charlie', 7, 14, 'EN_ADOPCION', N'Mediano', 'Macho', N'Charlie es un perro amigable y enérgico que siempre está lleno de energía.'),
-    (N'Daisy', 8, 3, 'EN_ADOPCION', N'Pequeño', 'Hembra', N'Daisy es una perrita pequeña y traviesa que adora jugar con sus juguetes.'),
-    (N'Cooper', 9, 21, 'EN_ADOPCION', N'Grande', 'Macho', N'Cooper es un perro grande y protector que siempre cuida de su familia.'),
-    (N'Zoe', 10, 36, 'EN_ADOPCION', N'Mediano', 'Hembra', N'Zoe es una gatita cariñosa y juguetona que ama los mimos y caricias.'),
-    (N'Pirata', 1, 37, 'EN_ADOPCION', N'Pequeño', 'Macho', N'Pirata es un gatito curioso y aventurero que está buscando un hogar.'),
-    (N'Misty', 2, 29, 'EN_ADOPCION', N'Grande', 'Hembra', N'Misty es una perra grande y dulce que merece una familia amorosa.'),
-    (N'Leo', 3, 7, 'EN_ADOPCION', N'Mediano', 'Macho', N'Leo es un perro activo y juguetón que necesita un lugar donde correr y jugar.'),
-    (N'Lucky', 4, 1, 'ADOPTADA', N'Pequeño', 'Hembra', N'Lucky es una perrita afortunada en busca de un hogar cálido y cariñoso.'),
-    (N'Oliver', 5, 19, 'ADOPTADA', N'Grande', 'Macho', N'Oliver es un perro grande y noble que se lleva bien con todos.'),
-    (N'Sasha', 6, 18, 'ADOPTADA', N'Mediano', 'Hembra', N'Sasha es una perra mediana y cariñosa que te dará mucho amor.'),
-    (N'Teddy', 7, 31, 'ADOPTADA', N'Pequeño', 'Macho', N'Teddy es un perrito pequeño y tierno en busca de un compañero fiel.'),
-    (N'Bentley', 8, 4, 'ADOPTADA', N'Grande', 'Hembra', N'Bentley es una perra grande y leal que te protegerá siempre.'),
-    (N'Milo', 9, 21, 'ADOPTADA', N'Mediano', 'Macho', N'Milo es un perro mediano y juguetón que alegrará tu hogar.'),
-    (N'Lucio', 10, 3, 'ADOPTADA', N'Pequeño', 'Macho', N'Lucio es un perrito pequeño y encantador que te hará sonreír.');
+    (N'Buddy', 1, 21, 'MASCOTA_PROPIA', N'Mediano', 'MACHO', N'Buddy es un perro cariñoso y juguetón que adora correr por el parque.'),
+    (N'Luna', 2, 32, 'MASCOTA_PROPIA', N'Pequeño', 'HEMBRA', N'Luna es una gatita elegante y curiosa que le encanta explorar la casa.'),
+    (N'Max', 3, 21, 'MASCOTA_PROPIA', N'Grande', 'MACHO', N'Max es un perro grande y amigable que siempre está listo para pasear.'),
+    (N'Molly', 4, 21, 'EN_ADOPCION', N'Mediano', 'HEMBRA', N'Molly es una perrita dulce y leal que adora estar en compañía de su familia.'),
+    (N'Rocky', 5, 15, 'EN_ADOPCION', N'Pequeño', 'MACHO', N'Rocky es un perro pequeño pero valiente que protege a su familia en todo momento.'),
+    (N'Bella', 6, 18, 'EN_ADOPCION', N'Grande', 'HEMBRA', N'Bella es una perrita grande y gentil que disfruta de largos paseos en el parque.'),
+    (N'Charlie', 7, 14, 'EN_ADOPCION', N'Mediano', 'MACHO', N'Charlie es un perro amigable y enérgico que siempre está lleno de energía.'),
+    (N'Daisy', 8, 3, 'EN_ADOPCION', N'Pequeño', 'HEMBRA', N'Daisy es una perrita pequeña y traviesa que adora jugar con sus juguetes.'),
+    (N'Cooper', 9, 21, 'EN_ADOPCION', N'Grande', 'MACHO', N'Cooper es un perro grande y protector que siempre cuida de su familia.'),
+    (N'Zoe', 10, 36, 'EN_ADOPCION', N'Mediano', 'HEMBRA', N'Zoe es una gatita cariñosa y juguetona que ama los mimos y caricias.'),
+    (N'Pirata', 1, 37, 'EN_ADOPCION', N'Pequeño', 'MACHO', N'Pirata es un gatito curioso y aventurero que está buscando un hogar.'),
+    (N'Misty', 2, 29, 'EN_ADOPCION', N'Grande', 'HEMBRA', N'Misty es una perra grande y dulce que merece una familia amorosa.'),
+    (N'Leo', 3, 7, 'EN_ADOPCION', N'Mediano', 'MACHO', N'Leo es un perro activo y juguetón que necesita un lugar donde correr y jugar.'),
+    (N'Lucky', 4, 1, 'ADOPTADA', N'Pequeño', 'HEMBRA', N'Lucky es una perrita afortunada en busca de un hogar cálido y cariñoso.'),
+    (N'Oliver', 5, 19, 'ADOPTADA', N'Grande', 'MACHO', N'Oliver es un perro grande y noble que se lleva bien con todos.'),
+    (N'Sasha', 6, 18, 'ADOPTADA', N'Mediano', 'HEMBRA', N'Sasha es una perra mediana y cariñosa que te dará mucho amor.'),
+    (N'Teddy', 7, 31, 'ADOPTADA', N'Pequeño', 'MACHO', N'Teddy es un perrito pequeño y tierno en busca de un compañero fiel.'),
+    (N'Bentley', 8, 4, 'ADOPTADA', N'Grande', 'HEMBRA', N'Bentley es una perra grande y leal que te protegerá siempre.'),
+    (N'Milo', 9, 21, 'ADOPTADA', N'Mediano', 'MACHO', N'Milo es un perro mediano y juguetón que alegrará tu hogar.'),
+    (N'Lucio', 10, 3, 'ADOPTADA', N'Pequeño', 'MACHO', N'Lucio es un perrito pequeño y encantador que te hará sonreír.');
 
 
 -- ingreso de fotos de mascotas --

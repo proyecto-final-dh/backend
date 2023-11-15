@@ -1,5 +1,6 @@
 package com.company.model.entity;
 
+import com.company.enums.PetGender;
 import com.company.enums.PetStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -39,7 +40,8 @@ public class Pets {
 
     private String size;
 
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private PetGender gender;
 
     private String description;
 
@@ -53,7 +55,7 @@ public class Pets {
     private UserDetails userDetails;
 
 
-    public Pets(String name, PetStatus status, String size, String gender, String description) {
+    public Pets(String name, PetStatus status, String size, PetGender gender, String description) {
         this.name = name;
         this.status = status;
         this.size = size;
