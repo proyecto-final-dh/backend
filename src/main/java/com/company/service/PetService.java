@@ -1,5 +1,6 @@
 package com.company.service;
 
+import com.company.model.entity.Pets;
 import com.company.enums.PetStatus;
 import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.ImageWithTitle;
@@ -7,7 +8,6 @@ import com.company.model.dto.PetWithImagesDto;
 import com.company.model.entity.Breeds;
 import com.company.model.entity.Image;
 import com.company.model.entity.Location;
-import com.company.model.entity.Pets;
 import com.company.model.entity.UserDetails;
 import com.company.repository.IBreedsRepository;
 import com.company.repository.IImageRepository;

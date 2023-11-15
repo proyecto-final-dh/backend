@@ -3,7 +3,6 @@ package com.company.HistoryTest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import com.company.controller.HistoryController;
 import com.company.model.dto.SaveHistoryDto;
@@ -21,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.notNull;
 
 
 @SpringBootTest
