@@ -1,12 +1,16 @@
 package com.company.model.entity;
 
+import com.company.enums.PetStatus;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -29,9 +33,11 @@ public class Pets {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotNull
+    @NotEmpty(message = "Name is mandatory")
     private String name;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private PetStatus status;
 
     private String size;
 
@@ -49,7 +55,7 @@ public class Pets {
     private UserDetails userDetails;
 
 
-    public Pets(String name, String status, String size, String gender, String description) {
+    public Pets(String name, PetStatus status, String size, String gender, String description) {
         this.name = name;
         this.status = status;
         this.size = size;

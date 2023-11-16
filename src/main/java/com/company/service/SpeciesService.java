@@ -1,6 +1,7 @@
 package com.company.service;
 import com.company.model.entity.Species;
 import com.company.repository.ISpeciesRepository;
+import com.company.service.interfaces.ISpeciesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class SpeciesService implements ISpeciesService{
+public class SpeciesService implements ISpeciesService {
     private final ISpeciesRepository speciesRepository;
 
     @Autowired

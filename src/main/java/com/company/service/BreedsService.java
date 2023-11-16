@@ -3,6 +3,8 @@ package com.company.service;
 import com.company.model.entity.Breeds;
 import com.company.model.entity.Species;
 import com.company.repository.IBreedsRepository;
+import com.company.service.interfaces.IBreedsService;
+import com.company.service.interfaces.ISpeciesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

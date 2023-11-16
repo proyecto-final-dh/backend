@@ -24,8 +24,6 @@ public class BucketImagesController {
         this.amazonClient = amazonClient;
     }
 
-
-
     @PostMapping("/uploadFile")
     public ResponseEntity<List<String>> uploadFile(@RequestParam("image") MultipartFile[] files) {
         return ResponseEntity.ok(this.amazonClient.uploadFile(files));

@@ -3,6 +3,7 @@ package com.company.service;
 
 import com.company.model.entity.Image;
 import com.company.repository.IImageRepository;
+import com.company.service.interfaces.IImageService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

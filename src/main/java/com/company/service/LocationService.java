@@ -2,6 +2,7 @@ package com.company.service;
 
 import com.company.model.entity.Location;
 import com.company.repository.LocationRepository;
+import com.company.service.interfaces.ILocationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
-public class LocationService implements ILocationService{
+public class LocationService implements ILocationService {
 
 
     private final LocationRepository locationRepository;
