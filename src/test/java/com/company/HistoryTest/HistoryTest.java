@@ -3,19 +3,15 @@ package com.company.HistoryTest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import com.company.controller.HistoryController;
 import com.company.model.dto.SaveHistoryDto;
 import com.company.model.entity.History;
-import com.company.model.entity.Pets;
-import com.company.model.entity.UserDetails;
 import com.company.repository.IHistoryRepository;
 import com.company.repository.IPetsRepository;
 import com.company.repository.IUserDetailsRepository;
-import com.company.service.IHistoryService;
+import com.company.service.interfaces.IHistoryService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -24,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.notNull;
 
 
 @SpringBootTest

@@ -7,6 +7,7 @@ import com.company.model.entity.UserDetails;
 import com.company.repository.IHistoryRepository;
 import com.company.repository.IPetsRepository;
 import com.company.repository.IUserDetailsRepository;
+import com.company.service.interfaces.IHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
