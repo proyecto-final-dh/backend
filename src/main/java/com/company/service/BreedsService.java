@@ -1,5 +1,6 @@
 package com.company.service;
 
+import com.company.model.dto.BreedsDTO;
 import com.company.model.entity.Breeds;
 import com.company.model.entity.Species;
 import com.company.repository.IBreedsRepository;
@@ -10,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BreedsService implements IBreedsService {
@@ -107,6 +109,16 @@ public class BreedsService implements IBreedsService {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Breed not found");
         }
+    }
+
+    @Override
+    public List<BreedsDTO> getBreedsBySpecies(int speciesId) {
+        Species species = speciesService.getSpeciesById(speciesId);
+        List<Breeds> breedsList = breedsRepository.findBySpecies(species) ;
+        List<BreedsDTO> breedsDtoList = breedsList.stream()
+                .map(breed -> new BreedsDTO(breed.getId(), breed.getName()))
+                .collect(Collectors.toList());
+        return breedsDtoList;
     }
 }
 
