@@ -1,5 +1,6 @@
 package com.company.utils;
 
+import com.company.enums.PetGender;
 import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.ImageWithTitle;
 import com.company.model.dto.PetWithImagesDto;
@@ -14,7 +15,7 @@ public class Mapper {
         petWithImagesDto.setName(pet.getName());
         petWithImagesDto.setStatusId(pet.getStatus().getId());
         petWithImagesDto.setSize(pet.getSize());
-        petWithImagesDto.setGender(pet.getGender());
+        petWithImagesDto.setGender(pet.getGender().getId());
         petWithImagesDto.setDescription(pet.getDescription());
         petWithImagesDto.setBreedId(pet.getBreed().getId());
         petWithImagesDto.setOwnerId(pet.getUserDetails().getId());
@@ -26,7 +27,7 @@ public class Mapper {
         Pets pet = new Pets();
         pet.setName(createPetDto.getName());
         pet.setSize(String.valueOf(createPetDto.getSize()));
-        pet.setGender(String.valueOf(createPetDto.getGender()));
+        pet.setGender(PetGender.getGenderById(createPetDto.getGender()));
         pet.setDescription(String.valueOf(createPetDto.getDescription()));
         return pet;
     }
