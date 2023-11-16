@@ -93,7 +93,9 @@ public class PetController {
 
     @PostMapping
     public ResponseEntity<Object> createPet(@RequestBody Pets pets) {
+
         try {
+            System.out.println(pets);
             Pets newPets = petService.save(pets);
             return new ResponseEntity<>(newPets, HttpStatus.CREATED);
         } catch (ResponseStatusException ex) {
