@@ -1,5 +1,6 @@
 package com.company.service;
 
+import com.company.model.dto.ImageWithTitle;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,9 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import jakarta.annotation.PostConstruct;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -91,19 +95,48 @@ public class BucketImageService {
         return urls;
     }
 
+    public List<ImageWithTitle> uploadFileWithTitle(MultipartFile[] files) {
+        validateFiles(files);
+
+        List<ImageWithTitle> images = new ArrayList<>();
+
+        for (MultipartFile multipartFile : files) {
+            try {
+                ImageWithTitle NewImage = new ImageWithTitle();
+                String fileUrl = "";
+
+                File file = convertMultiPartToFile(multipartFile);
+                String fileName = PET_IMAGES_FOLDER + generateFileName(multipartFile);
+                fileUrl = endpointUrl + "/" + fileName;
+
+                NewImage.setUrl(fileUrl);
+                NewImage.setTitle(multipartFile.getOriginalFilename());
+                images.add(NewImage);
+
+                uploadFileTos3bucket(fileName, file);
+                file.delete();
+            } catch (Exception e) {
+                throw new ResponseStatusException(
+                        org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            }
+        }
+        return images;
+    }
+
+
     private void validateFiles(MultipartFile[] files) {
-        if (files.length < 1) throw new ResponseStatusException(
+        if(files.length < 1) throw new ResponseStatusException(
                 org.springframework.http.HttpStatus.BAD_REQUEST, EMPTY_IMAGE);
 
-        if (files.length > 5) throw new ResponseStatusException(
+        if(files.length > 5) throw new ResponseStatusException(
                 org.springframework.http.HttpStatus.BAD_REQUEST, MAXIMUM_IMAGES_EXCEEDED);
 
-        if (!validateImageExtension(files)) {
+        if(!validateImageExtension(files)) {
             throw new ResponseStatusException(
                     org.springframework.http.HttpStatus.BAD_REQUEST, INVALID_IMAGE_EXTENSION);
         }
 
-        if (!validateImageSize(files)) {
+        if(!validateImageSize(files)) {
             throw new ResponseStatusException(
                     org.springframework.http.HttpStatus.BAD_REQUEST, MAXIMUM_IMAGE_SIZE_EXCEEDED);
         }

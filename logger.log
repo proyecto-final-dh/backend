@@ -1,7 +1,0 @@
-[2023-11-06 07:34:06] [ ERROR] [GlobalExceptions:38] ERROR: Description: El usuario con el ID 1 ya existe.
-Location: 
-com.company.service.UserDetailsService.save(UserDetailsService.java:50)
-com.company.controller.UserDetailsController.save(UserDetailsController.java:47)
-java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
-
-
