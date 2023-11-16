@@ -48,12 +48,10 @@ public class Pets {
 
     @ManyToOne
     @JoinColumn(name = "breed_id")
-//    @NotEmpty(message = "Breed is mandatory")
     private Breeds breed;
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
-//    @NotEmpty(message = "Owner is mandatory")
     private UserDetails userDetails;
 
 
