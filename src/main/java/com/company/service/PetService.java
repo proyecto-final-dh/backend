@@ -2,18 +2,28 @@ package com.company.service;
 
 import com.company.model.entity.Pets;
 import com.company.enums.PetStatus;
+import com.company.model.dto.CreatePetDto;
+import com.company.model.dto.ImageWithTitle;
+import com.company.model.dto.PetWithImagesDto;
+import com.company.model.entity.Breeds;
+import com.company.model.entity.Image;
 import com.company.model.entity.Location;
 import com.company.model.entity.UserDetails;
+import com.company.repository.IBreedsRepository;
+import com.company.repository.IImageRepository;
 import com.company.repository.IPetsRepository;
 import com.company.repository.IUserDetailsRepository;
 import com.company.repository.LocationRepository;
+import com.company.service.interfaces.IPetService;
 import jakarta.persistence.criteria.Join;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -22,16 +32,28 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.company.constants.Constants.BREED_NOT_FOUND;
 import static com.company.constants.Constants.LOCATION_NOT_FOUND;
 import static com.company.constants.Constants.OWNER_NOT_FOUND;
+import static com.company.constants.Constants.PET_BREED_REQUIRED;
+import static com.company.constants.Constants.PET_DESCRIPTION_REQUIRED;
+import static com.company.constants.Constants.PET_GENDER_REQUIRED;
+import static com.company.constants.Constants.PET_NAME_REQUIRED;
+import static com.company.constants.Constants.PET_OWNER_REQUIRED;
+import static com.company.constants.Constants.PET_SIZE_REQUIRED;
+import static com.company.utils.Mapper.mapCreatePetDtoToPet;
+import static com.company.utils.Mapper.mapPetToPetWithImages;
 
 @AllArgsConstructor
 @Service
-public class PetService implements  IPetService{
+public class PetService implements IPetService {
 
     private IPetsRepository IPetsRepository;
     private IUserDetailsRepository userDetailsRepository;
     private final LocationRepository locationRepository;
+    private BucketImageService bucketImageService;
+    private IImageRepository imageRepository;
+    private IBreedsRepository breedsRepository;
 
     public Page<Pets> findAll(Pageable pageable) throws Exception {
         try {
@@ -81,11 +103,55 @@ public class PetService implements  IPetService{
         }
     }
 
+    @Override
+    @Transactional
+    public PetWithImagesDto saveOwnPetWithImages(CreatePetDto pet, MultipartFile[] images) {
+        validateBasicPetData(pet, false);
+
+        Pets fullPet = mapCreatePetDtoToPet(pet);
+
+        fullPet.setBreed(validateBreeds(pet.getBreedId()));
+        fullPet.setUserDetails(validateUserDetails(pet.getOwnerId()));
+        fullPet.setStatus(PetStatus.MASCOTA_PROPIA);
+
+        Pets savedPet = IPetsRepository.save(fullPet);
+
+        if (images == null || images.length == 0) {
+            return mapPetToPetWithImages(savedPet, null);
+        }
+
+        List<ImageWithTitle> savedImages = bucketImageService.uploadFileWithTitle(images);
+
+        List<ImageWithTitle> returnImages = saveImagesInDatabase(savedImages, savedPet.getId());
+
+        return mapPetToPetWithImages(savedPet, returnImages);
+    }
+
+    @Override
+    @Transactional
+    public PetWithImagesDto saveAdoptivePetWithImages(CreatePetDto pet, MultipartFile[] images) {
+        validateBasicPetData(pet, true);
+
+        Pets fullPet = mapCreatePetDtoToPet(pet);
+
+        fullPet.setBreed(validateBreeds(pet.getBreedId()));
+        fullPet.setUserDetails(validateUserDetails(pet.getOwnerId()));
+        fullPet.setStatus(PetStatus.EN_ADOPCION);
+
+        Pets savedPet = IPetsRepository.save(fullPet);
+
+        List<ImageWithTitle> savedImages = bucketImageService.uploadFileWithTitle(images);
+
+        List<ImageWithTitle> returnImages = saveImagesInDatabase(savedImages, savedPet.getId());
+
+        return mapPetToPetWithImages(savedPet, returnImages);
+    }
+
     public void deleteById(int id) throws Exception {
         Optional<Pets> species = IPetsRepository.findById(id);
         if (species.isPresent()) {
-            IPetsRepository.deleteById( id);
-        }else{
+            IPetsRepository.deleteById(id);
+        } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found");
         }
     }
@@ -153,12 +219,6 @@ public class PetService implements  IPetService{
         }
     }
 
-
-
-
-
-
-
     @Override
     public Page<Pets> findByStatus(PetStatus status, Pageable pageable) throws Exception {
         try {
@@ -179,6 +239,86 @@ public class PetService implements  IPetService{
         }
     }
 
+    public Page<Pets> findByLocation(int id, Pageable pageable) throws Exception {
+        validateLocation(id);
+        try {
+            return IPetsRepository.findByLocation(id, pageable);
+        } catch (Exception e) {
+            throw new Exception("Error al recuperar las mascotas paginadas.");
+        }
+    }
+
+    public Page<Pets> findByOwner(int id, Pageable pageable) throws Exception {
+        validateUserDetails(id);
+        try {
+            return IPetsRepository.findByOwner(id, pageable);
+        } catch (Exception e) {
+            throw new Exception("Error al recuperar las mascotas paginadas.");
+        }
+    }
+
+    private Breeds validateBreeds(int id) {
+        Optional<Breeds> breeds = breedsRepository.findById(id);
+        if (breeds.isPresent()) {
+            return breeds.get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, BREED_NOT_FOUND);
+        }
+    }
+
+    private UserDetails validateUserDetails(int id) {
+        Optional<UserDetails> userDetails = userDetailsRepository.findById(id);
+        if (userDetails.isPresent()) {
+            return userDetails.get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, OWNER_NOT_FOUND);
+        }
+    }
+
+    private void validateBasicPetData(CreatePetDto pet, boolean isForAdoption) {
+        if (pet.getName() == null || pet.getName().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_NAME_REQUIRED);
+        }
+        if (pet.getOwnerId() == null || pet.getOwnerId() < 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_OWNER_REQUIRED);
+        }
+        if (pet.getBreedId() == null || pet.getBreedId() < 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_BREED_REQUIRED);
+        }
+
+        if (isForAdoption) {
+            if (pet.getGender() == null || pet.getGender().isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_GENDER_REQUIRED);
+            }
+            if (pet.getSize() == null || pet.getSize().isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_SIZE_REQUIRED);
+            }
+            // TODO: Revalidate this case
+            if (pet.getDescription() == null || pet.getDescription().isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_DESCRIPTION_REQUIRED);
+            }
+        }
+    }
+
+    private List<ImageWithTitle> saveImagesInDatabase(List<ImageWithTitle> images, int petId) {
+        List<Image> imagesToSave = images.stream().map(image -> {
+            Image newImage = new Image();
+            newImage.setUrl(image.getUrl());
+            newImage.setTitle(image.getTitle());
+            newImage.setPetID(petId);
+            return newImage;
+        }).toList();
+
+        List<Image> savedImages = imageRepository.saveAll(imagesToSave);
+
+        return savedImages.stream().map(image -> {
+            ImageWithTitle newImage = new ImageWithTitle();
+            newImage.setId(image.getId());
+            newImage.setUrl(image.getUrl());
+            newImage.setTitle(image.getTitle());
+            return newImage;
+        }).toList();
+    }
 
     private Specification<Pets> buildSpecification(String location, String species, Integer breedId, String size, String status) {
         Specification<Pets> spec = Specification.where(null);
@@ -217,41 +357,13 @@ public class PetService implements  IPetService{
         return spec;
     }
 
-    public Page<Pets> findByLocation(int id, Pageable pageable) throws Exception {
-        validateLocation(id);
-        try {
-            return IPetsRepository.findByLocation(id, pageable);
-        } catch (Exception e) {
-            throw new Exception("Error al recuperar las mascotas paginadas.");
-        }
-    }
-
-    public Page<Pets> findByOwner(int id, Pageable pageable) throws Exception {
-        validateUserDetails(id);
-        try {
-            return IPetsRepository.findByOwner(id, pageable);
-        } catch (Exception e) {
-            throw new Exception("Error al recuperar las mascotas paginadas.");
-        }
-    }
-
-    private UserDetails validateUserDetails(int id) {
-        Optional<UserDetails> userDetails = userDetailsRepository.findById(id);
-        if (userDetails.isPresent()) {
-            return userDetails.get();
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,OWNER_NOT_FOUND);
-        }
-    }
-
     private Location validateLocation(int id) {
         Optional<Location> location = locationRepository.findById(id);
         if (location.isPresent()) {
             return location.get();
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,LOCATION_NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, LOCATION_NOT_FOUND);
         }
     }
-
 
 }
