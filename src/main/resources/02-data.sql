@@ -753,11 +753,7 @@ INSERT INTO user_details (user_id, location_id, cellphone, created_at, updated_a
 ('c5h3g47g-7d09-6054-af9c-bb88d2ff2cfd', 3, '555-5643-5890', '2023-11-03 10:10:00', '2023-11-03 10:10:00');
 
 
--- Insertar pruebas resgistro de mascostas
-INSERT INTO pets (name, owner_id, breed_id, status, size, gender, description)
-VALUES ('Luna', 2, 2, 'active', 'Pequeño', 'Hembra', 'Luna es una gata tranquila y cariñosa.');
-INSERT INTO pets (name, owner_id, breed_id, status, size, gender, description)
-VALUES ('Rocky', 1, 3, 'active', 'Grande', 'Macho', 'Rocky es un perro guardián leal.');
+
 
 SET SQL_SAFE_UPDATES = 0;
 
