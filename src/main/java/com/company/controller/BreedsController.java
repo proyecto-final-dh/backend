@@ -83,7 +83,11 @@ public class BreedsController {
     public List<BreedsDTO> getBreedsBySpecies(@PathVariable int speciesId) {
         try {
             return breedsService.getBreedsBySpecies(speciesId);
-        }catch (Exception e) {
+        }catch(ResponseStatusException ex){
+            throw  new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        }
+        catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
