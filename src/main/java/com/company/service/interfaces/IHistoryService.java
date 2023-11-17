@@ -1,4 +1,4 @@
-package com.company.service;
+package com.company.service.interfaces;
 
 import com.company.model.dto.SaveHistoryDto;
 import com.company.model.entity.History;

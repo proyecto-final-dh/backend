@@ -1,4 +1,4 @@
-package com.company.service;
+package com.company.service.interfaces;
 
 import com.company.exceptions.BadRequestException;
 import com.company.exceptions.ResourceNotFoundException;

@@ -745,6 +745,20 @@ INSERT INTO history_states ( pet_id, date, status,user_id) VALUES
     (7, CURRENT_DATE(), 'ADOPTADA',5);
 
 
+-- Insertar pruebas resgistro de usuarios
+
+INSERT INTO user_details (user_id, location_id, cellphone, created_at, updated_at) VALUES
+('a3f1e25e-5b89-4032-8d7a-9899b0ee0bde', 1, '555-1234-5678', '2023-11-03 10:00:00', '2023-11-03 10:00:00'),
+('b4g2f36f-6c98-5043-9e8b-aa99c1ee1bfc', 2, '555-9876-5432', '2023-11-03 10:05:00', '2023-11-03 10:05:00'),
+('c5h3g47g-7d09-6054-af9c-bb88d2ff2cfd', 3, '555-5643-5890', '2023-11-03 10:10:00', '2023-11-03 10:10:00');
+
+
+-- Insertar pruebas resgistro de mascostas
+INSERT INTO pets (name, owner_id, breed_id, status, size, gender, description)
+VALUES ('Luna', 2, 2, 'active', 'Pequeño', 'Hembra', 'Luna es una gata tranquila y cariñosa.');
+INSERT INTO pets (name, owner_id, breed_id, status, size, gender, description)
+VALUES ('Rocky', 1, 3, 'active', 'Grande', 'Macho', 'Rocky es un perro guardián leal.');
+
 SET SQL_SAFE_UPDATES = 0;
 
 -- select
