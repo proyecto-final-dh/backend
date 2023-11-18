@@ -573,7 +573,7 @@ VALUES
     ('a9e2f5d1-c7b8-1e2d-8a7a', 7, '555-7777', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
     ('5b1c7e9d2-4c3d8-2e1d-1a9a', 8, '555-8888', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
     ('1a2e3f5d7-6b8c-4d3e-2f1a', 9, '555-9999', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
-    ('8f9e2d5c1-7b8c4d2-1e2d', 10, '555-1010', '2023-11-05 00:00:00', '2023-11-05 00:00:00');
+    ('8f9e2d5c1-7b8c4d2-1e2d', 10, '555-1010', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
     ('1c337090-0d59-45b8-ba82-428395de0da2', 11, '555-1111', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
     ('792aea21-d936-444e-8e0b-a0da9e71f70f', 12, '555-2222', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
     ('30f72ee2-ea5e-45f3-bb52-cf0deeea2450', 13, '555-3333', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
@@ -752,13 +752,4 @@ INSERT INTO user_details (user_id, location_id, cellphone, created_at, updated_a
 ('b4g2f36f-6c98-5043-9e8b-aa99c1ee1bfc', 2, '555-9876-5432', '2023-11-03 10:05:00', '2023-11-03 10:05:00'),
 ('c5h3g47g-7d09-6054-af9c-bb88d2ff2cfd', 3, '555-5643-5890', '2023-11-03 10:10:00', '2023-11-03 10:10:00');
 
-
--- Insertar pruebas resgistro de mascostas
-INSERT INTO pets (name, owner_id, breed_id, status, size, gender, description)
-VALUES ('Luna', 2, 2, 'active', 'Pequeño', 'Hembra', 'Luna es una gata tranquila y cariñosa.');
-INSERT INTO pets (name, owner_id, breed_id, status, size, gender, description)
-VALUES ('Rocky', 1, 3, 'active', 'Grande', 'Macho', 'Rocky es un perro guardián leal.');
-
 SET SQL_SAFE_UPDATES = 0;
-
--- select
