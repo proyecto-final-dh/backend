@@ -21,6 +21,7 @@ public class Constants {
     public static final String PET_OWNER_REQUIRED = "Pet owner is required and needs to be greater than 0";
     public static final String PET_BREED_REQUIRED = "Pet breed is required and needs to be greater than 0";
     public static final String PET_DESCRIPTION_REQUIRED = "Pet description is required";
+    public static final String PET_AGE_MUST_BE_VALID = "Pet age must be equal or grater than 0";
 
     // NOT FOUND MESSAGES
     public static final String BREED_NOT_FOUND = "Breed not found";

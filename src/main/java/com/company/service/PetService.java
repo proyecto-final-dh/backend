@@ -35,6 +35,7 @@ import java.util.Set;
 import static com.company.constants.Constants.BREED_NOT_FOUND;
 import static com.company.constants.Constants.LOCATION_NOT_FOUND;
 import static com.company.constants.Constants.OWNER_NOT_FOUND;
+import static com.company.constants.Constants.PET_AGE_MUST_BE_VALID;
 import static com.company.constants.Constants.PET_BREED_REQUIRED;
 import static com.company.constants.Constants.PET_DESCRIPTION_REQUIRED;
 import static com.company.constants.Constants.PET_GENDER_REQUIRED;
@@ -284,6 +285,9 @@ public class PetService implements IPetService {
         }
         if (pet.getBreedId() == null || pet.getBreedId() < 1) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_BREED_REQUIRED);
+        }
+        if(pet.getAge() != null && pet.getAge() < 0){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_AGE_MUST_BE_VALID);
         }
 
         if (isForAdoption) {
