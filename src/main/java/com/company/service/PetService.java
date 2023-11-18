@@ -287,6 +287,8 @@ public class PetService implements IPetService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_BREED_REQUIRED);
         }
 
+        // TODO: Agregar validacion en el caso de que se pase un genero en la mascota personal. No es obligatorio, por lo que solo hay que validar si llega el dato como parametro.
+
         if (isForAdoption) {
             if (pet.getGender() == null || pet.getGender().isEmpty() || !PetGender.isValidGender(pet.getGender())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_GENDER_REQUIRED);

@@ -27,6 +27,7 @@ public class Mapper {
         Pets pet = new Pets();
         pet.setName(createPetDto.getName());
         pet.setSize(String.valueOf(createPetDto.getSize()));
+        // TODO: Verificar que se guarda correctamente. Si se usa string no hace falta validarlo (ya que se deberia haber hecho en el service). En caso de usar enum, habria que ver si no rompe que este vacio.
         pet.setGender(PetGender.getGenderById(createPetDto.getGender()));
         pet.setDescription(String.valueOf(createPetDto.getDescription()));
         return pet;
