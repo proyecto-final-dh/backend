@@ -45,6 +45,8 @@ public class Pets {
 
     private String description;
 
+    private Integer age;
+
 
     @ManyToOne
     @JoinColumn(name = "breed_id")
@@ -55,11 +57,12 @@ public class Pets {
     private UserDetails userDetails;
 
 
-    public Pets(String name, PetStatus status, String size, String gender, String description) {
+    public Pets(String name, PetStatus status, String size, String gender, String description, Integer age) {
         this.name = name;
         this.status = status;
         this.size = size;
         this.gender = gender;
         this.description = description;
+        this.age = age;
     }
 }
