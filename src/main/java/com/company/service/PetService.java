@@ -123,7 +123,7 @@ public class PetService implements IPetService {
 
         List<ImageWithTitle> savedImages = bucketImageService.uploadFileWithTitle(images);
 
-        List<ImageWithTitle> returnImages = saveImagesInDatabase(savedImages, savedPet.getId());
+        List<ImageWithTitle> returnImages = saveImagesInDatabase(savedImages, savedPet);
 
         return mapPetToPetWithImages(savedPet, returnImages);
     }
@@ -143,7 +143,7 @@ public class PetService implements IPetService {
 
         List<ImageWithTitle> savedImages = bucketImageService.uploadFileWithTitle(images);
 
-        List<ImageWithTitle> returnImages = saveImagesInDatabase(savedImages, savedPet.getId());
+        List<ImageWithTitle> returnImages = saveImagesInDatabase(savedImages, savedPet);
 
         return mapPetToPetWithImages(savedPet, returnImages);
     }
@@ -304,12 +304,12 @@ public class PetService implements IPetService {
         }
     }
 
-    private List<ImageWithTitle> saveImagesInDatabase(List<ImageWithTitle> images, int petId) {
+    private List<ImageWithTitle> saveImagesInDatabase(List<ImageWithTitle> images, Pets pet) {
         List<Image> imagesToSave = images.stream().map(image -> {
             Image newImage = new Image();
             newImage.setUrl(image.getUrl());
             newImage.setTitle(image.getTitle());
-            newImage.setPetID(petId);
+            newImage.setPet(pet);
             return newImage;
         }).toList();
 

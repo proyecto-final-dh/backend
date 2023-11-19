@@ -1,6 +1,7 @@
 package com.company.imagetest;
 
 import com.company.model.entity.Image;
+import com.company.model.entity.Pets;
 import com.company.repository.IImageRepository;
 import com.company.service.ImageService;
 import org.mockito.InjectMocks;
@@ -26,7 +27,7 @@ public class ImageTest {
      void testFindAll() {
         // Arrange
         Image image= new Image();
-        image.setPetID(1);
+        image.setPet(createPet());
         image.setUrl("url");
 
         // Act
@@ -43,7 +44,7 @@ public class ImageTest {
     void testSave(){
         // Arrange
         Image image= new Image();
-        image.setPetID(4);
+        image.setPet(createPet());
         image.setUrl("urlDesdeBack");
 
         // Act
@@ -52,8 +53,14 @@ public class ImageTest {
 
         // Assert
         assertNotNull(imageResponde);
-        assertEquals(imageResponde.getPetID(), image.getPetID());
+        assertEquals(imageResponde.getPet(), image.getPet());
     }
 
 
+    private Pets createPet() {
+        Pets pet = new Pets();
+        pet.setId(1);
+        pet.setName("name");
+        return pet;
+    }
 }
