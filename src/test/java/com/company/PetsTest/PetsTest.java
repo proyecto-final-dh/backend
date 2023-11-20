@@ -1,11 +1,13 @@
 package com.company.PetsTest;
 
 import com.company.controller.PetController;
-import com.company.enums.PetGender;
 import com.company.enums.PetStatus;
+import com.company.model.entity.Breeds;
 import com.company.model.entity.Pets;
+import com.company.model.entity.Species;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +32,8 @@ public class PetsTest {
 
     @BeforeAll
     public void setup() {
-        newPet =  new Pets("Dog", PetStatus.EN_ADOPCION, "Medium", "MACHO", "A friendly dog");
-        newPet2 = new Pets("Cat", PetStatus.EN_ADOPCION, "Medium", "MACHO", "A friendly cat");
+        newPet =  new Pets("Dog", PetStatus.EN_ADOPCION, "Medium", "MACHO", "A friendly dog",2);
+        newPet2 = new Pets("Cat", PetStatus.EN_ADOPCION, "Medium", "MACHO", "A friendly cat",3);
     }
     @AfterAll
     public void teardown() {
@@ -83,7 +85,7 @@ public class PetsTest {
         var bodyResult = ((Pets) result.getBody());
         int id = bodyResult.getId();
 
-        Pets updatedPet = new Pets("CatUpdate", PetStatus.EN_ADOPCION, "Small", "HEMBRA", "A friendly and adopted cat");
+        Pets updatedPet = new Pets("CatUpdate", PetStatus.EN_ADOPCION, "Small", "HEMBRA", "A friendly and adopted cat", 3);
         ResponseEntity<Object> resultUpdateResponse = petController.updatePet(id, updatedPet);
         assertEquals(HttpStatus.OK, resultUpdateResponse.getStatusCode());
 

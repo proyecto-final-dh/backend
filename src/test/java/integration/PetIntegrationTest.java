@@ -150,10 +150,8 @@ public class PetIntegrationTest {
         String jsonResponse = result.getResponse().getContentAsString();
         JsonNode jsonNode = objectMapper.readTree(jsonResponse);
 
-
         assertTrue(jsonNode.isArray() && jsonNode.size() > 0);
     }
-
 
     @Test
     public void getPetsByLocation() throws Exception {
@@ -167,15 +165,15 @@ public class PetIntegrationTest {
         String jsonResponse = result.getResponse().getContentAsString();
         JsonNode jsonNode = objectMapper.readTree(jsonResponse);
 
-
         assertTrue(jsonNode.isArray() && jsonNode.size() > 0);
     }
+
 
     private CreatePetDto createCreatePetDto() {
 
         CreatePetDto pet = new CreatePetDto();
         pet.setName("Dog");
-        pet.setGender("M");
+        pet.setGender("MACHO");
         pet.setSize("Large");
         pet.setOwnerId(1);
         pet.setBreedId(1);
@@ -193,3 +191,4 @@ public class PetIntegrationTest {
     }
 
 }
+

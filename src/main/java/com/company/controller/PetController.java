@@ -167,14 +167,13 @@ public class PetController {
 
     @GetMapping("/filter")
     public ResponseEntity<Object> filterPets(
-            @RequestParam(required = false) String location,
-            @RequestParam(required = false) String species,
+            @RequestParam(required = false) Integer location,
+            @RequestParam(required = false) Integer species,
             @RequestParam(required = false, name = "breed_id") Integer breedId,
             @RequestParam(required = false, name = "pet_size") String petSize,
             @RequestParam(required = false) String status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "9") int size) throws Exception {
-
         try {
             Pageable pageable = PageRequest.of(page, size);
             Page<Pets> filteredPets = petService.filterPets(location, species, breedId, petSize, status, pageable);

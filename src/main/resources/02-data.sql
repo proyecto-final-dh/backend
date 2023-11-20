@@ -573,31 +573,41 @@ VALUES
     ('a9e2f5d1-c7b8-1e2d-8a7a', 7, '555-7777', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
     ('5b1c7e9d2-4c3d8-2e1d-1a9a', 8, '555-8888', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
     ('1a2e3f5d7-6b8c-4d3e-2f1a', 9, '555-9999', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
-    ('8f9e2d5c1-7b8c4d2-1e2d', 10, '555-1010', '2023-11-05 00:00:00', '2023-11-05 00:00:00');
+    ('8f9e2d5c1-7b8c4d2-1e2d', 10, '555-1010', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
+    ('1c337090-0d59-45b8-ba82-428395de0da2', 11, '555-1111', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
+    ('792aea21-d936-444e-8e0b-a0da9e71f70f', 12, '555-2222', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
+    ('30f72ee2-ea5e-45f3-bb52-cf0deeea2450', 13, '555-3333', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
+    ('f4e29255-9306-4b51-9dd1-c28527b2d0a0', 14, '555-4444', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
+    ('c9a294ee-0204-4c76-ba55-f85cab8406aa', 15, '555-5555', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
+    ('0903c1eb-49e1-40e2-b472-76ca7b50bfce', 16, '555-6666', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
+    ('48ada9ca-f429-4b94-bea8-c037739ac512', 17, '555-7777', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
+    ('a7e57d70-c2d2-4aa3-a2d5-3d9b532b8686', 18, '555-8888', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
+    ('ed19d0d2-742a-4336-8b9e-e180a6f57ae5', 19, '555-9999', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
+    ('eff5857a-c55f-413e-adc6-4580e51de220', 20, '555-1010', '2023-11-06 12:00:00', '2023-11-06 12:00:00');
 
 -- ingreso de mascotas --
-INSERT INTO pets (name, owner_id, breed_id, status, size, gender, description)
+INSERT INTO pets (name, owner_id, breed_id, status, size, gender, description, age)
 VALUES
-    (N'Buddy', 1, 21, 'MASCOTA_PROPIA', N'Mediano', 'MACHO', N'Buddy es un perro cariñoso y juguetón que adora correr por el parque.'),
-    (N'Luna', 2, 32, 'MASCOTA_PROPIA', N'Pequeño', 'HEMBRA', N'Luna es una gatita elegante y curiosa que le encanta explorar la casa.'),
-    (N'Max', 3, 21, 'MASCOTA_PROPIA', N'Grande', 'MACHO', N'Max es un perro grande y amigable que siempre está listo para pasear.'),
-    (N'Molly', 4, 21, 'EN_ADOPCION', N'Mediano', 'HEMBRA', N'Molly es una perrita dulce y leal que adora estar en compañía de su familia.'),
-    (N'Rocky', 5, 15, 'EN_ADOPCION', N'Pequeño', 'MACHO', N'Rocky es un perro pequeño pero valiente que protege a su familia en todo momento.'),
-    (N'Bella', 6, 18, 'EN_ADOPCION', N'Grande', 'HEMBRA', N'Bella es una perrita grande y gentil que disfruta de largos paseos en el parque.'),
-    (N'Charlie', 7, 14, 'EN_ADOPCION', N'Mediano', 'MACHO', N'Charlie es un perro amigable y enérgico que siempre está lleno de energía.'),
-    (N'Daisy', 8, 3, 'EN_ADOPCION', N'Pequeño', 'HEMBRA', N'Daisy es una perrita pequeña y traviesa que adora jugar con sus juguetes.'),
-    (N'Cooper', 9, 21, 'EN_ADOPCION', N'Grande', 'MACHO', N'Cooper es un perro grande y protector que siempre cuida de su familia.'),
-    (N'Zoe', 10, 36, 'EN_ADOPCION', N'Mediano', 'HEMBRA', N'Zoe es una gatita cariñosa y juguetona que ama los mimos y caricias.'),
-    (N'Pirata', 1, 37, 'EN_ADOPCION', N'Pequeño', 'MACHO', N'Pirata es un gatito curioso y aventurero que está buscando un hogar.'),
-    (N'Misty', 2, 29, 'EN_ADOPCION', N'Grande', 'HEMBRA', N'Misty es una perra grande y dulce que merece una familia amorosa.'),
-    (N'Leo', 3, 7, 'EN_ADOPCION', N'Mediano', 'MACHO', N'Leo es un perro activo y juguetón que necesita un lugar donde correr y jugar.'),
-    (N'Lucky', 4, 1, 'ADOPTADA', N'Pequeño', 'HEMBRA', N'Lucky es una perrita afortunada en busca de un hogar cálido y cariñoso.'),
-    (N'Oliver', 5, 19, 'ADOPTADA', N'Grande', 'MACHO', N'Oliver es un perro grande y noble que se lleva bien con todos.'),
-    (N'Sasha', 6, 18, 'ADOPTADA', N'Mediano', 'HEMBRA', N'Sasha es una perra mediana y cariñosa que te dará mucho amor.'),
-    (N'Teddy', 7, 31, 'ADOPTADA', N'Pequeño', 'MACHO', N'Teddy es un perrito pequeño y tierno en busca de un compañero fiel.'),
-    (N'Bentley', 8, 4, 'ADOPTADA', N'Grande', 'HEMBRA', N'Bentley es una perra grande y leal que te protegerá siempre.'),
-    (N'Milo', 9, 21, 'ADOPTADA', N'Mediano', 'MACHO', N'Milo es un perro mediano y juguetón que alegrará tu hogar.'),
-    (N'Lucio', 10, 3, 'ADOPTADA', N'Pequeño', 'MACHO', N'Lucio es un perrito pequeño y encantador que te hará sonreír.');
+    (N'Buddy', 1, 21, 'MASCOTA_PROPIA', N'Mediano', 'Macho', N'Buddy es un perro cariñoso y juguetón que adora correr por el parque.', 3),
+    (N'Luna', 2, 32, 'MASCOTA_PROPIA', N'Pequeño', 'Hembra', N'Luna es una gatita elegante y curiosa que le encanta explorar la casa.', 2),
+    (N'Max', 3, 21, 'MASCOTA_PROPIA', N'Grande', 'Macho', N'Max es un perro grande y amigable que siempre está listo para pasear.', 4),
+    (N'Molly', 4, 21, 'EN_ADOPCION', N'Mediano', 'Hembra', N'Molly es una perrita dulce y leal que adora estar en compañía de su familia.', 5),
+    (N'Rocky', 5, 15, 'EN_ADOPCION', N'Pequeño', 'Macho', N'Rocky es un perro pequeño pero valiente que protege a su familia en todo momento.', 3),
+    (N'Bella', 6, 18, 'EN_ADOPCION', N'Grande', 'Hembra', N'Bella es una perrita grande y gentil que disfruta de largos paseos en el parque.', 6),
+    (N'Charlie', 7, 14, 'EN_ADOPCION', N'Mediano', 'Macho', N'Charlie es un perro amigable y enérgico que siempre está lleno de energía.', 2),
+    (N'Daisy', 8, 3, 'EN_ADOPCION', N'Pequeño', 'Hembra', N'Daisy es una perrita pequeña y traviesa que adora jugar con sus juguetes.', 4),
+    (N'Cooper', 9, 21, 'EN_ADOPCION', N'Grande', 'Macho', N'Cooper es un perro grande y protector que siempre cuida de su familia.', 5),
+    (N'Zoe', 10, 36, 'EN_ADOPCION', N'Mediano', 'Hembra', N'Zoe es una gatita cariñosa y juguetona que ama los mimos y caricias.', 1),
+    (N'Pirata', 1, 37, 'EN_ADOPCION', N'Pequeño', 'Macho', N'Pirata es un gatito curioso y aventurero que está buscando un hogar.', 2),
+    (N'Misty', 2, 29, 'EN_ADOPCION', N'Grande', 'Hembra', N'Misty es una perra grande y dulce que merece una familia amorosa.', 6),
+    (N'Leo', 3, 7, 'EN_ADOPCION', N'Mediano', 'Macho', N'Leo es un perro activo y juguetón que necesita un lugar donde correr y jugar.', 3),
+    (N'Lucky', 4, 1, 'ADOPTADA', N'Pequeño', 'Hembra', N'Lucky es una perrita afortunada en busca de un hogar cálido y cariñoso.', 5),
+    (N'Oliver', 5, 19, 'ADOPTADA', N'Grande', 'Macho', N'Oliver es un perro grande y noble que se lleva bien con todos.', 4),
+    (N'Sasha', 6, 18, 'ADOPTADA', N'Mediano', 'Hembra', N'Sasha es una perra mediana y cariñosa que te dará mucho amor.', 2),
+    (N'Teddy', 7, 31, 'ADOPTADA', N'Pequeño', 'Macho', N'Teddy es un perrito pequeño y tierno en busca de un compañero fiel.', 1),
+    (N'Bentley', 8, 4, 'ADOPTADA', N'Grande', 'Hembra', N'Bentley es una perra grande y leal que te protegerá siempre.', 6),
+    (N'Milo', 9, 21, 'ADOPTADA', N'Mediano', 'Macho', N'Milo es un perro mediano y juguetón que alegrará tu hogar.', 4),
+    (N'Lucio', 10, 3, 'ADOPTADA', N'Pequeño', 'Macho', N'Lucio es un perrito pequeño y encantador que te hará sonreír.', 3);
 
 
 -- ingreso de fotos de mascotas --
@@ -735,6 +745,11 @@ INSERT INTO history_states ( pet_id, date, status,user_id) VALUES
     (7, CURRENT_DATE(), 'ADOPTADA',5);
 
 
-SET SQL_SAFE_UPDATES = 0;
+-- Insertar pruebas resgistro de usuarios
 
--- select
+INSERT INTO user_details (user_id, location_id, cellphone, created_at, updated_at) VALUES
+('a3f1e25e-5b89-4032-8d7a-9899b0ee0bde', 1, '555-1234-5678', '2023-11-03 10:00:00', '2023-11-03 10:00:00'),
+('b4g2f36f-6c98-5043-9e8b-aa99c1ee1bfc', 2, '555-9876-5432', '2023-11-03 10:05:00', '2023-11-03 10:05:00'),
+('c5h3g47g-7d09-6054-af9c-bb88d2ff2cfd', 3, '555-5643-5890', '2023-11-03 10:10:00', '2023-11-03 10:10:00');
+
+SET SQL_SAFE_UPDATES = 0;
