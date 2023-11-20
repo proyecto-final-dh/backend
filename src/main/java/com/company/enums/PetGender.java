@@ -16,7 +16,7 @@ public enum PetGender {
     private String id;
 
     public static boolean isValidGender(String gender) {
-        return Arrays.stream(PetStatus.values()).anyMatch(e -> e.getId().equalsIgnoreCase(gender));
+        return Arrays.stream(PetGender.values()).anyMatch(e -> e.getId().equalsIgnoreCase(gender));
     }
 
     public static PetGender getGenderById(String gender) {

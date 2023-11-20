@@ -97,6 +97,7 @@ public class PetService implements IPetService {
     }
 
     public Pets save(Pets pets) throws Exception {
+        validateGender(pets.getGender());
         if (!pets.getName().isEmpty()) {
             return IPetsRepository.save(pets);
         } else {
@@ -108,6 +109,7 @@ public class PetService implements IPetService {
     @Transactional
     public PetWithImagesDto saveOwnPetWithImages(CreatePetDto pet, MultipartFile[] images) {
         validateBasicPetData(pet, false);
+        validateGender(pet.getGender());
 
         Pets fullPet = mapCreatePetDtoToPet(pet);
 
@@ -132,6 +134,7 @@ public class PetService implements IPetService {
     @Transactional
     public PetWithImagesDto saveAdoptivePetWithImages(CreatePetDto pet, MultipartFile[] images) {
         validateBasicPetData(pet, true);
+        validateGender(pet.getGender());
 
         Pets fullPet = mapCreatePetDtoToPet(pet);
 
@@ -287,12 +290,25 @@ public class PetService implements IPetService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_BREED_REQUIRED);
         }
 
-        // TODO: Agregar validacion en el caso de que se pase un genero en la mascota personal. No es obligatorio, por lo que solo hay que validar si llega el dato como parametro.
+        if (pet.getGender() != null && !PetGender.isValidGender(pet.getGender())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_GENDER_REQUIRED);
+        }
+        if (pet.getGender() == null || pet.getGender().isEmpty()) {
+            pet.setGender("");
+        }
 
         if (isForAdoption) {
             if (pet.getGender() == null || pet.getGender().isEmpty() || !PetGender.isValidGender(pet.getGender())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_GENDER_REQUIRED);
             }
+            if (pet.getGender() != null || ! pet.getGender().isEmpty()){
+                try {
+                    PetGender.isValidGender(pet.getGender());
+                } catch (ResponseStatusException e) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_GENDER_REQUIRED);
+                }
+            }
+
             if (pet.getSize() == null || pet.getSize().isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_SIZE_REQUIRED);
             }
@@ -366,6 +382,12 @@ public class PetService implements IPetService {
             return location.get();
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, LOCATION_NOT_FOUND);
+        }
+    }
+
+    private void validateGender(String gender) {
+        if (gender != null && !gender.isEmpty() && !PetGender.isValidGender(gender)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_GENDER_REQUIRED);
         }
     }
 
