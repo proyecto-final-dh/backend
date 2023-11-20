@@ -1,8 +1,7 @@
 package com.company.model.entity;
 
-import com.company.enums.PetGender;
+
 import com.company.enums.PetStatus;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -43,7 +42,6 @@ public class Pets {
 
     private String size;
 
-    //@Enumerated(EnumType.STRING)
     private String gender;
 
     private String description;

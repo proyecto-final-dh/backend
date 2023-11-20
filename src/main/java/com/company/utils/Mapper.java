@@ -1,6 +1,6 @@
 package com.company.utils;
 
-import com.company.enums.PetGender;
+
 import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.ImageWithTitle;
 import com.company.model.dto.PetWithImagesDto;
