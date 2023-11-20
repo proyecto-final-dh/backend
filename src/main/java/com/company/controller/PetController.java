@@ -1,5 +1,6 @@
 package com.company.controller;
 
+import com.company.model.dto.CompletePetDto;
 import com.company.model.dto.CreatePetDto;
 import com.company.enums.PetStatus;
 import com.company.model.entity.Pets;
@@ -43,12 +44,12 @@ public class PetController {
 
 
     @GetMapping
-    public Page<Pets> getAllPets(
+    public Page<CompletePetDto> getAllPets(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "9") int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
-            Page<Pets> petPage = petService.findAll(pageable);
+            Page<CompletePetDto> petPage = petService.findAll(pageable);
             return petPage;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -56,13 +57,13 @@ public class PetController {
     }
 
     @GetMapping("/status")
-    public Page<Pets> getPetsByStatus(
+    public Page<CompletePetDto> getPetsByStatus(
             @RequestParam PetStatus status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "9") int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
-            Page<Pets> petPage = petService .findByStatus(status,pageable);
+            Page<CompletePetDto> petPage = petService .findByStatus(status,pageable);
             return petPage;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -72,7 +73,7 @@ public class PetController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getPetById(@PathVariable int id) {
         try {
-            Pets pets = petService.findById(id);
+            CompletePetDto pets = petService.findById(id);
             return ResponseEntity.ok(pets);
         } catch (ResponseStatusException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
@@ -82,26 +83,26 @@ public class PetController {
     }
 
     @GetMapping("/locations/{id}")
-    public List<Pets> getByLocation(@PathVariable int id,
+    public Page<CompletePetDto> getByLocation(@PathVariable int id,
                                     @RequestParam(defaultValue = "0") int page,
                                     @RequestParam(defaultValue = "9") int size) {
         try {
             Pageable pageable = PageRequest.of(page,size);
-            Page<Pets> petPage = petService.findByLocation(id,pageable);
-            return petPage.getContent();
+            Page<CompletePetDto> petPage = petService.findByLocation(id,pageable);
+            return petPage;
         } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
     @GetMapping("/owner/{id}")
-    public List<Pets> getByOwner(@PathVariable int id,
+    public Page<CompletePetDto> getByOwner(@PathVariable int id,
                                     @RequestParam(defaultValue = "0") int page,
                                     @RequestParam(defaultValue = "9") int size) {
         try {
             Pageable pageable = PageRequest.of(page,size);
-            Page<Pets> petPage = petService.findByOwner(id,pageable);
-            return petPage.getContent();
+            Page<CompletePetDto> petPage = petService.findByOwner(id,pageable);
+            return petPage;
         } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -156,7 +157,7 @@ public class PetController {
     }
 
     @GetMapping("/recommendation/{id}")
-    public List<Pets> getPetsRecommendation(@PathVariable int id,@RequestParam(name = "limit", required = false) int limit)
+    public List<CompletePetDto> getPetsRecommendation(@PathVariable int id,@RequestParam(name = "limit", required = false) int limit)
     {
         try {
             return petService.findPetsRecommendations(id,limit);
@@ -177,7 +178,7 @@ public class PetController {
 
         try {
             Pageable pageable = PageRequest.of(page, size);
-            Page<Pets> filteredPets = petService.filterPets(location, species, breedId, petSize, status, pageable);
+            Page<CompletePetDto> filteredPets = petService.filterPets(location, species, breedId, petSize, status, pageable);
             return ResponseEntity.ok(filteredPets);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
