@@ -59,28 +59,6 @@ public class PetService implements IPetService {
     private IImageRepository imageRepository;
     private IBreedsRepository breedsRepository;
 
-    private List<CompletePetDto> attachImages(List<Pets> pets){
-        List<CompletePetDto> petsDto = new ArrayList<>();
-        for (Pets pet : pets) {
-            var images = imageRepository.findByPetID(pet.getId());
-            if (images.isPresent()) {
-                List<ImageWithTitle> imagesPets = mapToImageWithTitleList(images.get());
-                petsDto.add(mapToCompletePetDto(pet, imagesPets));
-            }
-        }
-        return petsDto;
-    }
-
-    private CompletePetDto attachImages(Pets pet){
-        CompletePetDto petDto = new CompletePetDto();
-        var images = imageRepository.findByPetID(pet.getId());
-        if(images.isPresent()){
-            List<ImageWithTitle> imagesPets = mapToImageWithTitleList(images.get());
-            petDto = mapToCompletePetDto(pet, imagesPets);
-        }
-        return petDto;
-    }
-
     public Page<CompletePetDto> findAll(Pageable pageable) throws Exception {
         try {
             var petsDB = IPetsRepository.findAll(pageable);
@@ -415,6 +393,28 @@ public class PetService implements IPetService {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, LOCATION_NOT_FOUND);
         }
+    }
+
+    private List<CompletePetDto> attachImages(List<Pets> pets){
+        List<CompletePetDto> petsDto = new ArrayList<>();
+        for (Pets pet : pets) {
+            var images = imageRepository.findByPetID(pet.getId());
+            if (images.isPresent()) {
+                List<ImageWithTitle> imagesPets = mapToImageWithTitleList(images.get());
+                petsDto.add(mapToCompletePetDto(pet, imagesPets));
+            }
+        }
+        return petsDto;
+    }
+
+    private CompletePetDto attachImages(Pets pet){
+        CompletePetDto petDto = new CompletePetDto();
+        var images = imageRepository.findByPetID(pet.getId());
+        if(images.isPresent()){
+            List<ImageWithTitle> imagesPets = mapToImageWithTitleList(images.get());
+            petDto = mapToCompletePetDto(pet, imagesPets);
+        }
+        return petDto;
     }
 
 }
