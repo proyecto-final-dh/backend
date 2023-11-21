@@ -80,6 +80,7 @@ public class PetService implements IPetService {
 
     public Pets update(int id, Pets updatedPets) {
         Optional<Pets> existingPet = IPetsRepository.findById(id);
+        validateGender(updatedPets.getGender());
 
         if (existingPet.isPresent()) {
             Pets pets = existingPet.get();
