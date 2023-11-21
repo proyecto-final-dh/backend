@@ -18,6 +18,7 @@ public class Mapper {
         petWithImagesDto.setStatusId(pet.getStatus().getId());
         petWithImagesDto.setSize(pet.getSize());
         petWithImagesDto.setGender(pet.getGender());
+        petWithImagesDto.setAge(pet.getAge());
         petWithImagesDto.setDescription(pet.getDescription());
         petWithImagesDto.setBreedId(pet.getBreed().getId());
         petWithImagesDto.setOwnerId(pet.getUserDetails().getId());
@@ -28,9 +29,10 @@ public class Mapper {
     public static Pets mapCreatePetDtoToPet(CreatePetDto createPetDto) {
         Pets pet = new Pets();
         pet.setName(createPetDto.getName());
-        pet.setSize(String.valueOf(createPetDto.getSize()));
-        pet.setGender(String.valueOf(createPetDto.getGender()));
-        pet.setDescription(String.valueOf(createPetDto.getDescription()));
+        pet.setSize(createPetDto.getSize());
+        pet.setGender(createPetDto.getGender());
+        pet.setAge(createPetDto.getAge());
+        pet.setDescription(createPetDto.getDescription());
         return pet;
     }
 

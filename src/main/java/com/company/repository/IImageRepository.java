@@ -8,5 +8,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IImageRepository extends JpaRepository<Image, Integer>  {
-    Optional<List<Image>> findByPetID(int id);
+    Optional<List<Image>> findByPetId(int id);
 }

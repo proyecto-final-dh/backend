@@ -6,6 +6,7 @@ import com.company.enums.PetStatus;
 import com.company.model.entity.Pets;
 import com.company.service.PetService;
 import com.company.utils.ResponsesBuilder;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,18 +30,13 @@ import java.util.List;
 
 import static com.company.constants.Constants.PET_CREATED;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/pets")
 public class PetController {
 
     private final PetService petService;
     private final ResponsesBuilder responsesBuilder;
-
-    @Autowired
-    public PetController(PetService petService, ResponsesBuilder responsesBuilder) {
-        this.petService = petService;
-        this.responsesBuilder = responsesBuilder;
-    }
 
 
     @GetMapping
@@ -168,17 +164,16 @@ public class PetController {
 
     @GetMapping("/filter")
     public ResponseEntity<Object> filterPets(
-            @RequestParam(required = false) String location,
-            @RequestParam(required = false) String species,
+            @RequestParam(required = false) Integer location,
+            @RequestParam(required = false) Integer species,
             @RequestParam(required = false, name = "breed_id") Integer breedId,
             @RequestParam(required = false, name = "pet_size") String petSize,
             @RequestParam(required = false) String status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "9") int size) throws Exception {
-
         try {
             Pageable pageable = PageRequest.of(page, size);
-            Page<CompletePetDto> filteredPets = petService.filterPets(location, species, breedId, petSize, status, pageable);
+            Page<Pets> filteredPets = petService.filterPets(location, species, breedId, petSize, status, pageable);
             return ResponseEntity.ok(filteredPets);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

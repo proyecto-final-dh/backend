@@ -37,6 +37,7 @@ import java.util.Set;
 import static com.company.constants.Constants.BREED_NOT_FOUND;
 import static com.company.constants.Constants.LOCATION_NOT_FOUND;
 import static com.company.constants.Constants.OWNER_NOT_FOUND;
+import static com.company.constants.Constants.PET_AGE_MUST_BE_VALID;
 import static com.company.constants.Constants.PET_BREED_REQUIRED;
 import static com.company.constants.Constants.PET_DESCRIPTION_REQUIRED;
 import static com.company.constants.Constants.PET_GENDER_REQUIRED;
@@ -58,6 +59,7 @@ public class PetService implements IPetService {
     private BucketImageService bucketImageService;
     private IImageRepository imageRepository;
     private IBreedsRepository breedsRepository;
+
 
     public Page<CompletePetDto> findAll(Pageable pageable) throws Exception {
         try {
@@ -131,7 +133,7 @@ public class PetService implements IPetService {
 
         List<ImageWithTitle> savedImages = bucketImageService.uploadFileWithTitle(images);
 
-        List<ImageWithTitle> returnImages = saveImagesInDatabase(savedImages, savedPet.getId());
+        List<ImageWithTitle> returnImages = saveImagesInDatabase(savedImages, savedPet);
 
         return mapPetToPetWithImages(savedPet, returnImages);
     }
@@ -151,7 +153,7 @@ public class PetService implements IPetService {
 
         List<ImageWithTitle> savedImages = bucketImageService.uploadFileWithTitle(images);
 
-        List<ImageWithTitle> returnImages = saveImagesInDatabase(savedImages, savedPet.getId());
+        List<ImageWithTitle> returnImages = saveImagesInDatabase(savedImages, savedPet);
 
         return mapPetToPetWithImages(savedPet, returnImages);
     }
@@ -244,15 +246,10 @@ public class PetService implements IPetService {
     }
 
     @Override
-    public Page<CompletePetDto> filterPets(String location, String species, Integer breedId, String size, String status, Pageable pageable) throws Exception {
+    public Page<Pets> filterPets(Integer location, Integer species, Integer breedId, String size, String status, Pageable pageable) throws Exception {
         try {
             Specification<Pets> spec = buildSpecification(location, species, breedId, size, status);
-            var petsDB = IPetsRepository.findAll(spec, pageable);
-            if (petsDB.isEmpty()) {
-                return Page.empty();
-            }
-            var petsDto = attachImages(petsDB.getContent());
-            return new PageImpl<>(petsDto, pageable, petsDB.getTotalElements());
+            return IPetsRepository.findAll(spec, pageable);
         } catch (Exception e) {
             throw new Exception("Error al filtrar mascotas");
         }
@@ -314,6 +311,9 @@ public class PetService implements IPetService {
         if (pet.getBreedId() == null || pet.getBreedId() < 1) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_BREED_REQUIRED);
         }
+        if(pet.getAge() != null && pet.getAge() < 0){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_AGE_MUST_BE_VALID);
+        }
 
         if (isForAdoption) {
             if (pet.getGender() == null || pet.getGender().isEmpty()) {
@@ -329,12 +329,12 @@ public class PetService implements IPetService {
         }
     }
 
-    private List<ImageWithTitle> saveImagesInDatabase(List<ImageWithTitle> images, int petId) {
+    private List<ImageWithTitle> saveImagesInDatabase(List<ImageWithTitle> images, Pets pet) {
         List<Image> imagesToSave = images.stream().map(image -> {
             Image newImage = new Image();
             newImage.setUrl(image.getUrl());
             newImage.setTitle(image.getTitle());
-            newImage.setPetID(petId);
+            newImage.setPet(pet);
             return newImage;
         }).toList();
 
@@ -349,21 +349,20 @@ public class PetService implements IPetService {
         }).toList();
     }
 
-    private Specification<Pets> buildSpecification(String location, String species, Integer breedId, String size, String status) {
+    private Specification<Pets> buildSpecification(Integer location, Integer species, Integer breedId, String size, String status) {
         Specification<Pets> spec = Specification.where(null);
 
-        if (location != null && !location.isEmpty()) {
+        if (location != null) {
             spec = spec.and((root, query, cb) -> {
                 Join<Pets, UserDetails> userDetailsJoin = root.join("userDetails");
                 Join<UserDetails, Location> locationJoin = userDetailsJoin.join("location");
-                String likeExpression = "%" + location + "%";
-                return cb.like(locationJoin.get("city"), likeExpression);
+                return cb.equal(locationJoin.get("id"), location);
             });
         }
 
-        if (species != null && !species.isEmpty()) {
+        if (species != null) {
             spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("breed").get("species").get("name"), species));
+                    cb.equal(root.get("breed").get("species").get("id"), species));
         }
 
         if (breedId != null) {
@@ -376,7 +375,6 @@ public class PetService implements IPetService {
                     cb.equal(root.get("size"), size));
         }
 
-
         if (status != null && !status.isEmpty()) {
             PetStatus petStatus = PetStatus.valueOf(status);
             spec = spec.and((root, query, cb) ->
@@ -385,6 +383,7 @@ public class PetService implements IPetService {
 
         return spec;
     }
+
 
     private Location validateLocation(int id) {
         Optional<Location> location = locationRepository.findById(id);
@@ -398,7 +397,7 @@ public class PetService implements IPetService {
     private List<CompletePetDto> attachImages(List<Pets> pets){
         List<CompletePetDto> petsDto = new ArrayList<>();
         for (Pets pet : pets) {
-            var images = imageRepository.findByPetID(pet.getId());
+            var images = imageRepository.findByPetId(pet.getId());
             if (images.isPresent()) {
                 List<ImageWithTitle> imagesPets = mapToImageWithTitleList(images.get());
                 petsDto.add(mapToCompletePetDto(pet, imagesPets));
@@ -409,7 +408,7 @@ public class PetService implements IPetService {
 
     private CompletePetDto attachImages(Pets pet){
         CompletePetDto petDto = new CompletePetDto();
-        var images = imageRepository.findByPetID(pet.getId());
+        var images = imageRepository.findByPetId(pet.getId());
         if(images.isPresent()){
             List<ImageWithTitle> imagesPets = mapToImageWithTitleList(images.get());
             petDto = mapToCompletePetDto(pet, imagesPets);
