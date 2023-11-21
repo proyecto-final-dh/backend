@@ -123,7 +123,7 @@ public class PetService implements IPetService {
 
         List<ImageWithTitle> savedImages = bucketImageService.uploadFileWithTitle(images);
 
-        List<ImageWithTitle> returnImages = saveImagesInDatabase(savedImages, savedPet.getId());
+        List<ImageWithTitle> returnImages = saveImagesInDatabase(savedImages, savedPet);
 
         return mapPetToPetWithImages(savedPet, returnImages);
     }
@@ -143,7 +143,7 @@ public class PetService implements IPetService {
 
         List<ImageWithTitle> savedImages = bucketImageService.uploadFileWithTitle(images);
 
-        List<ImageWithTitle> returnImages = saveImagesInDatabase(savedImages, savedPet.getId());
+        List<ImageWithTitle> returnImages = saveImagesInDatabase(savedImages, savedPet);
 
         return mapPetToPetWithImages(savedPet, returnImages);
     }
@@ -229,16 +229,17 @@ public class PetService implements IPetService {
         }
     }
 
+    
     @Override
-    public Page<Pets> filterPets(String location, String species, Integer breedId, String size, String status, Pageable pageable) throws Exception {
+    public Page<Pets> filterPets(Integer location, Integer species, Integer breedId, String size, String status, Pageable pageable) throws Exception {
         try {
             Specification<Pets> spec = buildSpecification(location, species, breedId, size, status);
-
             return IPetsRepository.findAll(spec, pageable);
         } catch (Exception e) {
             throw new Exception("Error al filtrar mascotas");
         }
     }
+
 
     public Page<Pets> findByLocation(int id, Pageable pageable) throws Exception {
         validateLocation(id);
@@ -304,12 +305,12 @@ public class PetService implements IPetService {
         }
     }
 
-    private List<ImageWithTitle> saveImagesInDatabase(List<ImageWithTitle> images, int petId) {
+    private List<ImageWithTitle> saveImagesInDatabase(List<ImageWithTitle> images, Pets pet) {
         List<Image> imagesToSave = images.stream().map(image -> {
             Image newImage = new Image();
             newImage.setUrl(image.getUrl());
             newImage.setTitle(image.getTitle());
-            newImage.setPetID(petId);
+            newImage.setPet(pet);
             return newImage;
         }).toList();
 
@@ -324,21 +325,20 @@ public class PetService implements IPetService {
         }).toList();
     }
 
-    private Specification<Pets> buildSpecification(String location, String species, Integer breedId, String size, String status) {
+    private Specification<Pets> buildSpecification(Integer location, Integer species, Integer breedId, String size, String status) {
         Specification<Pets> spec = Specification.where(null);
 
-        if (location != null && !location.isEmpty()) {
+        if (location != null) {
             spec = spec.and((root, query, cb) -> {
                 Join<Pets, UserDetails> userDetailsJoin = root.join("userDetails");
                 Join<UserDetails, Location> locationJoin = userDetailsJoin.join("location");
-                String likeExpression = "%" + location + "%";
-                return cb.like(locationJoin.get("city"), likeExpression);
+                return cb.equal(locationJoin.get("id"), location);
             });
         }
 
-        if (species != null && !species.isEmpty()) {
+        if (species != null) {
             spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("breed").get("species").get("name"), species));
+                    cb.equal(root.get("breed").get("species").get("id"), species));
         }
 
         if (breedId != null) {
@@ -351,7 +351,6 @@ public class PetService implements IPetService {
                     cb.equal(root.get("size"), size));
         }
 
-
         if (status != null && !status.isEmpty()) {
             PetStatus petStatus = PetStatus.valueOf(status);
             spec = spec.and((root, query, cb) ->
@@ -360,6 +359,7 @@ public class PetService implements IPetService {
 
         return spec;
     }
+
 
     private Location validateLocation(int id) {
         Optional<Location> location = locationRepository.findById(id);
