@@ -35,3 +35,5 @@ server:
   error:
     include-message: always
   port: 8080
+
+  spring.jpa.open-in-view: false
