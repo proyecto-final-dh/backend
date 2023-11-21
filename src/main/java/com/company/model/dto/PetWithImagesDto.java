@@ -18,6 +18,7 @@ public class PetWithImagesDto {
     private String statusId;
     private String size;
     private String gender;
+    private Integer age;
     private String description;
     private Integer breedId;
     private Integer ownerId;

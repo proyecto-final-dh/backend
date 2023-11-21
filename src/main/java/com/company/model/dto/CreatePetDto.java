@@ -14,6 +14,7 @@ public class CreatePetDto {
     private String name;
     private String size;
     private String gender;
+    private Integer age;
     private String description;
     private Integer breedId;
     private Integer ownerId;
