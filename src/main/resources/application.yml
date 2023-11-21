@@ -34,4 +34,4 @@ server:
     key-password: password
   error:
     include-message: always
-  port: 8443
+  port: 8080
