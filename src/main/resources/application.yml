@@ -60,11 +60,11 @@ resqpet:
     api-version: 1.0.0
 
 server:
-  ssl:
-    key-alias: spring-https
-    key-store: classpath:backend.jks
-    key-store-type: JKS
-    key-password: passowrd
+  # ssl:
+  #   key-alias: spring-https
+  #   key-store: classpath:backend.jks
+  #   key-store-type: JKS
+  #   key-password: passowrd
   error:
     include-message: always
   port: 8080
