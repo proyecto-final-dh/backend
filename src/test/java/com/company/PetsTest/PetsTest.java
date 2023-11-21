@@ -2,6 +2,7 @@ package com.company.PetsTest;
 
 import com.company.controller.PetController;
 import com.company.enums.PetStatus;
+import com.company.model.dto.CompletePetDto;
 import com.company.model.entity.Breeds;
 import com.company.model.entity.Pets;
 import com.company.model.entity.Species;
@@ -45,7 +46,7 @@ public class PetsTest {
         ResponseEntity<Object> result = petController.createPet(newPet);
         ResponseEntity<Object> result2 = petController.createPet(newPet2);
 
-        List<Pets> petsList = petController.getAllPets(0,9).getContent();
+        List<CompletePetDto> petsList = petController.getAllPets(0,9).getContent();
         System.out.println(petsList);
         assertTrue(petsList.size() != 0);
 
@@ -63,8 +64,8 @@ public class PetsTest {
         System.out.println(getResult);
 
         assertEquals(HttpStatus.OK, getResult.getStatusCode());
-        assertTrue(getResult.getBody() instanceof Pets);
-        assertEquals(((Pets) getResult.getBody()).getId(), id);
+        assertTrue(getResult.getBody() instanceof CompletePetDto);
+        assertEquals(((CompletePetDto) getResult.getBody()).getId(), id);
         // Eliminar la entidad después de la prueba
         petController.deletePet(((Pets) createResult.getBody()).getId());
     }

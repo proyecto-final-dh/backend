@@ -1,5 +1,7 @@
 package com.company.service;
 
+
+import com.company.model.dto.CompletePetDto;
 import com.company.enums.PetGender;
 import com.company.model.entity.Pets;
 import com.company.enums.PetStatus;
@@ -20,6 +22,7 @@ import jakarta.persistence.criteria.Join;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -46,6 +49,8 @@ import static com.company.constants.Constants.PET_SIZE_REQUIRED;
 import static com.company.constants.Constants.WRONG_PET_GENDER;
 import static com.company.utils.Mapper.mapCreatePetDtoToPet;
 import static com.company.utils.Mapper.mapPetToPetWithImages;
+import static com.company.utils.Mapper.mapToCompletePetDto;
+import static com.company.utils.Mapper.mapToImageWithTitleList;
 
 @AllArgsConstructor
 @Service
@@ -58,19 +63,25 @@ public class PetService implements IPetService {
     private IImageRepository imageRepository;
     private IBreedsRepository breedsRepository;
 
-    public Page<Pets> findAll(Pageable pageable) throws Exception {
+
+    public Page<CompletePetDto> findAll(Pageable pageable) throws Exception {
         try {
-            return IPetsRepository.findAll(pageable);
+            var petsDB = IPetsRepository.findAll(pageable);
+            if (petsDB.isEmpty()) {
+                return Page.empty();
+            }
+            var petsDto = attachImages(petsDB.getContent());
+            return new PageImpl<>(petsDto, pageable, petsDB.getTotalElements());
         } catch (Exception e) {
             throw new Exception("Error al recuperar las mascotas paginadas.");
         }
     }
 
-    public Pets findById(int id) throws Exception {
+    public CompletePetDto findById(int id) throws Exception {
         try {
             Optional<Pets> pet = IPetsRepository.findById(id);
             if (pet.isPresent()) {
-                return pet.get();
+                return attachImages(pet.get());
             } else {
                 throw new Exception("Pet with id " + id + " not found.");
             }
@@ -162,7 +173,7 @@ public class PetService implements IPetService {
     }
 
 
-    public List<Pets> findPetsRecommendations(int petId, int limit) throws Exception {
+    public List<CompletePetDto> findPetsRecommendations(int petId, int limit) throws Exception {
         Optional<Pets> petOptional = IPetsRepository.findById(petId);
 
         if (petOptional.isPresent()) {
@@ -218,22 +229,27 @@ public class PetService implements IPetService {
 
             recommendations = recommendations.subList(0, Math.min(recommendations.size(), limit));
 
-            return recommendations;
+            var recommendationsDto = attachImages(recommendations);
+            return recommendationsDto;
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet not found");
         }
     }
 
     @Override
-    public Page<Pets> findByStatus(PetStatus status, Pageable pageable) throws Exception {
+    public Page<CompletePetDto> findByStatus(PetStatus status, Pageable pageable) throws Exception {
         try {
-            return IPetsRepository.findByStatus(status, pageable);
+            var petsDB = IPetsRepository.findByStatus(status, pageable);
+            if (petsDB.isEmpty()) {
+                return Page.empty();
+            }
+            var petsDto = attachImages(petsDB.getContent());
+            return new PageImpl<>(petsDto, pageable, petsDB.getTotalElements());
         } catch (Exception e) {
             throw new Exception("Error al recuperar las mascotas por status.");
         }
     }
 
-    
     @Override
     public Page<Pets> filterPets(Integer location, Integer species, Integer breedId, String size, String status, Pageable pageable) throws Exception {
         try {
@@ -244,20 +260,29 @@ public class PetService implements IPetService {
         }
     }
 
-
-    public Page<Pets> findByLocation(int id, Pageable pageable) throws Exception {
+    public Page<CompletePetDto> findByLocation(int id, Pageable pageable) throws Exception {
         validateLocation(id);
         try {
-            return IPetsRepository.findByLocation(id, pageable);
+            var petsDB = IPetsRepository.findByLocation(id, pageable);
+            if (petsDB.isEmpty()) {
+                return Page.empty();
+            }
+            var petsDto = attachImages(petsDB.getContent());
+            return new PageImpl<>(petsDto, pageable, petsDB.getTotalElements());
         } catch (Exception e) {
             throw new Exception("Error al recuperar las mascotas paginadas.");
         }
     }
 
-    public Page<Pets> findByOwner(int id, Pageable pageable) throws Exception {
+    public Page<CompletePetDto> findByOwner(int id, Pageable pageable) throws Exception {
         validateUserDetails(id);
         try {
-            return IPetsRepository.findByOwner(id, pageable);
+            var petsDB = IPetsRepository.findByOwner(id, pageable);
+            if (petsDB.isEmpty()) {
+                return Page.empty();
+            }
+            var petsDto = attachImages(petsDB.getContent());
+            return new PageImpl<>(petsDto, pageable, petsDB.getTotalElements());
         } catch (Exception e) {
             throw new Exception("Error al recuperar las mascotas paginadas.");
         }
@@ -291,7 +316,7 @@ public class PetService implements IPetService {
         if (pet.getBreedId() == null || pet.getBreedId() < 1) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_BREED_REQUIRED);
         }
-        if(pet.getAge() != null && pet.getAge() < 0){
+        if (pet.getAge() != null && pet.getAge() < 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_AGE_MUST_BE_VALID);
         }
 
@@ -379,10 +404,31 @@ public class PetService implements IPetService {
         }
     }
 
-    private void validateGender(String gender) {
+    private List<CompletePetDto> attachImages(List<Pets> pets) {
+        List<CompletePetDto> petsDto = new ArrayList<>();
+        for (Pets pet : pets) {
+            var images = imageRepository.findByPetId(pet.getId());
+            if (images.isPresent()) {
+                List<ImageWithTitle> imagesPets = mapToImageWithTitleList(images.get());
+                petsDto.add(mapToCompletePetDto(pet, imagesPets));
+            }
+        }
+        return petsDto;
+    }
+
+    private CompletePetDto attachImages(Pets pet) {
+        CompletePetDto petDto = new CompletePetDto();
+        var images = imageRepository.findByPetId(pet.getId());
+        if (images.isPresent()) {
+            List<ImageWithTitle> imagesPets = mapToImageWithTitleList(images.get());
+            petDto = mapToCompletePetDto(pet, imagesPets);
+        }
+        return petDto;
+    }
+
+    private void validateGender (String gender){
         if (gender != null && !gender.isEmpty() && !PetGender.isValidGender(gender)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_GENDER_REQUIRED);
         }
     }
-
 }
