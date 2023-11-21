@@ -23,4 +23,9 @@ public class PetWithImagesDto {
     private Integer breedId;
     private Integer ownerId;
     private List<ImageWithTitle> images;
+
+    public PetWithImagesDto setImages(List<ImageWithTitle> images) {
+        this.images = images;
+        return this;
+    }
 }

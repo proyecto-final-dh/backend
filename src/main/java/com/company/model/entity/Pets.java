@@ -1,5 +1,6 @@
 package com.company.model.entity;
 
+
 import com.company.enums.PetStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
