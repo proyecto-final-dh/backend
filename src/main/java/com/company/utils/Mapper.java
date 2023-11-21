@@ -1,11 +1,13 @@
 package com.company.utils;
 
+
 import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.ImageWithTitle;
 import com.company.model.dto.PetWithImagesDto;
 import com.company.model.entity.Pets;
 
 import java.util.List;
+
 
 public class Mapper {
     public static PetWithImagesDto mapPetToPetWithImages(Pets pet, List<ImageWithTitle> images) {

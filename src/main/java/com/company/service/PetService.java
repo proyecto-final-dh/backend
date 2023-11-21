@@ -1,5 +1,6 @@
 package com.company.service;
 
+import com.company.enums.PetGender;
 import com.company.model.entity.Pets;
 import com.company.enums.PetStatus;
 import com.company.model.dto.CreatePetDto;
@@ -42,6 +43,7 @@ import static com.company.constants.Constants.PET_GENDER_REQUIRED;
 import static com.company.constants.Constants.PET_NAME_REQUIRED;
 import static com.company.constants.Constants.PET_OWNER_REQUIRED;
 import static com.company.constants.Constants.PET_SIZE_REQUIRED;
+import static com.company.constants.Constants.WRONG_PET_GENDER;
 import static com.company.utils.Mapper.mapCreatePetDtoToPet;
 import static com.company.utils.Mapper.mapPetToPetWithImages;
 
@@ -80,6 +82,7 @@ public class PetService implements IPetService {
 
     public Pets update(int id, Pets updatedPets) {
         Optional<Pets> existingPet = IPetsRepository.findById(id);
+        validateGender(updatedPets.getGender());
 
         if (existingPet.isPresent()) {
             Pets pets = existingPet.get();
@@ -97,6 +100,7 @@ public class PetService implements IPetService {
     }
 
     public Pets save(Pets pets) throws Exception {
+        validateGender(pets.getGender());
         if (!pets.getName().isEmpty()) {
             return IPetsRepository.save(pets);
         } else {
@@ -291,10 +295,15 @@ public class PetService implements IPetService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_AGE_MUST_BE_VALID);
         }
 
+        if (pet.getGender() != null && !PetGender.isValidGender(pet.getGender())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_PET_GENDER);
+        }
+
         if (isForAdoption) {
             if (pet.getGender() == null || pet.getGender().isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_GENDER_REQUIRED);
             }
+
             if (pet.getSize() == null || pet.getSize().isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_SIZE_REQUIRED);
             }
@@ -367,6 +376,12 @@ public class PetService implements IPetService {
             return location.get();
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, LOCATION_NOT_FOUND);
+        }
+    }
+
+    private void validateGender(String gender) {
+        if (gender != null && !gender.isEmpty() && !PetGender.isValidGender(gender)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_GENDER_REQUIRED);
         }
     }
 
