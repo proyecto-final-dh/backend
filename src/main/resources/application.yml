@@ -31,7 +31,7 @@ server:
     key-alias: spring-https
     key-store: classpath:backend.jks
     key-store-type: JKS
-    key-password: password
+    key-password: passowrd
   error:
     include-message: always
   port: 8080
