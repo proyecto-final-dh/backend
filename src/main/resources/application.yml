@@ -32,4 +32,4 @@ security:
   oauth2:
     resource-server:
       jwt:
-        jwk-set-uri: http://localhost:8080/realms/prueba-reino/protocol/openid-connect/certs
+        jwk-set-uri: https://34.229.216.23:8443/realms/kc-resqpet-auth/protocol/openid-connect/certs
