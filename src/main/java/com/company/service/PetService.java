@@ -42,6 +42,7 @@ import static com.company.constants.Constants.PET_GENDER_REQUIRED;
 import static com.company.constants.Constants.PET_NAME_REQUIRED;
 import static com.company.constants.Constants.PET_OWNER_REQUIRED;
 import static com.company.constants.Constants.PET_SIZE_REQUIRED;
+import static com.company.constants.Constants.WRONG_PET_GENDER;
 import static com.company.utils.Mapper.mapCreatePetDtoToPet;
 import static com.company.utils.Mapper.mapPetToPetWithImages;
 
@@ -110,7 +111,6 @@ public class PetService implements IPetService {
     @Transactional
     public PetWithImagesDto saveOwnPetWithImages(CreatePetDto pet, MultipartFile[] images) {
         validateBasicPetData(pet, false);
-        validateGender(pet.getGender());
 
         Pets fullPet = mapCreatePetDtoToPet(pet);
 
@@ -135,7 +135,6 @@ public class PetService implements IPetService {
     @Transactional
     public PetWithImagesDto saveAdoptivePetWithImages(CreatePetDto pet, MultipartFile[] images) {
         validateBasicPetData(pet, true);
-        validateGender(pet.getGender());
 
         Pets fullPet = mapCreatePetDtoToPet(pet);
 
@@ -293,22 +292,12 @@ public class PetService implements IPetService {
         }
 
         if (pet.getGender() != null && !PetGender.isValidGender(pet.getGender())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_GENDER_REQUIRED);
-        }
-        if (pet.getGender() == null || pet.getGender().isEmpty()) {
-            pet.setGender("");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_PET_GENDER);
         }
 
         if (isForAdoption) {
-            if (pet.getGender() == null || pet.getGender().isEmpty() || !PetGender.isValidGender(pet.getGender())) {
+            if (pet.getGender() == null || pet.getGender().isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_GENDER_REQUIRED);
-            }
-            if (pet.getGender() != null || ! pet.getGender().isEmpty()){
-                try {
-                    PetGender.isValidGender(pet.getGender());
-                } catch (ResponseStatusException e) {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_GENDER_REQUIRED);
-                }
             }
 
             if (pet.getSize() == null || pet.getSize().isEmpty()) {

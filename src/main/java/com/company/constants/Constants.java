@@ -17,6 +17,7 @@ public class Constants {
     // PET ERRORS
     public static final String PET_NAME_REQUIRED = "Pet name is required";
     public static final String PET_GENDER_REQUIRED = "Pet gender is required and must be valid";
+    public static final String WRONG_PET_GENDER = "Pet gender must be valid";
     public static final String PET_SIZE_REQUIRED = "Pet size is required";
     public static final String PET_OWNER_REQUIRED = "Pet owner is required and needs to be greater than 0";
     public static final String PET_BREED_REQUIRED = "Pet breed is required and needs to be greater than 0";
