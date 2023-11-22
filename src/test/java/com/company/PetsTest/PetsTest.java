@@ -2,6 +2,7 @@ package com.company.PetsTest;
 
 import com.company.controller.PetController;
 import com.company.enums.PetStatus;
+import com.company.model.dto.CompletePetDto;
 import com.company.model.entity.Breeds;
 import com.company.model.entity.Pets;
 import com.company.model.entity.Species;
@@ -32,8 +33,8 @@ public class PetsTest {
 
     @BeforeAll
     public void setup() {
-        newPet =  new Pets("Dog", PetStatus.EN_ADOPCION, "Medium", "Male", "A friendly dog",2);
-        newPet2 = new Pets("Cat", PetStatus.EN_ADOPCION, "Medium", "Male", "A friendly cat",3);
+        newPet =  new Pets("Dog", PetStatus.EN_ADOPCION, "Medium", "MACHO", "A friendly dog",2);
+        newPet2 = new Pets("Cat", PetStatus.EN_ADOPCION, "Medium", "MACHO", "A friendly cat",3);
     }
     @AfterAll
     public void teardown() {
@@ -45,7 +46,7 @@ public class PetsTest {
         ResponseEntity<Object> result = petController.createPet(newPet);
         ResponseEntity<Object> result2 = petController.createPet(newPet2);
 
-        List<Pets> petsList = petController.getAllPets(0,9).getContent();
+        List<CompletePetDto> petsList = petController.getAllPets(0,9).getContent();
         System.out.println(petsList);
         assertTrue(petsList.size() != 0);
 
@@ -63,8 +64,8 @@ public class PetsTest {
         System.out.println(getResult);
 
         assertEquals(HttpStatus.OK, getResult.getStatusCode());
-        assertTrue(getResult.getBody() instanceof Pets);
-        assertEquals(((Pets) getResult.getBody()).getId(), id);
+        assertTrue(getResult.getBody() instanceof CompletePetDto);
+        assertEquals(((CompletePetDto) getResult.getBody()).getId(), id);
         // Eliminar la entidad después de la prueba
         petController.deletePet(((Pets) createResult.getBody()).getId());
     }
@@ -85,7 +86,7 @@ public class PetsTest {
         var bodyResult = ((Pets) result.getBody());
         int id = bodyResult.getId();
 
-        Pets updatedPet = new Pets("CatUpdate", PetStatus.EN_ADOPCION, "Small", "Female", "A friendly and adopted cat", 3);
+        Pets updatedPet = new Pets("CatUpdate", PetStatus.EN_ADOPCION, "Small", "HEMBRA", "A friendly and adopted cat", 3);
         ResponseEntity<Object> resultUpdateResponse = petController.updatePet(id, updatedPet);
         assertEquals(HttpStatus.OK, resultUpdateResponse.getStatusCode());
 
