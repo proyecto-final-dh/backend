@@ -69,10 +69,7 @@ public JwtDecoder jwtDecoder() throws KeyStoreException, NoSuchAlgorithmExceptio
         SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
 
         PoolingHttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder.create()
-                .setSSLSocketFactory(SSLConnectionSocketFactoryBuilder.create()
-                        .setSslContext(sslContext)
-                        .setTlsVersions(TLS.V_1_3)
-                        .build())
+                .setSSLSocketFactory(csf)
                 .build();
 
         CloseableHttpClient httpClient = HttpClients.custom()
