@@ -60,16 +60,6 @@ resqpet:
     api-version: 1.0.0
 
 server:
-<<<<<<< HEAD
-  # ssl:
-  #   key-alias: spring-https
-  #   key-store: classpath:backend.jks
-  #   key-store-type: JKS
-  #   key-password: passowrd
-  error:
-    include-message: always
-  port: 8080
-=======
   ssl:
     key-alias: spring-https
     key-store: classpath:backend.p12
@@ -77,7 +67,7 @@ server:
     key-password: password
   error:
     include-message: always
-  port: 8081
+  port: 8080
 
 
 security:
@@ -85,4 +75,3 @@ security:
     resource-server:
       jwt:
         jwk-set-uri: https://34.229.216.23:8443/realms/kc-resqpet-auth/protocol/openid-connect/certs
->>>>>>> feature/122-security-implementation_rest_template
