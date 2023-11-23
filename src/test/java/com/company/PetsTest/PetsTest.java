@@ -43,8 +43,8 @@ public class PetsTest {
 
     @BeforeAll
     public void setup() {
-        newPet =  new Pets("Dog", PetStatus.EN_ADOPCION, "Medium", "MACHO", "A friendly dog",2);
-        newPet2 = new Pets("Cat", PetStatus.EN_ADOPCION, "Medium", "MACHO", "A friendly cat",3);
+        newPet =  new Pets("Dog", PetStatus.EN_ADOPCION, "MEDIANO", "MACHO", "A friendly dog",2);
+        newPet2 = new Pets("Cat", PetStatus.EN_ADOPCION, "MEDIANO", "MACHO", "A friendly cat",3);
     }
     @AfterAll
     public void teardown() {
@@ -95,7 +95,7 @@ public class PetsTest {
         CreatePetDto createPetDto = new CreatePetDto();
         createPetDto.setName("Dog");
         createPetDto.setGender("MACHO");
-        createPetDto.setSize("Medium");
+        createPetDto.setSize("MEDIANO");
         createPetDto.setAge(2);
         createPetDto.setDescription("A friendly dog");
         createPetDto.setOwnerId(1);
@@ -111,7 +111,6 @@ public class PetsTest {
 
         ResponseEntity result = petController.createOwnPetWithImages(createPetDto, new MultipartFile[]{file});
 
-        System.out.println(result);
         PetWithImagesDto bodyResult = ((PetWithImagesDto) ((ApiResponse) result.getBody()).getData());
         int id = bodyResult.getId();
 
@@ -127,7 +126,6 @@ public class PetsTest {
 
         ResponseEntity resultUpdateResponse = petController.updatePet(id, updatePet, new MultipartFile[]{file});
         assertEquals(HttpStatus.OK, resultUpdateResponse.getStatusCode());
-
         assertEquals("EDITADO", ((String) ((PetWithImagesDto) ((ApiResponse) resultUpdateResponse.getBody()).getData()).getName()));
 
         petController.deletePet(id);

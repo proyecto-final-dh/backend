@@ -178,7 +178,7 @@ public class PetIntegrationTest {
         CreatePetDto pet = new CreatePetDto();
         pet.setName("Dog");
         pet.setGender("MACHO");
-        pet.setSize("Large");
+        pet.setSize("GRANDE");
         pet.setOwnerId(1);
         pet.setBreedId(1);
         pet.setDescription("Descripción");
