@@ -3,6 +3,7 @@ package com.company.service;
 
 import com.company.model.dto.CompletePetDto;
 import com.company.enums.PetGender;
+import com.company.enums.PetSize;
 import com.company.model.entity.Pets;
 import com.company.enums.PetStatus;
 import com.company.model.dto.CreatePetDto;
@@ -47,6 +48,7 @@ import static com.company.constants.Constants.PET_NAME_REQUIRED;
 import static com.company.constants.Constants.PET_OWNER_REQUIRED;
 import static com.company.constants.Constants.PET_SIZE_REQUIRED;
 import static com.company.constants.Constants.WRONG_PET_GENDER;
+import static com.company.constants.Constants.WRONG_PET_SIZE;
 import static com.company.utils.Mapper.mapCreatePetDtoToPet;
 import static com.company.utils.Mapper.mapPetToPetWithImages;
 import static com.company.utils.Mapper.mapToCompletePetDto;
@@ -94,6 +96,7 @@ public class PetService implements IPetService {
     public Pets update(int id, Pets updatedPets) {
         Optional<Pets> existingPet = IPetsRepository.findById(id);
         validateGender(updatedPets.getGender());
+        validateSize(updatedPets.getSize());
 
         if (existingPet.isPresent()) {
             Pets pets = existingPet.get();
@@ -112,6 +115,8 @@ public class PetService implements IPetService {
 
     public Pets save(Pets pets) throws Exception {
         validateGender(pets.getGender());
+        validateSize(pets.getSize());
+
         if (!pets.getName().isEmpty()) {
             return IPetsRepository.save(pets);
         } else {
@@ -251,10 +256,12 @@ public class PetService implements IPetService {
     }
 
     @Override
-    public Page<Pets> filterPets(Integer location, Integer species, Integer breedId, String size, String status, Pageable pageable) throws Exception {
+    public Page<CompletePetDto> filterPets(Integer location, Integer species, Integer breedId, String size, String status, Pageable pageable) throws Exception {
         try {
             Specification<Pets> spec = buildSpecification(location, species, breedId, size, status);
-            return IPetsRepository.findAll(spec, pageable);
+            Page<Pets> petsPage = IPetsRepository.findAll(spec, pageable);
+            List<CompletePetDto> petsDto = attachImages(petsPage.getContent());
+            return new PageImpl<>(petsDto, pageable, petsPage.getTotalElements());
         } catch (Exception e) {
             throw new Exception("Error al filtrar mascotas");
         }
@@ -322,6 +329,10 @@ public class PetService implements IPetService {
 
         if (pet.getGender() != null && !PetGender.isValidGender(pet.getGender())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_PET_GENDER);
+        }
+
+        if (pet.getSize() != null && !PetSize.isValidSize(pet.getSize())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_PET_SIZE);
         }
 
         if (isForAdoption) {
@@ -428,7 +439,13 @@ public class PetService implements IPetService {
 
     private void validateGender (String gender){
         if (gender != null && !gender.isEmpty() && !PetGender.isValidGender(gender)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_GENDER_REQUIRED);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_PET_GENDER);
+        }
+    }
+
+    private void validateSize(String size) {
+        if (size != null && !size.isEmpty() && !PetSize.isValidSize(size)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_PET_SIZE);
         }
     }
 }

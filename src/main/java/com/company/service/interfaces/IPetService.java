@@ -24,6 +24,6 @@ public interface IPetService {
     Page<CompletePetDto> findByLocation(int id, Pageable pageable) throws Exception;
     Page<CompletePetDto> findByOwner(int id, Pageable pageable) throws Exception;
     Page<CompletePetDto> findByStatus(PetStatus status, Pageable pageable) throws Exception;
-    Page<Pets> filterPets(Integer location, Integer species, Integer breed, String size,String status, Pageable pageable) throws Exception;
+    Page<CompletePetDto> filterPets(Integer location, Integer species, Integer breed, String size,String status, Pageable pageable) throws Exception;
 
 }
