@@ -250,16 +250,6 @@ public class PetService implements IPetService {
         }
     }
 
-//    @Override
-//    public Page<Pets> filterPets(Integer location, Integer species, Integer breedId, String size, String status, Pageable pageable) throws Exception {
-//        try {
-//            Specification<Pets> spec = buildSpecification(location, species, breedId, size, status);
-//            return IPetsRepository.findAll(spec, pageable);
-//        } catch (Exception e) {
-//            throw new Exception("Error al filtrar mascotas");
-//        }
-//    }
-
     @Override
     public Page<CompletePetDto> filterPets(Integer location, Integer species, Integer breedId, String size, String status, Pageable pageable) throws Exception {
         try {

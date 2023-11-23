@@ -162,24 +162,6 @@ public class PetController {
         }
     }
 
-//    @GetMapping("/filter")
-//    public ResponseEntity<Object> filterPets(
-//            @RequestParam(required = false) Integer location,
-//            @RequestParam(required = false) Integer species,
-//            @RequestParam(required = false, name = "breed_id") Integer breedId,
-//            @RequestParam(required = false, name = "pet_size") String petSize,
-//            @RequestParam(required = false) String status,
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "9") int size) throws Exception {
-//        try {
-//            Pageable pageable = PageRequest.of(page, size);
-//            Page<Pets> filteredPets = petService.filterPets(location, species, breedId, petSize, status, pageable);
-//            return ResponseEntity.ok(filteredPets);
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-//        }
-//    }
-
     @GetMapping("/filter")
     public ResponseEntity<Page<CompletePetDto>> filterPets(
             @RequestParam(required = false) Integer location,
