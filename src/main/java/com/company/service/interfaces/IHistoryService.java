@@ -1,12 +1,13 @@
-package com.company.service;
+package com.company.service.interfaces;
 
+import com.company.model.dto.SaveHistoryDto;
 import com.company.model.entity.History;
 
 import java.util.List;
 
 public interface IHistoryService {
 
-    History createHistory(History history);
+    History createHistory(SaveHistoryDto item);
 
     List<History> getAllHistory();
 

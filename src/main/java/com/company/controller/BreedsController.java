@@ -1,5 +1,6 @@
 package com.company.controller;
 
+import com.company.model.dto.BreedsDTO;
 import com.company.model.entity.Breeds;
 import com.company.service.BreedsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,18 @@ public class BreedsController {
                     HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         }catch(Exception ex){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting breeds");
+        }
+    }
+    @GetMapping("/species/{speciesId}")
+    public List<BreedsDTO> getBreedsBySpecies(@PathVariable int speciesId) {
+        try {
+            return breedsService.getBreedsBySpecies(speciesId);
+        }catch(ResponseStatusException ex){
+            throw  new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        }
+        catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 }
