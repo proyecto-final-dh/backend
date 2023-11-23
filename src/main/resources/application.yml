@@ -49,10 +49,10 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
 bucket:
-  name: resqpet-images
-  accessKey: AKIAUNATVL73O6WMC3XO
-  secretKey: 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
-  url: https://resqpet-images.s3.us-east-1.amazonaws.com
+  name: ${BUCKET_NAME}
+  accessKey: ${S3_ACCESS_KEY_ID}
+  secretKey: ${S3_SECRET_ACCESS_KEY}
+  url: https://${BUCKET_NAME}.s3.us-east-1.amazonaws.com
 
 resqpet:
   app:
@@ -60,11 +60,11 @@ resqpet:
     api-version: 1.0.0
 
 server:
-  ssl:
-    key-alias: spring-https
-    key-store: classpath:backend.p12
-    key-store-type: PKCS12
-    key-password: password
+  # ssl:
+  #   key-alias: spring-https
+  #   key-store: classpath:backend.p12
+  #   key-store-type: PKCS12
+  #   key-password: password
   error:
     include-message: always
   port: 8080
