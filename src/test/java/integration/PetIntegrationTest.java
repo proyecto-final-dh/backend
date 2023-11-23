@@ -3,6 +3,7 @@ package integration;
 import com.company.ProyectoFinalApplication;
 import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.PetWithImagesDto;
+import com.company.model.entity.Pets;
 import com.company.repository.IPetsRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -21,8 +22,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import static com.company.utils.Mapper.mapCreatePetDtoToPet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

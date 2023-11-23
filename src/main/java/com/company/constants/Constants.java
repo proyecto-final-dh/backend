@@ -5,6 +5,7 @@ import java.util.List;
 public class Constants {
     public static final String PET_IMAGES_FOLDER = "petImages/";
     public static final List<String> ALLOWED_IMAGE_EXTENSIONS = List.of("image/jpeg", "image/png", "image/jpg");
+    public static final int MAXIMUM_IMAGES = 5;
 
     // ERROR MESSAGES
 
@@ -28,10 +29,14 @@ public class Constants {
     public static final String BREED_NOT_FOUND = "Breed not found";
     public static final String OWNER_NOT_FOUND = "Owner not found";
     public static final String LOCATION_NOT_FOUND = "Location not found";
+    public static final String PET_NOT_FOUND = "Pet not found";
 
     // SUCCESS MESSAGES
 
     // CREATION
     public static final String PET_CREATED = "Pet created successfully";
+
+    // UPDATE
+    public static final String PET_UPDATED = "Pet updated successfully";
 
 }

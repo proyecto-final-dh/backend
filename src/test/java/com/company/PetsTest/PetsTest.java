@@ -3,9 +3,13 @@ package com.company.PetsTest;
 import com.company.controller.PetController;
 import com.company.enums.PetStatus;
 import com.company.model.dto.CompletePetDto;
+import com.company.model.dto.CreatePetDto;
+import com.company.model.dto.PetWithImagesDto;
+import com.company.model.dto.UpdatePetDto;
 import com.company.model.entity.Breeds;
 import com.company.model.entity.Pets;
 import com.company.model.entity.Species;
+import com.company.utils.ApiResponse;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,8 +18,14 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -81,17 +91,44 @@ public class PetsTest {
     }
 
     @Test
-    public void testUpdatePet() {
-        ResponseEntity<Object> result = petController.createPet(newPet);
-        var bodyResult = ((Pets) result.getBody());
+    public void testUpdatePet() throws IOException {
+        CreatePetDto createPetDto = new CreatePetDto();
+        createPetDto.setName("Dog");
+        createPetDto.setGender("MACHO");
+        createPetDto.setSize("Medium");
+        createPetDto.setAge(2);
+        createPetDto.setDescription("A friendly dog");
+        createPetDto.setOwnerId(1);
+        createPetDto.setBreedId(1);
+
+
+        MockMultipartFile file = new MockMultipartFile(
+                "image",
+                "image.png",
+                MediaType.IMAGE_PNG_VALUE,
+                new FileInputStream("src/test/resources/images/image.png").readAllBytes()
+        );
+
+        ResponseEntity result = petController.createOwnPetWithImages(createPetDto, new MultipartFile[]{file});
+
+        System.out.println(result);
+        PetWithImagesDto bodyResult = ((PetWithImagesDto) ((ApiResponse) result.getBody()).getData());
         int id = bodyResult.getId();
 
-        Pets updatedPet = new Pets("CatUpdate", PetStatus.EN_ADOPCION, "Small", "HEMBRA", "A friendly and adopted cat", 3);
-        ResponseEntity<Object> resultUpdateResponse = petController.updatePet(id, updatedPet);
+        UpdatePetDto updatePet = new UpdatePetDto();
+        updatePet.setName("EDITADO");
+        updatePet.setAge(bodyResult.getAge());
+        updatePet.setDescription(bodyResult.getDescription());
+        updatePet.setGender(bodyResult.getGender());
+        updatePet.setSize(bodyResult.getSize());
+        updatePet.setBreedId(bodyResult.getBreedId());
+        updatePet.setOwnerId(bodyResult.getOwnerId());
+        updatePet.setImagesIds(List.of());
+
+        ResponseEntity resultUpdateResponse = petController.updatePet(id, updatePet, new MultipartFile[]{file});
         assertEquals(HttpStatus.OK, resultUpdateResponse.getStatusCode());
 
-        Pets resultUpdate = (Pets) resultUpdateResponse.getBody();
-        assertEquals(resultUpdate.getName(), updatedPet.getName());
+        assertEquals("EDITADO", ((String) ((PetWithImagesDto) ((ApiResponse) resultUpdateResponse.getBody()).getData()).getName()));
 
         petController.deletePet(id);
     }
