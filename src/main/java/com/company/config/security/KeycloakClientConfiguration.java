@@ -36,12 +36,18 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 public class KeycloakClientConfiguration {
     @Value("${dh.keycloak.serverUrl}")
     private String serverUrl;
-    @Value("${dh.keycloak.realmMaster}")
+    @Value("${dh.keycloak.realm}")
     private String realm;
     @Value("${dh.keycloak.username}")
     private String username;
     @Value("${dh.keycloak.password}")
     private String password;
+
+    @Value("${dh.keycloak.clientId}")
+    private String clientId;
+
+    @Value("${dh.keycloak.realmMaster}")
+    private String realmMaster;
 
 
 
@@ -66,11 +72,11 @@ public class KeycloakClientConfiguration {
 
 
         return KeycloakBuilder.builder()
-                .serverUrl("https://34.229.216.23:8443/")
-                .realm("master")
-                .username("admin")
-                .password("admin")
-                .clientId("admin-cli")
+                .serverUrl(serverUrl)
+                .realm(realmMaster)
+                .username(username)
+                .password(password)
+                .clientId(clientId)
                 .resteasyClient(builder.build())
                 .build();
     }
