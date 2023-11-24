@@ -24,6 +24,9 @@ public class UserKeycloakRepository {
         UserKeycloak userResponse = new UserKeycloak();
         userResponse.setUserName(usersRepresentation.getUsername());
         userResponse.setEmail(usersRepresentation.getEmail());
+        userResponse.setName(usersRepresentation.getFirstName());
+        userResponse.setLastname(usersRepresentation.getLastName());
+        userResponse.setIdUsuario(keycloakUserId);
 
         return userResponse;
     }

@@ -13,6 +13,8 @@ public class UserKeycloak {
 
     private String idUsuario;
     private String userName;
+    private String name;
+    private String lastname;
     private String email;
 
 
