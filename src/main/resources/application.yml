@@ -40,6 +40,6 @@ dh:
     realmMaster: master
     username: admin
     password: admin
-    realm: kc-resqpet-auth
+    realm: master
     clientId: fe-resqpet
 

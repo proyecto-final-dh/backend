@@ -44,36 +44,10 @@ public class KeycloakClientConfiguration {
     private String password;
 
 
-    @Bean
-    public RestTemplate restTemplate() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
-        final TrustStrategy acceptingTrustStrategy = (cert, authType) -> true;
-
-        SSLContext sslContext = SSLContexts.custom()
-                .loadTrustMaterial(null, acceptingTrustStrategy)
-                .build();
-
-        SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
-
-        PoolingHttpClientConnectionManager connectionManager = PoolingHttpClientConnectionManagerBuilder.create()
-                .setSSLSocketFactory(csf)
-                .build();
-
-        CloseableHttpClient httpClient = HttpClients.custom()
-                .setConnectionManager( connectionManager)
-                .build();
-
-        HttpComponentsClientHttpRequestFactory requestFactory =
-                new HttpComponentsClientHttpRequestFactory();
-
-        requestFactory.setHttpClient(httpClient);
-
-        RestTemplate restTemplate = new RestTemplate(requestFactory);
-        return restTemplate;
-    }
-
 
     @Bean
     public Keycloak getInstance() throws NoSuchAlgorithmException, KeyManagementException {
+        /*
         SSLContext sslContext = SSLContext.getInstance("TLS");
         sslContext.init(null, new TrustManager[]{new X509TrustManager() {
             public void checkClientTrusted(X509Certificate[] chain, String authType) {}
@@ -85,7 +59,9 @@ public class KeycloakClientConfiguration {
                 .sslContext(sslContext)
                 .hostnameVerification(ResteasyClientBuilder.HostnameVerificationPolicy.ANY)
                 .build();
+   */
 
+        ResteasyClientBuilder builder = new ResteasyClientBuilderImpl().disableTrustManager();
 
 
 
@@ -94,8 +70,8 @@ public class KeycloakClientConfiguration {
                 .realm("master")
                 .username("admin")
                 .password("admin")
-                .clientId("fe-resqpet")
-                .resteasyClient(client)
+                .clientId("admin-cli")
+                .resteasyClient(builder.build())
                 .build();
     }
 }

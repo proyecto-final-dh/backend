@@ -20,7 +20,7 @@ public class UserKeycloakRepository {
     }
 
     public UserKeycloak findUser(String keycloakUserId){
-        UserRepresentation usersRepresentation=keycloakClient.realm(realm).users().get(keycloakUserId).toRepresentation();
+        UserRepresentation usersRepresentation=keycloakClient.realm("kc-resqpet-auth").users().get(keycloakUserId).toRepresentation();
         UserKeycloak userResponse = new UserKeycloak();
         userResponse.setUserName(usersRepresentation.getUsername());
         userResponse.setEmail(usersRepresentation.getEmail());
