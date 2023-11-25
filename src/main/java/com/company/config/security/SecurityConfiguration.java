@@ -123,39 +123,5 @@ public JwtDecoder jwtDecoder() throws KeyStoreException, NoSuchAlgorithmExceptio
         return http.build();
     }
 
-/*
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        http.
-                oauth2ResourceServer(oauth2ResourceServer ->
-                        oauth2ResourceServer.jwt(jwt ->
-                                jwt.decoder(jwtDecoder())
-                                        .jwtAuthenticationConverter( new JwtAuthenticationConverter())
-                        )
-                );
-
-        http
-                .cors(cors -> cors.disable())
-
-
-                .sessionManagement((session) -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .authorizeRequests()
-                .anyRequest().authenticated();
-        return http.build();
-    }
-
-
-
-
-    public JwtDecoder jwtDecoder() {
-        return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
-    }
-
-
-*/
 
 }
