@@ -53,22 +53,8 @@ public class KeycloakClientConfiguration {
 
     @Bean
     public Keycloak getInstance() throws NoSuchAlgorithmException, KeyManagementException {
-        /*
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, new TrustManager[]{new X509TrustManager() {
-            public void checkClientTrusted(X509Certificate[] chain, String authType) {}
-            public void checkServerTrusted(X509Certificate[] chain, String authType) {}
-            public X509Certificate[] getAcceptedIssuers() { return null; }
-        }}, new SecureRandom());
-
-        var client = new ResteasyClientBuilderImpl()
-                .sslContext(sslContext)
-                .hostnameVerification(ResteasyClientBuilder.HostnameVerificationPolicy.ANY)
-                .build();
-   */
 
         ResteasyClientBuilder builder = new ResteasyClientBuilderImpl().disableTrustManager();
-
 
 
         return KeycloakBuilder.builder()
