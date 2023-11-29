@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface IUserPetInterestRepository extends JpaRepository<UserPetInterest, UserPetInterestId> {
     Boolean existsByUserIdAndPetId(int userId, int petId);
+
     List<UserPetInterest> findAllByUserId(int userId);
 }

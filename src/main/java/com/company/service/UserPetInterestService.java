@@ -64,17 +64,17 @@ public class UserPetInterestService implements IUserPetInterestService {
 
     @Override
     public UserPetInterestDto createUserPetInterest(int petId) {
-        UserDetails userDetails= getCompleteUserDetails();
+        UserDetails userDetails = getCompleteUserDetails();
 
         Optional<Pets> pet = petsRepository.findById(petId);
 
-        if(pet.isEmpty()) {
+        if (pet.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, PET_NOT_FOUND);
         }
 
         boolean isInterested = userPetInterestRepository.existsByUserIdAndPetId(userDetails.getId(), petId);
 
-        if(isInterested) {
+        if (isInterested) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_INTEREST_ALREADY_EXISTS);
         }
 

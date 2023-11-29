@@ -24,16 +24,16 @@ public class UserPetInterestController {
 
     @GetMapping("/by-pet/{petId}")
     public ResponseEntity getUserPetInterest(@PathVariable("petId") int petId) {
-        return responseBuilder.buildResponse(HttpStatus.OK.value(), "Get User interest status successfully",userPetInterestService.getUserPetInterest(petId), null);
+        return responseBuilder.buildResponse(HttpStatus.OK.value(), "Get User interest status successfully", userPetInterestService.getUserPetInterest(petId), null);
     }
 
     @GetMapping
     public ResponseEntity getUserInterestsList() {
-        return responseBuilder.buildResponse(HttpStatus.OK.value(), "Get User interests status successfully",userPetInterestService.getUserPetListInterests(), null);
+        return responseBuilder.buildResponse(HttpStatus.OK.value(), "Get User interests status successfully", userPetInterestService.getUserPetListInterests(), null);
     }
 
     @PostMapping("/{petId}")
     public ResponseEntity createUserPetInterest(@PathVariable("petId") int petId) {
-        return responseBuilder.buildResponse(HttpStatus.OK.value(), "User interest created successfully",userPetInterestService.createUserPetInterest(petId), null);
+        return responseBuilder.buildResponse(HttpStatus.OK.value(), "User interest created successfully", userPetInterestService.createUserPetInterest(petId), null);
     }
 }

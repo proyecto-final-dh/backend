@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface IUserPetInterestService {
     UserPetInterestDto getUserPetInterest(int petId);
+
     List<UserPetInterestDto> getUserPetListInterests();
+
     UserPetInterestDto createUserPetInterest(int petId);
 }
