@@ -25,10 +25,15 @@ public class Constants {
     public static final String PET_DESCRIPTION_REQUIRED = "Pet description is required";
     public static final String PET_AGE_MUST_BE_VALID = "Pet age must be equal or grater than 0";
 
+    // USER ERRORS
+    public static final String USER_INTEREST_ALREADY_EXISTS = "User interest already exists";
+
     // NOT FOUND MESSAGES
     public static final String BREED_NOT_FOUND = "Breed not found";
     public static final String OWNER_NOT_FOUND = "Owner not found";
     public static final String LOCATION_NOT_FOUND = "Location not found";
+    public static final String PET_NOT_FOUND = "Pet not found";
+    public static final String USER_NOT_FOUND = "User not found";
 
     // SUCCESS MESSAGES
 
