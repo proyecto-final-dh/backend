@@ -12,6 +12,7 @@ import org.apache.hc.core5.ssl.TrustStrategy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -90,10 +91,9 @@ public class SecurityConfiguration {
         http.cors(cors -> cors.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeRequests(authz -> authz
-                        .requestMatchers("/locations/**","/species/**","/breeds/**","/pets/**").permitAll()
-
-
-                        .anyRequest().authenticated());
+                        .requestMatchers(HttpMethod.POST,"/locations/**","/species/**","/breeds/**","/pets/**").authenticated()
+                        .requestMatchers("/user-details/**","/history/**").authenticated()
+                        .anyRequest().permitAll());
         return http.build();
     }
 

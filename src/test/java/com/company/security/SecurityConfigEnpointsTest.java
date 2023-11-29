@@ -8,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -30,11 +33,23 @@ class SecurityConfigEnpointsTest {
                 .andExpect(status().isOk());
         mockMvc.perform(get("/breeds/"))
                 .andExpect(status().isOk());
+
+
     }
 
     @Test
     public void givenPrivateEndpoint_whenAccessWithoutAuth_thenUnauthorized() throws Exception {
-        mockMvc.perform(get("//user-details"))
+        mockMvc.perform(get("/user-details"))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void givenProtectedEndpoint_whenPostRequestWithoutCredentials_thenForbidden() throws Exception{
+        String jsonContent = "{\"name\": \"pulpo\"}";
+        mockMvc.perform(post("/species/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonContent))
+                .andExpect(status().isForbidden());
+
     }
 }
