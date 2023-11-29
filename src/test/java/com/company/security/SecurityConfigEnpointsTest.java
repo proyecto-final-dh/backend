@@ -12,9 +12,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -51,5 +53,15 @@ class SecurityConfigEnpointsTest {
                         .content(jsonContent))
                 .andExpect(status().isForbidden());
 
+    }
+
+    @Test
+    public void givenProtectedEndpoint_whenPutRequestWithoutCredentials_thenForbidden() throws Exception {
+        String jsonContent = "{\"name\": \"pajaross\"}";
+
+        mockMvc.perform(put("/species1/3")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonContent))
+                .andExpect(status().isForbidden());
     }
 }
