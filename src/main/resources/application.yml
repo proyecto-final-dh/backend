@@ -27,7 +27,6 @@ server:
     include-message: always
   port: 8081
 
-
 security:
   oauth2:
     resource-server:
