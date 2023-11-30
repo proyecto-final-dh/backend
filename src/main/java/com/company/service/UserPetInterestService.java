@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.company.constants.Constants.INTEREST_CAN_ONLY_BE_FOR_PETS_IN_ADOPTION;
 import static com.company.constants.Constants.PET_NOT_FOUND;
 import static com.company.constants.Constants.USER_INTEREST_ALREADY_EXISTS;
 import static com.company.constants.Constants.USER_NOT_FOUND;
@@ -70,6 +71,8 @@ public class UserPetInterestService implements IUserPetInterestService {
 
         if (pet.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, PET_NOT_FOUND);
+        } else if (pet.get().getStatus() != PetStatus.EN_ADOPCION) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INTEREST_CAN_ONLY_BE_FOR_PETS_IN_ADOPTION);
         }
 
         boolean isInterested = userPetInterestRepository.existsByUserIdAndPetId(userDetails.getId(), petId);

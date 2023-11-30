@@ -27,6 +27,7 @@ public class Constants {
 
     // USER ERRORS
     public static final String USER_INTEREST_ALREADY_EXISTS = "User interest already exists";
+    public static final String INTEREST_CAN_ONLY_BE_FOR_PETS_IN_ADOPTION = "The interest can only be created for pets in adoption";
 
     // NOT FOUND MESSAGES
     public static final String BREED_NOT_FOUND = "Breed not found";
