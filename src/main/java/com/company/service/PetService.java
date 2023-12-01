@@ -333,6 +333,34 @@ public class PetService implements IPetService {
         }
     }
 
+    public Page<CompletePetDto> findByGender(String gender, Pageable pageable) throws Exception {
+        validateGender(gender);
+        try {
+            var petsDB = IPetsRepository.findByGender(gender, pageable);
+            if (petsDB.isEmpty()) {
+                return Page.empty();
+            }
+            var petsDto = attachImages(petsDB.getContent());
+            return new PageImpl<>(petsDto, pageable, petsDB.getTotalElements());
+        } catch (Exception e) {
+            throw new Exception("Error al recuperar las mascotas por Gender.");
+        }
+    }
+    public Page<CompletePetDto> findBySize(String size, Pageable pageable) throws Exception {
+        validateSize(size);
+        try {
+            var petsDB = IPetsRepository.findBySize(size, pageable);
+            if (petsDB.isEmpty()) {
+                return Page.empty();
+            }
+            var petsDto = attachImages(petsDB.getContent());
+            return new PageImpl<>(petsDto, pageable, petsDB.getTotalElements());
+        } catch (Exception e) {
+            throw new Exception("Error al recuperar las mascotas por Size.");
+        }
+    }
+
+
     private Breeds validateBreeds(int id) {
         Optional<Breeds> breeds = breedsRepository.findById(id);
         if (breeds.isPresent()) {

@@ -1,5 +1,7 @@
 package com.company.service.interfaces;
 
+import com.company.enums.PetGender;
+import com.company.enums.PetSize;
 import com.company.model.dto.CompletePetDto;
 import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.PetWithImagesDto;
@@ -26,5 +28,7 @@ public interface IPetService {
     Page<CompletePetDto> findByOwner(int id, Pageable pageable) throws Exception;
     Page<CompletePetDto> findByStatus(PetStatus status, Pageable pageable) throws Exception;
     Page<CompletePetDto> filterPets(Integer location, Integer species, Integer breed, String size,String status, Pageable pageable) throws Exception;
+    Page<CompletePetDto> findByGender(String gender, Pageable pageable) throws Exception;
+    Page<CompletePetDto> findBySize(String size, Pageable pageable) throws Exception;
 
 }
