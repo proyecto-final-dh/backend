@@ -29,6 +29,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -36,6 +39,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -52,6 +56,7 @@ import static com.company.constants.Constants.PET_NAME_REQUIRED;
 import static com.company.constants.Constants.PET_NOT_FOUND;
 import static com.company.constants.Constants.PET_OWNER_REQUIRED;
 import static com.company.constants.Constants.PET_SIZE_REQUIRED;
+import static com.company.constants.Constants.USER_NOT_FOUND;
 import static com.company.constants.Constants.WRONG_PET_GENDER;
 import static com.company.constants.Constants.WRONG_PET_SIZE;
 import static com.company.utils.Mapper.mapCreatePetDtoToPet;
@@ -101,10 +106,16 @@ public class PetService implements IPetService {
     @Override
     @Transactional
     public PetWithImagesDto update(int id, UpdatePetDto updatedPet, MultipartFile[] newImages) {
+        UserDetails userDetails = getCompleteUserDetails();
+
         Optional<Pets> oldPet = IPetsRepository.findById(id);
 
         if (oldPet.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, PET_NOT_FOUND);
+        }
+
+        if(!Objects.equals(oldPet.get().getUserDetails().getUserId(), userDetails.getUserId())){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not authorized to update this pet");
         }
 
         PetStatus oldPetStatus = oldPet.get().getStatus();
@@ -114,7 +125,6 @@ public class PetService implements IPetService {
         validateBasicUpdatePetData(updatedPet, newImagesQuantity, oldPetStatus.equals(PetStatus.EN_ADOPCION));
 
         Breeds breed = validateBreeds(updatedPet.getBreedId());
-        UserDetails userDetails = validateUserDetails(updatedPet.getOwnerId());
 
         Optional<List<Image>> imagesToDelete = imageRepository.findAllByPetId(id);
 
@@ -419,9 +429,6 @@ public class PetService implements IPetService {
         if (pet.getName() == null || pet.getName().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_NAME_REQUIRED);
         }
-        if (pet.getOwnerId() == null || pet.getOwnerId() < 1) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_OWNER_REQUIRED);
-        }
         if (pet.getBreedId() == null || pet.getBreedId() < 1) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_BREED_REQUIRED);
         }
@@ -547,5 +554,22 @@ public class PetService implements IPetService {
         if (size != null && !size.isEmpty() && !PetSize.isValidSize(size)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_PET_SIZE);
         }
+    }
+
+    private UserDetails getCompleteUserDetails() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId = "";
+
+        if (authentication instanceof JwtAuthenticationToken jwtAuthToken) {
+            userId = jwtAuthToken.getToken().getClaims().get("sub").toString();
+        }
+
+        Optional<UserDetails> userDetails = userDetailsRepository.findByUserId(userId);
+
+        if (userDetails.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, USER_NOT_FOUND);
+        }
+
+        return userDetails.get();
     }
 }
