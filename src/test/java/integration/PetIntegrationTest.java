@@ -3,11 +3,12 @@ package integration;
 import com.company.ProyectoFinalApplication;
 import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.PetWithImagesDto;
-import com.company.model.entity.Pets;
 import com.company.repository.IPetsRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockPart;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -22,15 +27,16 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+
 import java.io.UnsupportedEncodingException;
 
-import static com.company.utils.Mapper.mapCreatePetDtoToPet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @SpringBootTest(classes = ProyectoFinalApplication.class)
 public class PetIntegrationTest {
@@ -45,6 +51,26 @@ public class PetIntegrationTest {
     @BeforeEach
     public void setup() {
 
+    }
+
+    @BeforeAll
+    public static void setupAll() {
+        SecurityContextHolder.clearContext();
+        Jwt jwt = Jwt.withTokenValue("token")
+                .header("alg", "none")
+                .claim("authorities", "ROLE_default-roles-kc-resqpet-auth, SCOPE_groups, ID_b19dc58a-0836-425d-ae3e-814a816a523e, ROLE_offline_access, SCOPE_openid, SCOPE_email, ROLE_manage-account, ROLE_uma_authorization, ROLE_view-profile, ROLE_manage-account-links, SCOPE_profile")
+                .claim("sub","b19dc58a-0836-425d-ae3e-814a816a523e")
+                .build();
+
+        JwtAuthenticationToken jwtAuth = new JwtAuthenticationToken(jwt);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(jwtAuth);
+        SecurityContextHolder.setContext(securityContext);
+    }
+
+    @AfterAll
+    public static void teardownAll() {
+        SecurityContextHolder.clearContext();
     }
 
     @Test

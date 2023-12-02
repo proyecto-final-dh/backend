@@ -13,7 +13,6 @@ import com.company.model.dto.UpdatePetDto;
 import com.company.model.entity.Breeds;
 import com.company.model.entity.Image;
 import com.company.model.entity.Location;
-import com.company.model.entity.Pets;
 import com.company.model.entity.UserDetails;
 import com.company.repository.IBreedsRepository;
 import com.company.repository.IImageRepository;
@@ -54,8 +53,8 @@ import static com.company.constants.Constants.PET_DESCRIPTION_REQUIRED;
 import static com.company.constants.Constants.PET_GENDER_REQUIRED;
 import static com.company.constants.Constants.PET_NAME_REQUIRED;
 import static com.company.constants.Constants.PET_NOT_FOUND;
-import static com.company.constants.Constants.PET_OWNER_REQUIRED;
 import static com.company.constants.Constants.PET_SIZE_REQUIRED;
+import static com.company.constants.Constants.PET_UPDATE_UNAUTHORIZED;
 import static com.company.constants.Constants.USER_NOT_FOUND;
 import static com.company.constants.Constants.WRONG_PET_GENDER;
 import static com.company.constants.Constants.WRONG_PET_SIZE;
@@ -115,7 +114,7 @@ public class PetService implements IPetService {
         }
 
         if(!Objects.equals(oldPet.get().getUserDetails().getUserId(), userDetails.getUserId())){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You are not authorized to update this pet");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, PET_UPDATE_UNAUTHORIZED);
         }
 
         PetStatus oldPetStatus = oldPet.get().getStatus();
@@ -175,7 +174,11 @@ public class PetService implements IPetService {
     @Override
     @Transactional
     public PetWithImagesDto saveOwnPetWithImages(CreatePetDto pet, MultipartFile[] images) {
+        UserDetails userDetails = getCompleteUserDetails();
+
         validateBasicPetData(pet, false);
+
+        pet.setOwnerId(userDetails.getId());
 
         Pets fullPet = mapCreatePetDtoToPet(pet);
 
@@ -199,7 +202,11 @@ public class PetService implements IPetService {
     @Override
     @Transactional
     public PetWithImagesDto saveAdoptivePetWithImages(CreatePetDto pet, MultipartFile[] images) {
+        UserDetails userDetails = getCompleteUserDetails();
+
         validateBasicPetData(pet, true);
+
+        pet.setOwnerId(userDetails.getId());
 
         Pets fullPet = mapCreatePetDtoToPet(pet);
 
@@ -392,9 +399,6 @@ public class PetService implements IPetService {
     private void validateBasicPetData(CreatePetDto pet, boolean isForAdoption) {
         if (pet.getName() == null || pet.getName().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_NAME_REQUIRED);
-        }
-        if (pet.getOwnerId() == null || pet.getOwnerId() < 1) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_OWNER_REQUIRED);
         }
         if (pet.getBreedId() == null || pet.getBreedId() < 1) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_BREED_REQUIRED);
