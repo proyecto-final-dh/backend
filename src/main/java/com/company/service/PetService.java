@@ -4,6 +4,7 @@ package com.company.service;
 import com.company.model.dto.CompletePetDto;
 import com.company.enums.PetGender;
 import com.company.enums.PetSize;
+import com.company.model.entity.History;
 import com.company.model.entity.Pets;
 import com.company.enums.PetStatus;
 import com.company.model.dto.CreatePetDto;
@@ -14,6 +15,7 @@ import com.company.model.entity.Image;
 import com.company.model.entity.Location;
 import com.company.model.entity.UserDetails;
 import com.company.repository.IBreedsRepository;
+import com.company.repository.IHistoryRepository;
 import com.company.repository.IImageRepository;
 import com.company.repository.IPetsRepository;
 import com.company.repository.IUserDetailsRepository;
@@ -32,10 +34,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.time.Instant;
 
 import static com.company.constants.Constants.BREED_NOT_FOUND;
 import static com.company.constants.Constants.LOCATION_NOT_FOUND;
@@ -64,6 +68,7 @@ public class PetService implements IPetService {
     private BucketImageService bucketImageService;
     private IImageRepository imageRepository;
     private IBreedsRepository breedsRepository;
+    private IHistoryRepository historyRepository;
 
 
     public Page<CompletePetDto> findAll(Pageable pageable) throws Exception {
@@ -100,6 +105,36 @@ public class PetService implements IPetService {
 
         if (existingPet.isPresent()) {
             Pets pets = existingPet.get();
+
+            if (pets.getStatus()!=updatedPets.getStatus()){
+                System.out.println("------------");
+                System.out.println(pets.getStatus());
+                System.out.println(updatedPets.getStatus());
+                System.out.println(updatedPets);
+
+                if(updatedPets.getUserDetails() != null){
+
+                    System.out.println("llega");
+                    Optional<Pets> pet = IPetsRepository.findById(id);
+                    Optional<UserDetails> userDetails = userDetailsRepository.findById(updatedPets.getUserDetails().getId());
+
+                    System.out.println(pet);
+                    System.out.println(userDetails);
+
+                    if (userDetails.isPresent() && pet.isPresent()) {
+
+                        History newItem = new History(Date.from(Instant.now()));
+                        newItem.setPet(pet.get());
+                        newItem.setUserDetails(userDetails.get());
+                        newItem.setStatus(updatedPets.getStatus().toString());
+
+                        System.out.println(newItem);
+
+                        historyRepository.save(newItem);
+                    }
+                }
+            }
+
             pets.setName(updatedPets.getName());
             pets.setStatus(updatedPets.getStatus());
             pets.setGender(updatedPets.getGender());
@@ -118,7 +153,26 @@ public class PetService implements IPetService {
         validateSize(pets.getSize());
 
         if (!pets.getName().isEmpty()) {
-            return IPetsRepository.save(pets);
+
+            Pets petTemp = IPetsRepository.save(pets);
+
+            if(petTemp.getUserDetails() != null){
+
+                Optional<Pets> pet = IPetsRepository.findById(petTemp.getId());
+                Optional<UserDetails> userDetails = userDetailsRepository.findById(petTemp.getUserDetails().getId());
+
+                if (userDetails.isPresent() && pet.isPresent()) {
+
+                    History newItem = new History(Date.from(Instant.now()));
+                    newItem.setPet(pet.get());
+                    newItem.setUserDetails(userDetails.get());
+                    newItem.setStatus(pet.get().getStatus().toString());
+
+                    historyRepository.save(newItem);
+                }
+            }
+
+            return petTemp;
         } else {
             throw new Exception("Pet Name not found");
         }

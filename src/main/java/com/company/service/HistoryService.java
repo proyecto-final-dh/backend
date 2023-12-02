@@ -61,6 +61,7 @@ public class HistoryService implements IHistoryService {
         History newItem = new History(item.getDate());
         newItem.setPet(pet.get());
         newItem.setUserDetails(userDetails.get());
+        newItem.setStatus(pet.get().getStatus().toString());
 
 
         return historyRepository.save(newItem);
