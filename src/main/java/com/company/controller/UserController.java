@@ -45,15 +45,4 @@ public class UserController {
 
 
 
-    /*
-
-    @GetMapping("/{id}")
-    public ResponseEntity<UserKeycloak> buscarid(@PathVariable String id) throws ResourceNotFoundException {
-        return  ResponseEntity.ok().body(userKeycloakRepository.findUser(id));
-
-    }
-
-     */
-
-
 }
