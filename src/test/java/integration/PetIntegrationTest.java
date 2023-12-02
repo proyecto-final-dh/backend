@@ -3,6 +3,7 @@ package integration;
 import com.company.ProyectoFinalApplication;
 import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.PetWithImagesDto;
+import com.company.model.dto.UpdatePetDto;
 import com.company.repository.IPetsRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -22,6 +23,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -29,6 +31,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.io.FileInputStream;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -58,8 +61,7 @@ public class PetIntegrationTest {
         SecurityContextHolder.clearContext();
         Jwt jwt = Jwt.withTokenValue("token")
                 .header("alg", "none")
-                .claim("authorities", "ROLE_default-roles-kc-resqpet-auth, SCOPE_groups, ID_b19dc58a-0836-425d-ae3e-814a816a523e, ROLE_offline_access, SCOPE_openid, SCOPE_email, ROLE_manage-account, ROLE_uma_authorization, ROLE_view-profile, ROLE_manage-account-links, SCOPE_profile")
-                .claim("sub","b19dc58a-0836-425d-ae3e-814a816a523e")
+                .claim("sub", "b19dc58a-0836-425d-ae3e-814a816a523e")
                 .build();
 
         JwtAuthenticationToken jwtAuth = new JwtAuthenticationToken(jwt);
@@ -150,6 +152,73 @@ public class PetIntegrationTest {
         // Eliminar la entidad después de la prueba
         petsRepository.deleteById(responsePet.getId());
     }
+
+    @Test
+    public void updatePet() throws Exception {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        // First create the pet (same that createOwnPetWithImage)
+        CreatePetDto pet = createCreatePetDto();
+
+        MockMultipartFile file = new MockMultipartFile(
+                "image",
+                "image.png",
+                MediaType.IMAGE_PNG_VALUE,
+                new FileInputStream("src/test/resources/images/image.png").readAllBytes()
+        );
+
+        String petJson = objectMapper.writeValueAsString(pet);
+
+        MockPart postPart = new MockPart("post", petJson.getBytes());
+        postPart.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.multipart("/pets/own-with-images")
+                        .file(file)
+                        .part(postPart)
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        JsonNode dataJson = getJsonNode("data", result);
+        PetWithImagesDto responsePet = objectMapper.treeToValue(dataJson, PetWithImagesDto.class);
+
+        // Now update the pet
+        int id = responsePet.getId();
+        UpdatePetDto updatePet = new UpdatePetDto();
+        updatePet.setName("EDITADO");
+        updatePet.setAge(responsePet.getAge());
+        updatePet.setDescription(responsePet.getDescription());
+        updatePet.setBreedId(responsePet.getBreedId());
+        updatePet.setImagesIds(List.of());
+
+        String petJsonUpdate = objectMapper.writeValueAsString(updatePet);
+
+        MockPart postPartUpdate = new MockPart("post", petJsonUpdate.getBytes());
+        postPartUpdate.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart("/pets/" + id);
+        builder.with(request -> {
+            request.setMethod("PUT");
+            return request;
+        });
+
+        MvcResult resultUpdateResponse = mockMvc.perform(builder
+                        .part(postPartUpdate)
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE))
+                .andReturn();
+
+        JsonNode dataJsonUpdate = getJsonNode("data", resultUpdateResponse);
+        PetWithImagesDto responsePetUpdate = objectMapper.treeToValue(dataJsonUpdate, PetWithImagesDto.class);
+
+        assertEquals("EDITADO", responsePetUpdate.getName());
+        assertEquals(responsePet.getId(), responsePetUpdate.getId());
+
+        // Delete the pet after the test
+        petsRepository.deleteById(responsePet.getId());
+
+    }
+
 
     @Test
     public void getPetsRecommendation() throws Exception {

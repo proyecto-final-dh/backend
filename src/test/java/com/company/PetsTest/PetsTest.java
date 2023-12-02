@@ -91,47 +91,6 @@ public class PetsTest {
     }
 
     @Test
-    public void testUpdatePet() throws IOException {
-        CreatePetDto createPetDto = new CreatePetDto();
-        createPetDto.setName("Dog");
-        createPetDto.setGender("MACHO");
-        createPetDto.setSize("MEDIANO");
-        createPetDto.setAge(2);
-        createPetDto.setDescription("A friendly dog");
-        createPetDto.setOwnerId(1);
-        createPetDto.setBreedId(1);
-
-
-        MockMultipartFile file = new MockMultipartFile(
-                "image",
-                "image.png",
-                MediaType.IMAGE_PNG_VALUE,
-                new FileInputStream("src/test/resources/images/image.png").readAllBytes()
-        );
-
-        ResponseEntity result = petController.createOwnPetWithImages(createPetDto, new MultipartFile[]{file});
-
-        PetWithImagesDto bodyResult = ((PetWithImagesDto) ((ApiResponse) result.getBody()).getData());
-        int id = bodyResult.getId();
-
-        UpdatePetDto updatePet = new UpdatePetDto();
-        updatePet.setName("EDITADO");
-        updatePet.setAge(bodyResult.getAge());
-        updatePet.setDescription(bodyResult.getDescription());
-        updatePet.setGender(bodyResult.getGender());
-        updatePet.setSize(bodyResult.getSize());
-        updatePet.setBreedId(bodyResult.getBreedId());
-        updatePet.setOwnerId(bodyResult.getOwnerId());
-        updatePet.setImagesIds(List.of());
-
-        ResponseEntity resultUpdateResponse = petController.updatePet(id, updatePet, new MultipartFile[]{file});
-        assertEquals(HttpStatus.OK, resultUpdateResponse.getStatusCode());
-        assertEquals("EDITADO", ((String) ((PetWithImagesDto) ((ApiResponse) resultUpdateResponse.getBody()).getData()).getName()));
-
-        petController.deletePet(id);
-    }
-
-    @Test
     public void testDeletePet() {
         ResponseEntity<Object> result = petController.createPet(newPet);
         var bodyResult = ((Pets) result.getBody());

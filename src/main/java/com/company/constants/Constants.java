@@ -26,6 +26,7 @@ public class Constants {
     public static final String PET_DESCRIPTION_REQUIRED = "Pet description is required";
     public static final String PET_AGE_MUST_BE_VALID = "Pet age must be equal or grater than 0";
     public static final String PET_UPDATE_UNAUTHORIZED= "You are not authorized to update this pet";
+    public static final String WRONG_PET_UPDATE_STATUS = "It is not possible to update pets that have been adopted";
 
     // NOT FOUND MESSAGES
     public static final String BREED_NOT_FOUND = "Breed not found";

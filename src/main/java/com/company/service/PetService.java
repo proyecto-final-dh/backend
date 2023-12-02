@@ -3,7 +3,6 @@ package com.company.service;
 
 import com.company.enums.PetGender;
 import com.company.enums.PetSize;
-import com.company.model.entity.Pets;
 import com.company.enums.PetStatus;
 import com.company.model.dto.CompletePetDto;
 import com.company.model.dto.CreatePetDto;
@@ -13,6 +12,7 @@ import com.company.model.dto.UpdatePetDto;
 import com.company.model.entity.Breeds;
 import com.company.model.entity.Image;
 import com.company.model.entity.Location;
+import com.company.model.entity.Pets;
 import com.company.model.entity.UserDetails;
 import com.company.repository.IBreedsRepository;
 import com.company.repository.IImageRepository;
@@ -43,6 +43,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.company.constants.Constants.BREED_NOT_FOUND;
+import static com.company.constants.Constants.EMPTY_IMAGE;
 import static com.company.constants.Constants.LOCATION_NOT_FOUND;
 import static com.company.constants.Constants.MAXIMUM_IMAGES;
 import static com.company.constants.Constants.MAXIMUM_IMAGES_EXCEEDED;
@@ -58,6 +59,7 @@ import static com.company.constants.Constants.PET_UPDATE_UNAUTHORIZED;
 import static com.company.constants.Constants.USER_NOT_FOUND;
 import static com.company.constants.Constants.WRONG_PET_GENDER;
 import static com.company.constants.Constants.WRONG_PET_SIZE;
+import static com.company.constants.Constants.WRONG_PET_UPDATE_STATUS;
 import static com.company.utils.Mapper.mapCreatePetDtoToPet;
 import static com.company.utils.Mapper.mapPetToPetWithImages;
 import static com.company.utils.Mapper.mapToCompletePetDto;
@@ -113,23 +115,33 @@ public class PetService implements IPetService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, PET_NOT_FOUND);
         }
 
-        if(!Objects.equals(oldPet.get().getUserDetails().getUserId(), userDetails.getUserId())){
+        if (!Objects.equals(oldPet.get().getUserDetails().getUserId(), userDetails.getUserId())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, PET_UPDATE_UNAUTHORIZED);
         }
 
         PetStatus oldPetStatus = oldPet.get().getStatus();
 
-        Integer newImagesQuantity = newImages != null ? newImages.length : 0;
+        if (oldPetStatus.equals(PetStatus.ADOPTADA)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_PET_UPDATE_STATUS);
+        }
+
+        int newImagesQuantity = newImages != null ? newImages.length : 0;
+
+        if (updatedPet.getImagesIds() == null) updatedPet.setImagesIds(new ArrayList<>());
 
         validateBasicUpdatePetData(updatedPet, newImagesQuantity, oldPetStatus.equals(PetStatus.EN_ADOPCION));
 
         Breeds breed = validateBreeds(updatedPet.getBreedId());
 
         Optional<List<Image>> imagesToDelete = imageRepository.findAllByPetId(id);
+        int imagesToDeleteQuantity = imagesToDelete.map(List::size).orElse(0);
 
         if (imagesToDelete.isPresent()) {
             for (Integer imageId : updatedPet.getImagesIds()) {
                 imagesToDelete.get().removeIf(image -> image.getId() == imageId);
+            }
+            if (oldPetStatus.equals(PetStatus.EN_ADOPCION) && imagesToDelete.get().size() == imagesToDeleteQuantity && newImagesQuantity == 0) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EMPTY_IMAGE);
             }
             imageRepository.deleteAll(imagesToDelete.get());
         }
@@ -363,6 +375,7 @@ public class PetService implements IPetService {
             throw new Exception("Error al recuperar las mascotas por Gender.");
         }
     }
+
     public Page<CompletePetDto> findBySize(String size, Pageable pageable) throws Exception {
         validateSize(size);
         try {
@@ -445,7 +458,7 @@ public class PetService implements IPetService {
         if ((newImagesQuantity + pet.getImagesIds().size()) > MAXIMUM_IMAGES) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, MAXIMUM_IMAGES_EXCEEDED);
         }
-        if( pet.getSize() != null && !PetSize.isValidSize(pet.getSize())) {
+        if (pet.getSize() != null && !PetSize.isValidSize(pet.getSize())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_PET_SIZE);
         }
         if (isForAdoption) {
@@ -457,6 +470,9 @@ public class PetService implements IPetService {
             }
             if (pet.getDescription() == null || pet.getDescription().isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PET_DESCRIPTION_REQUIRED);
+            }
+            if (newImagesQuantity == 0 && pet.getImagesIds().isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EMPTY_IMAGE);
             }
         }
     }
@@ -548,7 +564,7 @@ public class PetService implements IPetService {
         return petDto;
     }
 
-    private void validateGender (String gender){
+    private void validateGender(String gender) {
         if (gender != null && !gender.isEmpty() && !PetGender.isValidGender(gender)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_PET_GENDER);
         }

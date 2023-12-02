@@ -20,5 +20,4 @@ public class UpdatePetDto {
     private String description;
     private List<Integer> imagesIds;
     private Integer breedId;
-    private Integer ownerId;
 }
