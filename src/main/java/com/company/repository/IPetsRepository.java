@@ -1,5 +1,7 @@
 package com.company.repository;
 
+import com.company.enums.PetGender;
+import com.company.enums.PetSize;
 import com.company.enums.PetStatus;
 import com.company.model.entity.Pets;
 import org.springframework.data.domain.Page;
@@ -52,6 +54,9 @@ public interface IPetsRepository extends JpaRepository<Pets, Integer> , JpaSpeci
             countQuery = "SELECT COUNT(*) FROM petPI.pets AS pets " +
             "WHERE pets.owner_id = :id ", nativeQuery = true)
     Page<Pets> findByOwner(@Param("id") int id, Pageable pageable);
+
+    Page<Pets> findByGender(String gender, Pageable pageable);
+    Page<Pets> findBySize(String size, Pageable pageable);
 
 
 }
