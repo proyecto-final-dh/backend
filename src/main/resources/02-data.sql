@@ -564,7 +564,7 @@ INSERT INTO breeds (species_id, name) VALUES
 -- ingreso de user-details --
 INSERT INTO user_details (user_id, location_id, cellphone, created_at, updated_at)
 VALUES
-    ('b1c7d38f-6a92-412d-9e81', 1, '555-1111', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
+    ('b9b7d8f1-8ff7-426a-98ef-7a620f1fa81b', 1, '555-1111', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
     ('d0e4f6a5-3c78-8421-9eaa', 2, '555-2222', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
     ('f9e2d5c1-6b47-129d-8a8e', 3, '555-3333', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
     ('9c4e2f5a1-7b8c-3d2e-1f8a', 4, '555-4444', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
@@ -750,6 +750,6 @@ INSERT INTO history_states ( pet_id, date, status,user_id) VALUES
 INSERT INTO user_details (user_id, location_id, cellphone, created_at, updated_at) VALUES
 ('a3f1e25e-5b89-4032-8d7a-9899b0ee0bde', 1, '555-1234-5678', '2023-11-03 10:00:00', '2023-11-03 10:00:00'),
 ('b4g2f36f-6c98-5043-9e8b-aa99c1ee1bfc', 2, '555-9876-5432', '2023-11-03 10:05:00', '2023-11-03 10:05:00'),
-('c5h3g47g-7d09-6054-af9c-bb88d2ff2cfd', 3, '555-5643-5890', '2023-11-03 10:10:00', '2023-11-03 10:10:00');
+('b19dc58a-0836-425d-ae3e-814a816a523e', 3, '555-5643-5890', '2023-11-03 10:10:00', '2023-11-03 10:10:00');
 
 SET SQL_SAFE_UPDATES = 0;
