@@ -124,9 +124,7 @@ public class PetService implements IPetService {
         validateSize(pets.getSize());
 
         if (!pets.getName().isEmpty()) {
-            Pets petTemp = IPetsRepository.save(pets);
-
-            return petTemp;
+            return IPetsRepository.save(pets);
         } else {
             throw new Exception("Pet Name not found");
         }
@@ -183,6 +181,8 @@ public class PetService implements IPetService {
 
                 historyRepository.save(newItem);
             }
+        }else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "userDetails not found");
         }
 
 

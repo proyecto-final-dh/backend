@@ -36,9 +36,6 @@ public class PetIntegrationTest {
     IPetsRepository petsRepository;
 
     @Autowired
-    IHistoryRepository historyRepository;
-
-    @Autowired
     private WebApplicationContext webApplicationContext;
     private MockMvc mockMvc;
 
