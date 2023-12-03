@@ -14,8 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.notNull;
 
@@ -49,7 +51,7 @@ public class BreedsTest {
         int id = 1;
         ResponseEntity<Object> result = breedsController.getBreedsById(id);
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        notNull(result.getBody().getClass());
+        assertNotNull(Objects.requireNonNull(result.getBody()).getClass());
         assertTrue(result.getBody() instanceof Breeds);
         assertEquals(((Breeds) result.getBody()).getId(), 1);
     }

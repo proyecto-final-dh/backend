@@ -2,10 +2,9 @@ package com.company.UserPetInterestTest;
 
 import com.company.enums.PetStatus;
 import com.company.exceptions.ResourceNotFoundException;
-import com.company.model.dto.PetWithUserInformationDto;
+import com.company.model.dto.PetInterestWithOwnerInformationDto;
 import com.company.model.dto.UserInformationDTO;
 import com.company.model.dto.UserPetInterestDto;
-import com.company.model.dto.PetInterestWithOwnerInformationDto;
 import com.company.model.entity.Pets;
 import com.company.model.entity.UserDetails;
 import com.company.model.entity.UserPetInterest;
@@ -114,7 +113,7 @@ public class UserPetInterestTest {
         assertTrue(result.get(0).isInterested());
     }
 
-     @Test
+    @Test
     public void testCreateUserPetInterest_whenPetHasAdoptedStatus_thenReturnException() {
         // Given
         int petId = 1;
@@ -134,7 +133,6 @@ public class UserPetInterestTest {
         when(userDetailsRepository.findByUserId(anyString())).thenReturn(Optional.of(userDetails));
         when(petsRepository.findById(anyInt())).thenReturn(Optional.of(pet));
         when(userPetInterestRepository.existsByUserIdAndPetId(1, 1)).thenReturn(false);
-        when(userPetInterestRepository.save(userPetInterest)).thenReturn(userPetInterest);
 
         // Then
         assertThrows(ResponseStatusException.class, () -> userPetInterestService.createUserPetInterest(petId));
@@ -160,7 +158,6 @@ public class UserPetInterestTest {
         when(userDetailsRepository.findByUserId(anyString())).thenReturn(Optional.of(userDetails));
         when(petsRepository.findById(anyInt())).thenReturn(Optional.of(pet));
         when(userPetInterestRepository.existsByUserIdAndPetId(1, 1)).thenReturn(true);
-        when(userPetInterestRepository.save(userPetInterest)).thenReturn(userPetInterest);
 
         // Then
         assertThrows(ResponseStatusException.class, () -> userPetInterestService.createUserPetInterest(petId));
