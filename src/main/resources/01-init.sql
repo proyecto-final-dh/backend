@@ -79,7 +79,7 @@ ALTER TABLE user_details
 
 -- Historial de estados
 ALTER TABLE history_states
-    ADD FOREIGN KEY (pet_id) REFERENCES pets(id);
+    ADD FOREIGN KEY (pet_id) REFERENCES pets(id) ON DELETE CASCADE;
 
 ALTER TABLE history_states
     ADD FOREIGN KEY (user_id) REFERENCES user_details(id);

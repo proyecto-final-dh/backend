@@ -3,6 +3,7 @@ package integration;
 import com.company.ProyectoFinalApplication;
 import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.PetWithImagesDto;
+import com.company.repository.IHistoryRepository;
 import com.company.repository.IPetsRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -33,6 +34,9 @@ public class PetIntegrationTest {
 
     @Autowired
     IPetsRepository petsRepository;
+
+    @Autowired
+    IHistoryRepository historyRepository;
 
     @Autowired
     private WebApplicationContext webApplicationContext;

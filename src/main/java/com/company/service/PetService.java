@@ -106,35 +106,6 @@ public class PetService implements IPetService {
         if (existingPet.isPresent()) {
             Pets pets = existingPet.get();
 
-            if (pets.getStatus()!=updatedPets.getStatus()){
-                System.out.println("------------");
-                System.out.println(pets.getStatus());
-                System.out.println(updatedPets.getStatus());
-                System.out.println(updatedPets);
-
-                if(updatedPets.getUserDetails() != null){
-
-                    System.out.println("llega");
-                    Optional<Pets> pet = IPetsRepository.findById(id);
-                    Optional<UserDetails> userDetails = userDetailsRepository.findById(updatedPets.getUserDetails().getId());
-
-                    System.out.println(pet);
-                    System.out.println(userDetails);
-
-                    if (userDetails.isPresent() && pet.isPresent()) {
-
-                        History newItem = new History(Date.from(Instant.now()));
-                        newItem.setPet(pet.get());
-                        newItem.setUserDetails(userDetails.get());
-                        newItem.setStatus(updatedPets.getStatus().toString());
-
-                        System.out.println(newItem);
-
-                        historyRepository.save(newItem);
-                    }
-                }
-            }
-
             pets.setName(updatedPets.getName());
             pets.setStatus(updatedPets.getStatus());
             pets.setGender(updatedPets.getGender());
@@ -153,24 +124,7 @@ public class PetService implements IPetService {
         validateSize(pets.getSize());
 
         if (!pets.getName().isEmpty()) {
-
             Pets petTemp = IPetsRepository.save(pets);
-
-            if(petTemp.getUserDetails() != null){
-
-                Optional<Pets> pet = IPetsRepository.findById(petTemp.getId());
-                Optional<UserDetails> userDetails = userDetailsRepository.findById(petTemp.getUserDetails().getId());
-
-                if (userDetails.isPresent() && pet.isPresent()) {
-
-                    History newItem = new History(Date.from(Instant.now()));
-                    newItem.setPet(pet.get());
-                    newItem.setUserDetails(userDetails.get());
-                    newItem.setStatus(pet.get().getStatus().toString());
-
-                    historyRepository.save(newItem);
-                }
-            }
 
             return petTemp;
         } else {
@@ -215,8 +169,24 @@ public class PetService implements IPetService {
 
         Pets savedPet = IPetsRepository.save(fullPet);
 
-        List<ImageWithTitle> savedImages = bucketImageService.uploadFileWithTitle(images);
+        if(savedPet.getUserDetails() != null){
 
+            Optional<Pets> petIt = IPetsRepository.findById(savedPet.getId());
+            Optional<UserDetails> userDetails = userDetailsRepository.findById(savedPet.getUserDetails().getId());
+
+            if (userDetails.isPresent() && petIt.isPresent()) {
+
+                History newItem = new History(Date.from(Instant.now()));
+                newItem.setPet(petIt.get());
+                newItem.setUserDetails(userDetails.get());
+                newItem.setStatus(petIt.get().getStatus().toString());
+
+                historyRepository.save(newItem);
+            }
+        }
+
+
+        List<ImageWithTitle> savedImages = bucketImageService.uploadFileWithTitle(images);
         List<ImageWithTitle> returnImages = saveImagesInDatabase(savedImages, savedPet);
 
         return mapPetToPetWithImages(savedPet, returnImages);
