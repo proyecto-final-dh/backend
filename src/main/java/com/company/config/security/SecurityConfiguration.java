@@ -1,6 +1,5 @@
 package com.company.config.security;
 
-import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
@@ -22,12 +21,8 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
 
 import javax.net.ssl.SSLContext;
-
-
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -35,8 +30,7 @@ import java.security.NoSuchAlgorithmException;
 
 @Configuration
 @EnableWebSecurity
-@EnableWebMvc
-@EnableGlobalMethodSecurity(prePostEnabled = false, securedEnabled = false, jsr250Enabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
 
@@ -48,7 +42,6 @@ public class SecurityConfiguration {
     public JwtDecoder jwtDecoder() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
         RestTemplate restTemplate = restTemplate();
         NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withJwkSetUri(this.jwkSetUri).restOperations(restTemplate).build();
-        // Configura el resto del JwtDecoder como lo necesites
         return jwtDecoder;
     }
 
@@ -93,7 +86,7 @@ public class SecurityConfiguration {
                 .authorizeRequests(authz -> authz
                         .requestMatchers(HttpMethod.POST,"/locations/**","/species/**","/breeds/**","/pets/**").authenticated()
                         .requestMatchers(HttpMethod.PUT,"/locations/**","/species/**","/breeds/**","/pets/**").authenticated()
-                        .requestMatchers("/user-details/**","/history/**").authenticated()
+                        .requestMatchers("/user-details/**","/history/**","/users/**").authenticated()
                         .anyRequest().permitAll());
         return http.build();
     }
