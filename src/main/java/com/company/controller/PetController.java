@@ -1,5 +1,7 @@
 package com.company.controller;
 
+import com.company.enums.PetGender;
+import com.company.enums.PetSize;
 import com.company.model.dto.CompletePetDto;
 import com.company.model.dto.CreatePetDto;
 import com.company.enums.PetStatus;
@@ -100,6 +102,33 @@ public class PetController {
             Page<CompletePetDto> petPage = petService.findByOwner(id,pageable);
             return petPage;
         } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+    @GetMapping("/gender")
+    public Page<CompletePetDto> getPetsByGender(
+            @RequestParam String gender,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<CompletePetDto> petPage = petService .findByGender(gender,pageable);
+            return petPage;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    @GetMapping("/size")
+    public Page<CompletePetDto> getPetsBySize(
+            @RequestParam String petSize,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<CompletePetDto> petPage = petService .findBySize(petSize,pageable);
+            return petPage;
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }

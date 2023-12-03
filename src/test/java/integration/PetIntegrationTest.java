@@ -125,6 +125,7 @@ public class PetIntegrationTest {
     public void getPetsRecommendation() throws Exception {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         ObjectMapper objectMapper = new ObjectMapper();
+        CreatePetDto pet = createCreatePetDto();
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/pets/recommendation/1?limit=3"))
                 .andExpect(status().isOk())
@@ -141,6 +142,7 @@ public class PetIntegrationTest {
     public void getPetsByOwner() throws Exception {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         ObjectMapper objectMapper = new ObjectMapper();
+        CreatePetDto pet = createCreatePetDto();
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/pets/owner/1"))
 
@@ -150,24 +152,59 @@ public class PetIntegrationTest {
         String jsonResponse = result.getResponse().getContentAsString();
         JsonNode jsonNode = objectMapper.readTree(jsonResponse);
 
-        assertTrue(jsonNode.isArray() && jsonNode.size() > 0);
+        assertTrue(jsonNode.has("content") && jsonNode.get("content").isArray() && jsonNode.get("content").size() > 0);
+
+
     }
 
     @Test
     public void getPetsByLocation() throws Exception {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         ObjectMapper objectMapper = new ObjectMapper();
+        CreatePetDto pet = createCreatePetDto();
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/pets/locations/1"))
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/pets/locations/1?page=0&size=3"))
                 .andExpect(status().isOk())
                 .andReturn();
 
         String jsonResponse = result.getResponse().getContentAsString();
         JsonNode jsonNode = objectMapper.readTree(jsonResponse);
 
-        assertTrue(jsonNode.isArray() && jsonNode.size() > 0);
+        assertTrue(jsonNode.has("content") && jsonNode.get("content").isArray() && jsonNode.get("content").size() > 0);
+
     }
 
+    @Test
+    public void getPetsBySize() throws Exception {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        ObjectMapper objectMapper = new ObjectMapper();
+        CreatePetDto pet = createCreatePetDto();
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/pets/size?page=0&size=3&petSize=GRANDE"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String jsonResponse = result.getResponse().getContentAsString();
+        JsonNode jsonNode = objectMapper.readTree(jsonResponse);
+
+        assertTrue(jsonNode.has("content") && jsonNode.get("content").isArray() && jsonNode.get("content").size() > 0);
+    }
+
+    @Test
+    public void getPetsByGender() throws Exception {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        ObjectMapper objectMapper = new ObjectMapper();
+        CreatePetDto pet = createCreatePetDto();
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/pets/gender?page=0&size=3&gender=MACHO"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String jsonResponse = result.getResponse().getContentAsString();
+        JsonNode jsonNode = objectMapper.readTree(jsonResponse);
+
+        assertTrue(jsonNode.has("content") && jsonNode.get("content").isArray() && jsonNode.get("content").size() > 0);
+    }
 
     private CreatePetDto createCreatePetDto() {
 
