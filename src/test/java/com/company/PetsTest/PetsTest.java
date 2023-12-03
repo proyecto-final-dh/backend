@@ -3,9 +3,12 @@ package com.company.PetsTest;
 import com.company.controller.PetController;
 import com.company.enums.PetStatus;
 import com.company.model.dto.CompletePetDto;
+import com.company.model.dto.PetWithUserInformationDto;
 import com.company.model.entity.Breeds;
 import com.company.model.entity.Pets;
 import com.company.model.entity.Species;
+import com.company.utils.ApiResponse;
+import com.company.utils.ResponsesBuilder;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -60,12 +64,16 @@ public class PetsTest {
 
         int id = ((Pets) createResult.getBody()).getId();
 
-        ResponseEntity<Object> getResult = petController.getPetById(id);
-        System.out.println(getResult);
+        ResponseEntity getResult = petController.getPetById(id);
+
+        ApiResponse apiResponse = (ApiResponse) getResult.getBody();
+        PetWithUserInformationDto petWithUserInformationDto = (PetWithUserInformationDto) apiResponse.getData();
 
         assertEquals(HttpStatus.OK, getResult.getStatusCode());
-        assertTrue(getResult.getBody() instanceof CompletePetDto);
-        assertEquals(((CompletePetDto) getResult.getBody()).getId(), id);
+        assertEquals(id, petWithUserInformationDto.getPet().getId());
+        assertEquals(newPet.getName(), petWithUserInformationDto.getPet().getName());
+        assertEquals(null, petWithUserInformationDto.getOwnerInformation());
+
         // Eliminar la entidad después de la prueba
         petController.deletePet(((Pets) createResult.getBody()).getId());
     }

@@ -1,6 +1,9 @@
 package com.company.service;
 
 import com.company.enums.PetStatus;
+import com.company.exceptions.ResourceNotFoundException;
+import com.company.model.dto.UserInformationDTO;
+import com.company.model.dto.PetInterestWithOwnerInformationDto;
 import com.company.model.dto.UserPetInterestDto;
 import com.company.model.entity.Pets;
 import com.company.model.entity.UserDetails;
@@ -31,23 +34,26 @@ public class UserPetInterestService implements IUserPetInterestService {
     private final IUserPetInterestRepository userPetInterestRepository;
     private final IUserDetailsRepository userDetailsRepository;
     private final IPetsRepository petsRepository;
+    private final UserService userService;
 
-    public UserPetInterestService(IUserPetInterestRepository userPetInterestRepository, IUserDetailsRepository userDetailsRepository, IPetsRepository petsRepository) {
+    public UserPetInterestService(IUserPetInterestRepository userPetInterestRepository, IUserDetailsRepository userDetailsRepository, IPetsRepository petsRepository, UserService userService) {
         this.userPetInterestRepository = userPetInterestRepository;
         this.userDetailsRepository = userDetailsRepository;
         this.petsRepository = petsRepository;
+        this.userService = userService;
     }
 
     @Override
-    public List<UserPetInterestDto> getUserPetListInterests() {
+    public List<PetInterestWithOwnerInformationDto> getUserPetListInterests() throws ResourceNotFoundException {
         int userId = getUserId();
-        List<UserPetInterestDto> listDto = new ArrayList<>();
+        List<PetInterestWithOwnerInformationDto> listDto = new ArrayList<>();
 
         List<UserPetInterest> list = userPetInterestRepository.findAllByUserId(userId);
 
         for (UserPetInterest userPetInterest : list) {
             if (userPetInterest.getPet().getStatus() == PetStatus.EN_ADOPCION) {
-                listDto.add(new UserPetInterestDto(userPetInterest.getUserId(), userPetInterest.getPetId(), true));
+                UserInformationDTO userInformationDTO = userService.findById(userPetInterest.getPet().getUserDetails().getUserId());
+                listDto.add(new PetInterestWithOwnerInformationDto(userPetInterest.getPetId(), userInformationDTO, true));
             }
         }
 
@@ -64,7 +70,7 @@ public class UserPetInterestService implements IUserPetInterestService {
     }
 
     @Override
-    public UserPetInterestDto createUserPetInterest(int petId) {
+    public PetInterestWithOwnerInformationDto createUserPetInterest(int petId) throws ResourceNotFoundException {
         UserDetails userDetails = getCompleteUserDetails();
 
         Optional<Pets> pet = petsRepository.findById(petId);
@@ -85,7 +91,9 @@ public class UserPetInterestService implements IUserPetInterestService {
 
         userPetInterestRepository.save(userPetInterest);
 
-        return new UserPetInterestDto(userDetails.getId(), petId, true);
+        UserInformationDTO userInformationDTO = userService.findById(pet.get().getUserDetails().getUserId());
+
+        return new PetInterestWithOwnerInformationDto(petId, userInformationDTO, true);
     }
 
 

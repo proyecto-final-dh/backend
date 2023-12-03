@@ -1,22 +1,25 @@
 package com.company.service;
 
 
-import com.company.model.dto.CompletePetDto;
 import com.company.enums.PetGender;
 import com.company.enums.PetSize;
-import com.company.model.entity.Pets;
 import com.company.enums.PetStatus;
+import com.company.model.dto.CompletePetDto;
 import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.ImageWithTitle;
 import com.company.model.dto.PetWithImagesDto;
+import com.company.model.dto.PetWithUserInformationDto;
+import com.company.model.dto.UserInformationDTO;
 import com.company.model.entity.Breeds;
 import com.company.model.entity.Image;
 import com.company.model.entity.Location;
+import com.company.model.entity.Pets;
 import com.company.model.entity.UserDetails;
 import com.company.repository.IBreedsRepository;
 import com.company.repository.IImageRepository;
 import com.company.repository.IPetsRepository;
 import com.company.repository.IUserDetailsRepository;
+import com.company.repository.IUserPetInterestRepository;
 import com.company.repository.LocationRepository;
 import com.company.service.interfaces.IPetService;
 import jakarta.persistence.criteria.Join;
@@ -27,6 +30,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -47,6 +53,7 @@ import static com.company.constants.Constants.PET_GENDER_REQUIRED;
 import static com.company.constants.Constants.PET_NAME_REQUIRED;
 import static com.company.constants.Constants.PET_OWNER_REQUIRED;
 import static com.company.constants.Constants.PET_SIZE_REQUIRED;
+import static com.company.constants.Constants.USER_NOT_FOUND;
 import static com.company.constants.Constants.WRONG_PET_GENDER;
 import static com.company.constants.Constants.WRONG_PET_SIZE;
 import static com.company.utils.Mapper.mapCreatePetDtoToPet;
@@ -64,6 +71,8 @@ public class PetService implements IPetService {
     private BucketImageService bucketImageService;
     private IImageRepository imageRepository;
     private IBreedsRepository breedsRepository;
+    private IUserPetInterestRepository userPetInterestRepository;
+    private UserService userService;
 
 
     public Page<CompletePetDto> findAll(Pageable pageable) throws Exception {
@@ -79,11 +88,24 @@ public class PetService implements IPetService {
         }
     }
 
-    public CompletePetDto findById(int id) throws Exception {
+    public PetWithUserInformationDto findById(int id) throws Exception {
+        UserDetails userDetails = getCompleteUserDetails();
+
         try {
             Optional<Pets> pet = IPetsRepository.findById(id);
             if (pet.isPresent()) {
-                return attachImages(pet.get());
+                PetWithUserInformationDto petWithUserInformationDto = new PetWithUserInformationDto();
+
+                if ((userDetails != null && userPetInterestRepository.existsByUserIdAndPetId(userDetails.getId(), id)) ||
+                        (pet.get().getStatus().equals(PetStatus.MASCOTA_PROPIA))) {
+                    UserInformationDTO userInformationDTO = userService.findById(pet.get().getUserDetails().getUserId());
+                    petWithUserInformationDto.setOwnerInformation(userInformationDTO);
+                }
+
+                pet.get().setUserDetails(null);
+                petWithUserInformationDto.setPet(attachImages(pet.get()));
+
+                return petWithUserInformationDto;
             } else {
                 throw new Exception("Pet with id " + id + " not found.");
             }
@@ -308,6 +330,7 @@ public class PetService implements IPetService {
             throw new Exception("Error al recuperar las mascotas por Gender.");
         }
     }
+
     public Page<CompletePetDto> findBySize(String size, Pageable pageable) throws Exception {
         validateSize(size);
         try {
@@ -465,7 +488,7 @@ public class PetService implements IPetService {
         return petDto;
     }
 
-    private void validateGender (String gender){
+    private void validateGender(String gender) {
         if (gender != null && !gender.isEmpty() && !PetGender.isValidGender(gender)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_PET_GENDER);
         }
@@ -475,5 +498,24 @@ public class PetService implements IPetService {
         if (size != null && !size.isEmpty() && !PetSize.isValidSize(size)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_PET_SIZE);
         }
+    }
+
+    private UserDetails getCompleteUserDetails() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId = "";
+
+        if (authentication instanceof JwtAuthenticationToken jwtAuthToken) {
+            userId = jwtAuthToken.getToken().getClaims().get("sub").toString();
+
+            Optional<UserDetails> userDetails = userDetailsRepository.findByUserId(userId);
+
+            if (userDetails.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, USER_NOT_FOUND);
+            }
+
+            return userDetails.get();
+        }
+
+        return null;
     }
 }

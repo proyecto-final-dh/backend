@@ -1,5 +1,6 @@
 package com.company.controller;
 
+import com.company.exceptions.ResourceNotFoundException;
 import com.company.service.interfaces.IUserPetInterestService;
 import com.company.utils.ResponsesBuilder;
 import org.springframework.http.HttpStatus;
@@ -28,12 +29,12 @@ public class UserPetInterestController {
     }
 
     @GetMapping
-    public ResponseEntity getUserInterestsList() {
+    public ResponseEntity getUserInterestsList() throws ResourceNotFoundException {
         return responseBuilder.buildResponse(HttpStatus.OK.value(), "Get User interests status successfully", userPetInterestService.getUserPetListInterests(), null);
     }
 
     @PostMapping("/{petId}")
-    public ResponseEntity createUserPetInterest(@PathVariable("petId") int petId) {
-        return responseBuilder.buildResponse(HttpStatus.OK.value(), "User interest created successfully", userPetInterestService.createUserPetInterest(petId), null);
+    public ResponseEntity createUserPetInterest(@PathVariable("petId") int petId) throws ResourceNotFoundException {
+        return responseBuilder.buildResponse(HttpStatus.CREATED.value(), "User interest created successfully", userPetInterestService.createUserPetInterest(petId), null);
     }
 }

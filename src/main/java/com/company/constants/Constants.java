@@ -41,4 +41,7 @@ public class Constants {
     // CREATION
     public static final String PET_CREATED = "Pet created successfully";
 
+    // GETS
+    public static final String PET_GET_SUCCESS = "Pet get successfully";
+
 }
