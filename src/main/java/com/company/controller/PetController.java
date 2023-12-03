@@ -5,6 +5,7 @@ import com.company.enums.PetSize;
 import com.company.model.dto.CompletePetDto;
 import com.company.model.dto.CreatePetDto;
 import com.company.enums.PetStatus;
+import com.company.model.dto.UpdatePetDto;
 import com.company.model.entity.Pets;
 import com.company.service.PetService;
 import com.company.utils.ResponsesBuilder;
@@ -31,6 +32,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 import static com.company.constants.Constants.PET_CREATED;
+import static com.company.constants.Constants.PET_UPDATED;
 
 @AllArgsConstructor
 @RestController
@@ -158,15 +160,11 @@ public class PetController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updatePet(@PathVariable int id, @RequestBody Pets pets) {
-        try {
-            Pets updatedPets = petService.update(id, pets);
-            return ResponseEntity.ok(updatedPets);
-        } catch (ResponseStatusException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the pet");
-        }
+    public ResponseEntity updatePet(@PathVariable int id,
+                                    @RequestPart("post") UpdatePetDto pet,
+                                    @RequestPart(value = "newImage", required = false) MultipartFile[] newImages) {
+        return responsesBuilder.buildResponse(HttpStatus.OK.value(), PET_UPDATED, petService.update(id, pet, newImages), null);
+
     }
 
     @DeleteMapping("/{id}")
