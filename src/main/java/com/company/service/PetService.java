@@ -96,7 +96,7 @@ public class PetService implements IPetService {
             if (pet.isPresent()) {
                 PetWithUserInformationDto petWithUserInformationDto = new PetWithUserInformationDto();
 
-                if ((userDetails != null && userPetInterestRepository.existsByUserIdAndPetId(userDetails.getId(), id)) ||
+                if ((userDetails != null && userPetInterestRepository.existsByUserIdAndPetId(userDetails.getId(), id) && pet.get().getStatus().equals(PetStatus.EN_ADOPCION))||
                         (pet.get().getStatus().equals(PetStatus.MASCOTA_PROPIA))) {
                     UserInformationDTO userInformationDTO = userService.findById(pet.get().getUserDetails().getUserId());
                     petWithUserInformationDto.setOwnerInformation(userInformationDTO);
