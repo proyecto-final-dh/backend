@@ -6,6 +6,7 @@ import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.ImageWithTitle;
 import com.company.model.dto.PetWithImagesDto;
 import com.company.model.entity.Image;
+import com.company.model.dto.UpdatePetDto;
 import com.company.model.entity.Pets;
 
 import java.util.ArrayList;
@@ -68,4 +69,15 @@ public class Mapper {
         completePetDto.setImages(images);
         return completePetDto;
     }
+
+    public static Pets mapUpdatePetDtoToPet(UpdatePetDto updatePetDto) {
+        Pets pet = new Pets();
+        pet.setName(updatePetDto.getName());
+        pet.setSize(updatePetDto.getSize());
+        pet.setGender(updatePetDto.getGender());
+        pet.setAge(updatePetDto.getAge());
+        pet.setDescription(updatePetDto.getDescription());
+        return pet;
+    }
+
 }

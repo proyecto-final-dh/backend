@@ -5,6 +5,7 @@ import java.util.List;
 public class Constants {
     public static final String PET_IMAGES_FOLDER = "petImages/";
     public static final List<String> ALLOWED_IMAGE_EXTENSIONS = List.of("image/jpeg", "image/png", "image/jpg");
+    public static final int MAXIMUM_IMAGES = 5;
 
     // ERROR MESSAGES
 
@@ -24,6 +25,8 @@ public class Constants {
     public static final String PET_BREED_REQUIRED = "Pet breed is required and needs to be greater than 0";
     public static final String PET_DESCRIPTION_REQUIRED = "Pet description is required";
     public static final String PET_AGE_MUST_BE_VALID = "Pet age must be equal or grater than 0";
+    public static final String PET_UPDATE_UNAUTHORIZED= "You are not authorized to update this pet";
+    public static final String WRONG_PET_UPDATE_STATUS = "It is not possible to update pets that have been adopted";
 
     // USER ERRORS
     public static final String USER_INTEREST_ALREADY_EXISTS = "User interest already exists";
@@ -40,6 +43,9 @@ public class Constants {
 
     // CREATION
     public static final String PET_CREATED = "Pet created successfully";
+
+    // UPDATE
+    public static final String PET_UPDATED = "Pet updated successfully";
 
     // GETS
     public static final String PET_GET_SUCCESS = "Pet get successfully";
