@@ -1,15 +1,23 @@
 package com.company.utils;
 
 
+import com.company.enums.PetStatus;
+import com.company.model.dto.ReportBySpeciesDto;
+import com.company.model.dto.AdoptionsByDateDto;
 import com.company.model.dto.CompletePetDto;
 import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.ImageWithTitle;
 import com.company.model.dto.PetWithImagesDto;
+import com.company.model.dto.ReportByStatusDto;
 import com.company.model.entity.Image;
 import com.company.model.entity.Pets;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class Mapper {
@@ -67,5 +75,62 @@ public class Mapper {
         completePetDto.setAge(pet.getAge());
         completePetDto.setImages(images);
         return completePetDto;
+    }
+
+    public static List<ReportBySpeciesDto> mapToReportBySpeciesDtoList (List<Object[]> responseDB){
+        Map<Integer, ReportBySpeciesDto> reportBySpeciesDtoMap = new HashMap<>();
+
+        for (Object[] row : responseDB) {
+            int speciesId = (int) row[0];
+            String dateString = row[1].toString();
+            LocalDate date = LocalDate.parse(dateString);
+            long adoptionsCount = (long) row[2];
+
+            ReportBySpeciesDto reportBySpeciesDto = reportBySpeciesDtoMap.get(speciesId);
+
+            if (reportBySpeciesDto == null) {
+                reportBySpeciesDto = new ReportBySpeciesDto();
+                reportBySpeciesDto.setSpeciesId(speciesId);
+                reportBySpeciesDto.setResult(new ArrayList<>());
+                reportBySpeciesDtoMap.put(speciesId, reportBySpeciesDto);
+            }
+
+            AdoptionsByDateDto adoptionsByDateDto = new AdoptionsByDateDto();
+            adoptionsByDateDto.setDate(date.format(DateTimeFormatter.ofPattern("MMM yyyy")));
+            adoptionsByDateDto.setCount(adoptionsCount);
+
+            reportBySpeciesDto.getResult().add(adoptionsByDateDto);
+        }
+
+        return new ArrayList<>(reportBySpeciesDtoMap.values());
+    }
+
+    public static List<ReportByStatusDto> mapToReportByStatusDtoList (List<Object[]> responseDB){
+        Map<String, ReportByStatusDto> reportByStatusDtoMap = new HashMap<>();
+
+        for (Object[] row : responseDB) {
+            String statusString = row[0].toString();
+            LocalDate date = LocalDate.parse(row[1].toString());
+            long adoptionsCount = (long) row[2];
+
+            PetStatus petStatus = PetStatus.valueOf(statusString);
+
+            ReportByStatusDto reportByStatusDto = reportByStatusDtoMap.get(statusString);
+
+            if (reportByStatusDto == null) {
+                reportByStatusDto = new ReportByStatusDto();
+                reportByStatusDto.setStatus(petStatus);
+                reportByStatusDto.setResult(new ArrayList<>());
+                reportByStatusDtoMap.put(statusString, reportByStatusDto);
+            }
+
+            AdoptionsByDateDto adoptionsByDateDto = new AdoptionsByDateDto();
+            adoptionsByDateDto.setDate(date.format(DateTimeFormatter.ofPattern("MMM yyyy")));
+            adoptionsByDateDto.setCount(adoptionsCount);
+
+            reportByStatusDto.getResult().add(adoptionsByDateDto);
+        }
+
+        return new ArrayList<>(reportByStatusDtoMap.values());
     }
 }
