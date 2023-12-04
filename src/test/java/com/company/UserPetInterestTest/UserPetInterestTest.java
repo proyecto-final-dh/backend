@@ -5,6 +5,7 @@ import com.company.exceptions.ResourceNotFoundException;
 import com.company.model.dto.PetInterestWithOwnerInformationDto;
 import com.company.model.dto.UserInformationDTO;
 import com.company.model.dto.UserPetInterestDto;
+import com.company.model.entity.Location;
 import com.company.model.entity.Pets;
 import com.company.model.entity.UserDetails;
 import com.company.model.entity.UserPetInterest;

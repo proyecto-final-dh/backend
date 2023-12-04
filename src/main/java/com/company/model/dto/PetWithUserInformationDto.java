@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class PetWithUserInformationDto {
-    private CompletePetDto pet;
+    private CopmpleteGetPetDto pet;
     private UserInformationDTO ownerInformation;
 }

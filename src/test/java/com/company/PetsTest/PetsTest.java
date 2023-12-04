@@ -4,7 +4,9 @@ import com.company.controller.PetController;
 import com.company.enums.PetStatus;
 import com.company.model.dto.CompletePetDto;
 import com.company.model.dto.PetWithUserInformationDto;
+import com.company.model.entity.Location;
 import com.company.model.entity.Pets;
+import com.company.model.entity.UserDetails;
 import com.company.utils.ApiResponse;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -55,6 +57,16 @@ public class PetsTest {
 
     @Test
     public void testGetPetById() {
+        UserDetails userDetails = new UserDetails();
+        userDetails.setId(1);
+
+        Location location = new Location();
+        location.setId(1);
+        location.setCity("city");
+        location.setCountry("country");
+
+        userDetails.setLocation(location);
+        newPet.setUserDetails(userDetails);
         ResponseEntity<Object> createResult = petController.createPet(newPet);
 
         int id = ((Pets) createResult.getBody()).getId();

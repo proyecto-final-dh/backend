@@ -5,6 +5,7 @@ import com.company.enums.PetGender;
 import com.company.enums.PetSize;
 import com.company.enums.PetStatus;
 import com.company.model.dto.CompletePetDto;
+import com.company.model.dto.CopmpleteGetPetDto;
 import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.ImageWithTitle;
 import com.company.model.dto.PetWithImagesDto;
@@ -65,6 +66,7 @@ import static com.company.constants.Constants.WRONG_PET_SIZE;
 import static com.company.constants.Constants.WRONG_PET_UPDATE_STATUS;
 import static com.company.utils.Mapper.mapCreatePetDtoToPet;
 import static com.company.utils.Mapper.mapPetToPetWithImages;
+import static com.company.utils.Mapper.mapToCompleteGetPetDto;
 import static com.company.utils.Mapper.mapToCompletePetDto;
 import static com.company.utils.Mapper.mapToImageWithTitleList;
 import static com.company.utils.Mapper.mapUpdatePetDtoToPet;
@@ -110,7 +112,6 @@ public class PetService implements IPetService {
                     petWithUserInformationDto.setOwnerInformation(userInformationDTO);
                 }
 
-                pet.get().setUserDetails(null);
                 petWithUserInformationDto.setPet(attachImages(pet.get()));
 
                 return petWithUserInformationDto;
@@ -572,12 +573,12 @@ public class PetService implements IPetService {
         return petsDto;
     }
 
-    private CompletePetDto attachImages(Pets pet) {
-        CompletePetDto petDto = new CompletePetDto();
+    private CopmpleteGetPetDto attachImages(Pets pet) {
+        CopmpleteGetPetDto petDto = new CopmpleteGetPetDto();
         var images = imageRepository.findByPetId(pet.getId());
         if (images.isPresent()) {
             List<ImageWithTitle> imagesPets = mapToImageWithTitleList(images.get());
-            petDto = mapToCompletePetDto(pet, imagesPets);
+            petDto = mapToCompleteGetPetDto(pet, imagesPets);
         }
         return petDto;
     }
