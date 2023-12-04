@@ -10,6 +10,7 @@ import com.company.model.dto.ImageWithTitle;
 import com.company.model.dto.PetWithImagesDto;
 import com.company.model.dto.ReportByStatusDto;
 import com.company.model.entity.Image;
+import com.company.model.dto.UpdatePetDto;
 import com.company.model.entity.Pets;
 
 import java.time.LocalDate;
@@ -133,4 +134,15 @@ public class Mapper {
 
         return new ArrayList<>(reportByStatusDtoMap.values());
     }
+
+    public static Pets mapUpdatePetDtoToPet(UpdatePetDto updatePetDto) {
+        Pets pet = new Pets();
+        pet.setName(updatePetDto.getName());
+        pet.setSize(updatePetDto.getSize());
+        pet.setGender(updatePetDto.getGender());
+        pet.setAge(updatePetDto.getAge());
+        pet.setDescription(updatePetDto.getDescription());
+        return pet;
+    }
+
 }
