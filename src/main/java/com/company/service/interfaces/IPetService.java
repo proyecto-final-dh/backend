@@ -4,6 +4,8 @@ import com.company.model.dto.CompletePetDto;
 import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.PetWithImagesDto;
 import com.company.enums.PetStatus;
+import com.company.model.dto.PetWithUserInformationDto;
+import com.company.model.dto.UpdatePetDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.company.model.entity.Pets;
@@ -13,8 +15,8 @@ import java.util.List;
 
 public interface IPetService {
     Page<CompletePetDto> findAll(Pageable pageable) throws Exception;
-    CompletePetDto findById(int id) throws Exception;
-    Pets update(int id, Pets pets) throws Exception;
+    PetWithUserInformationDto findById(int id) throws Exception;
+    PetWithImagesDto update(int id, UpdatePetDto pets, MultipartFile[] newImages) throws Exception;
     Pets save(Pets pets) throws Exception;
     PetWithImagesDto saveOwnPetWithImages(CreatePetDto pet, MultipartFile[] images) throws Exception;
     PetWithImagesDto saveAdoptivePetWithImages(CreatePetDto pet, MultipartFile[] images) throws Exception;
@@ -25,5 +27,7 @@ public interface IPetService {
     Page<CompletePetDto> findByOwner(int id, Pageable pageable) throws Exception;
     Page<CompletePetDto> findByStatus(PetStatus status, Pageable pageable) throws Exception;
     Page<CompletePetDto> filterPets(Integer location, Integer species, Integer breed, String size,String status, Pageable pageable) throws Exception;
+    Page<CompletePetDto> findByGender(String gender, Pageable pageable) throws Exception;
+    Page<CompletePetDto> findBySize(String size, Pageable pageable) throws Exception;
 
 }

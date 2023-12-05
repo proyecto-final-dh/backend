@@ -3,11 +3,12 @@ package com.company.controller;
 import com.company.model.dto.CompletePetDto;
 import com.company.model.dto.CreatePetDto;
 import com.company.enums.PetStatus;
+import com.company.model.dto.PetWithUserInformationDto;
+import com.company.model.dto.UpdatePetDto;
 import com.company.model.entity.Pets;
 import com.company.service.PetService;
 import com.company.utils.ResponsesBuilder;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +30,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 import static com.company.constants.Constants.PET_CREATED;
+import static com.company.constants.Constants.PET_UPDATED;
+import static com.company.constants.Constants.PET_GET_SUCCESS;
 
 @AllArgsConstructor
 @RestController
@@ -67,10 +70,11 @@ public class PetController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getPetById(@PathVariable int id) {
+    public ResponseEntity getPetById(@PathVariable int id) {
         try {
-            CompletePetDto pets = petService.findById(id);
-            return ResponseEntity.ok(pets);
+            PetWithUserInformationDto pets = petService.findById(id);
+            return responsesBuilder.buildResponse(HttpStatus.OK.value(), PET_GET_SUCCESS, pets, null);
+
         } catch (ResponseStatusException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         } catch (Exception e) {
@@ -103,6 +107,33 @@ public class PetController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
+    @GetMapping("/gender")
+    public Page<CompletePetDto> getPetsByGender(
+            @RequestParam String gender,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<CompletePetDto> petPage = petService .findByGender(gender,pageable);
+            return petPage;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    @GetMapping("/size")
+    public Page<CompletePetDto> getPetsBySize(
+            @RequestParam String petSize,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<CompletePetDto> petPage = petService .findBySize(petSize,pageable);
+            return petPage;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
 
     @PostMapping
     public ResponseEntity<Object> createPet(@RequestBody Pets pets) {
@@ -129,15 +160,11 @@ public class PetController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updatePet(@PathVariable int id, @RequestBody Pets pets) {
-        try {
-            Pets updatedPets = petService.update(id, pets);
-            return ResponseEntity.ok(updatedPets);
-        } catch (ResponseStatusException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the pet");
-        }
+    public ResponseEntity updatePet(@PathVariable int id,
+                                    @RequestPart("post") UpdatePetDto pet,
+                                    @RequestPart(value = "newImage", required = false) MultipartFile[] newImages) {
+        return responsesBuilder.buildResponse(HttpStatus.OK.value(), PET_UPDATED, petService.update(id, pet, newImages), null);
+
     }
 
     @DeleteMapping("/{id}")
