@@ -62,9 +62,9 @@ public interface IPetsRepository extends JpaRepository<Pets, Integer> , JpaSpeci
 
     @Query("SELECT DISTINCT  NEW com.company.model.dto.PetStatusUpdateDTO(p, h.date) " +
             "FROM Pets p " +
-            "INNER JOIN History h ON p.userDetails.id = h.userDetails.id " +
-            "WHERE p.status = :status AND p.userDetails.id = :userId")
-    List<PetStatusUpdateDTO> findByOwnerAndStatus(@Param("status") PetStatus status, @Param("userId") Integer userId);
+            "INNER JOIN History h ON p.id = h.pet.id " +
+            "WHERE  p.status = :status AND p.userDetails.id = :userId")
+    List<PetStatusUpdateDTO> findByOwnerAndStatus( PetStatus status, @Param("userId") Integer userId);
 
 
 

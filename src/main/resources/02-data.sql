@@ -737,12 +737,10 @@ VALUES
 
 
 -- ingreso de historial --
-INSERT INTO history_states ( pet_id, date, status,user_id) VALUES
-    (13, CURRENT_DATE(), 'ADOPTADA',1 ),
-    (1, CURRENT_DATE(), 'EN_ADOPCION',1),
-    (1, CURRENT_DATE(), 'ADOPTADA',1),
-    (5, CURRENT_DATE(), 'EN_ADOPCION',4),
-    (5, CURRENT_DATE(), 'ADOPTADA',4);
+INSERT INTO history_states (pet_id, date, status, user_id) VALUES
+    (1, '2023-12-01', 'EN_ADOPCION', 1),
+    (1, '2023-12-02', 'ADOPTADA', 1),
+    (11, '2023-12-01', 'EN_ADOPCION', 1);
 
 
 -- Insertar pruebas resgistro de usuarios

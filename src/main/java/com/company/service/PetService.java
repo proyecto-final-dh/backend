@@ -612,6 +612,9 @@ public class PetService implements IPetService {
                var dateCreationPet= resultHistoryPet.get(0).getDate();
                result.setDateCreationPet((Timestamp) dateCreationPet);
 
+               var dataCreatioStatus= historyRepository.findByPetIdAndStatus(result.getPet().getId(),status.getId()).get(0).getDate();
+               result.setDateCreationStatus((Timestamp) dataCreatioStatus);
+
             }
 
         }
