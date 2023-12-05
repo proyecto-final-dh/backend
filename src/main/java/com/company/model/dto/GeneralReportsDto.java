@@ -12,4 +12,5 @@ public class GeneralReportsDto {
     private int enAdopcionCount;
     private int adoptadasCount;
     private int conQrCount;
+    private String averageTime;
 }

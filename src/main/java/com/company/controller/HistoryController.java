@@ -1,6 +1,5 @@
 package com.company.controller;
 
-import com.company.model.dto.GeneralReportsDto;
 import com.company.model.dto.SaveHistoryDto;
 import com.company.model.entity.History;
 import com.company.service.HistoryService;
