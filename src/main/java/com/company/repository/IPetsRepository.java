@@ -3,6 +3,7 @@ package com.company.repository;
 import com.company.enums.PetGender;
 import com.company.enums.PetSize;
 import com.company.enums.PetStatus;
+import com.company.model.dto.PetStatusUpdateDTO;
 import com.company.model.entity.Pets;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,6 +58,14 @@ public interface IPetsRepository extends JpaRepository<Pets, Integer> , JpaSpeci
 
     Page<Pets> findByGender(String gender, Pageable pageable);
     Page<Pets> findBySize(String size, Pageable pageable);
+
+
+    @Query("SELECT NEW com.company.model.dto.PetStatusUpdateDTO(p, h.date) " +
+            "FROM Pets p " +
+            "INNER JOIN History h ON p.userDetails.id = h.userDetails.id " +
+            "WHERE p.status = :status AND p.userDetails.id = :userId")
+    List<PetStatusUpdateDTO> findByOwnerAndStatus(@Param("status") PetStatus status, @Param("userId") Integer userId);
+
 
 
 }

@@ -12,12 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
 
 
@@ -28,6 +23,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 @ToString
 @EqualsAndHashCode
 @Entity
+@Builder
 @Table(name="pets")
 public class Pets {
     @Id

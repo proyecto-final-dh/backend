@@ -79,14 +79,16 @@ public class SecurityConfiguration {
             } catch (KeyManagementException e) {
                 throw new RuntimeException(e);
             }
+
         }));
 
-        http.cors(cors -> cors.disable())
+        http
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeRequests(authz -> authz
                         .requestMatchers(HttpMethod.POST,"/locations/**","/species/**","/breeds/**","/pets/**").authenticated()
                         .requestMatchers(HttpMethod.PUT,"/locations/**","/species/**","/breeds/**","/pets/**").authenticated()
-                        .requestMatchers("/user-details/**","/history/**","/users/**").authenticated()
+                        .requestMatchers(HttpMethod.GET,"/pets/preuba").authenticated()
+                        .requestMatchers("/user-details/**","/users/**").authenticated()
                         .anyRequest().permitAll());
         return http.build();
     }

@@ -4,11 +4,7 @@ package com.company.service;
 import com.company.enums.PetGender;
 import com.company.enums.PetSize;
 import com.company.enums.PetStatus;
-import com.company.model.dto.CompletePetDto;
-import com.company.model.dto.CreatePetDto;
-import com.company.model.dto.ImageWithTitle;
-import com.company.model.dto.PetWithImagesDto;
-import com.company.model.dto.UpdatePetDto;
+import com.company.model.dto.*;
 import com.company.model.entity.Breeds;
 import com.company.model.entity.Image;
 import com.company.model.entity.Location;
@@ -35,12 +31,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.company.constants.Constants.BREED_NOT_FOUND;
 import static com.company.constants.Constants.EMPTY_IMAGE;
@@ -591,5 +589,24 @@ public class PetService implements IPetService {
         }
 
         return userDetails.get();
+    }
+
+    public List<PetStatusUpdateDTO> findbyOwnerByOwnerAndStatus(PetStatus status, Integer userId) {
+        List<PetStatusUpdateDTO> results = IPetsRepository.findByOwnerAndStatus(status, userId);
+
+
+        for (PetStatusUpdateDTO result : results) {
+            Integer petId = result.getPet().getId();
+            result.getPet().setUserDetails(null);
+
+            List<Image> images = imageRepository.findByPetId(petId).get();
+            List<ImageWithTitle> imageWithTitles = mapToImageWithTitleList(images);
+            result.setImages(imageWithTitles);
+
+
+        }
+
+
+        return results;
     }
 }
