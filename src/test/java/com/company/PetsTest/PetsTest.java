@@ -3,7 +3,11 @@ package com.company.PetsTest;
 import com.company.controller.PetController;
 import com.company.enums.PetStatus;
 import com.company.model.dto.CompletePetDto;
+import com.company.model.dto.PetWithUserInformationDto;
+import com.company.model.entity.Location;
 import com.company.model.entity.Pets;
+import com.company.model.entity.UserDetails;
+import com.company.utils.ApiResponse;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -53,16 +57,30 @@ public class PetsTest {
 
     @Test
     public void testGetPetById() {
+        UserDetails userDetails = new UserDetails();
+        userDetails.setId(1);
+
+        Location location = new Location();
+        location.setId(1);
+        location.setCity("city");
+        location.setCountry("country");
+
+        userDetails.setLocation(location);
+        newPet.setUserDetails(userDetails);
         ResponseEntity<Object> createResult = petController.createPet(newPet);
 
         int id = ((Pets) createResult.getBody()).getId();
 
-        ResponseEntity<Object> getResult = petController.getPetById(id);
-        System.out.println(getResult);
+        ResponseEntity getResult = petController.getPetById(id);
+
+        ApiResponse apiResponse = (ApiResponse) getResult.getBody();
+        PetWithUserInformationDto petWithUserInformationDto = (PetWithUserInformationDto) apiResponse.getData();
 
         assertEquals(HttpStatus.OK, getResult.getStatusCode());
-        assertTrue(getResult.getBody() instanceof CompletePetDto);
-        assertEquals(((CompletePetDto) getResult.getBody()).getId(), id);
+        assertEquals(id, petWithUserInformationDto.getPet().getId());
+        assertEquals(newPet.getName(), petWithUserInformationDto.getPet().getName());
+        assertEquals(null, petWithUserInformationDto.getOwnerInformation());
+
         // Eliminar la entidad después de la prueba
         petController.deletePet(((Pets) createResult.getBody()).getId());
     }
