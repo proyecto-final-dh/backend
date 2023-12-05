@@ -590,7 +590,7 @@ public class PetService implements IPetService {
     }
 
     public List<PetStatusUpdateDTO> findbyOwnerByOwnerAndStatus(PetStatus status, Integer userId) throws ResourceNotFoundException {
-        List<PetStatusUpdateDTO> results = IPetsRepository.findByOwnerAndStatus(status, userId);
+        List<PetStatusUpdateDTO> results = IPetsRepository.findByStatusAndOwner(status.getId(),status, userId);
 
 
         for (PetStatusUpdateDTO result : results) {
@@ -612,8 +612,6 @@ public class PetService implements IPetService {
                var dateCreationPet= resultHistoryPet.get(0).getDate();
                result.setDateCreationPet((Timestamp) dateCreationPet);
 
-               var dataCreatioStatus= historyRepository.findByPetIdAndStatus(result.getPet().getId(),status.getId()).get(0).getDate();
-               result.setDateCreationStatus((Timestamp) dataCreatioStatus);
 
             }
 

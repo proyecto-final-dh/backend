@@ -60,12 +60,12 @@ public interface IPetsRepository extends JpaRepository<Pets, Integer> , JpaSpeci
     Page<Pets> findBySize(String size, Pageable pageable);
 
 
-    @Query("SELECT DISTINCT  NEW com.company.model.dto.PetStatusUpdateDTO(p, h.date) " +
+    @Query("SELECT DISTINCT NEW com.company.model.dto.PetStatusUpdateDTO(p, h.date) " +
             "FROM Pets p " +
             "INNER JOIN History h ON p.id = h.pet.id " +
-            "WHERE  p.status = :status AND p.userDetails.id = :userId")
-    List<PetStatusUpdateDTO> findByOwnerAndStatus( PetStatus status, @Param("userId") Integer userId);
-
+            "WHERE h.status = :hStatus AND p.status = :pStatus AND p.userDetails.id = :userId")
+    List<PetStatusUpdateDTO> findByStatusAndOwner(@Param("hStatus") String hStatus, @Param("pStatus") PetStatus pStatus, @Param("userId") Integer userId);
+    //Se tuvieron que implentar 3 parametros porque History no usó en enum de status, para no romper nada de lo ya construido
 
 
 }
