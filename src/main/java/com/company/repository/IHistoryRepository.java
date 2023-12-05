@@ -2,6 +2,7 @@ package com.company.repository;
 
 import com.company.model.entity.History;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 

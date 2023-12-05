@@ -3,6 +3,8 @@ package com.company.service;
 
 import com.company.enums.PetGender;
 import com.company.enums.PetSize;
+import com.company.model.entity.History;
+import com.company.model.entity.Pets;
 import com.company.enums.PetStatus;
 import com.company.model.dto.CompletePetDto;
 import com.company.model.dto.CopmpleteGetPetDto;
@@ -18,6 +20,7 @@ import com.company.model.entity.Location;
 import com.company.model.entity.Pets;
 import com.company.model.entity.UserDetails;
 import com.company.repository.IBreedsRepository;
+import com.company.repository.IHistoryRepository;
 import com.company.repository.IImageRepository;
 import com.company.repository.IPetsRepository;
 import com.company.repository.IUserDetailsRepository;
@@ -38,13 +41,21 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import java.text.ParseException;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.time.Instant;
+import java.util.TimeZone;
 
 import static com.company.constants.Constants.BREED_NOT_FOUND;
 import static com.company.constants.Constants.EMPTY_IMAGE;
@@ -81,6 +92,7 @@ public class PetService implements IPetService {
     private BucketImageService bucketImageService;
     private IImageRepository imageRepository;
     private IBreedsRepository breedsRepository;
+    private IHistoryRepository historyRepository;
     private IUserPetInterestRepository userPetInterestRepository;
     private UserService userService;
 
@@ -247,8 +259,27 @@ public class PetService implements IPetService {
 
         Pets savedPet = IPetsRepository.save(fullPet);
 
-        List<ImageWithTitle> savedImages = bucketImageService.uploadFileWithTitle(images);
+        if(savedPet.getUserDetails() != null){
 
+            Optional<Pets> petIt = IPetsRepository.findById(savedPet.getId());
+            Optional<UserDetails> userDetailsTemp = userDetailsRepository.findById(savedPet.getUserDetails().getId());
+
+            if (userDetailsTemp.isPresent() && petIt.isPresent()) {
+
+                History newItem = new History(Date.from(Instant.now()));
+
+                newItem.setPet(petIt.get());
+                newItem.setUserDetails(userDetailsTemp.get());
+                newItem.setStatus(petIt.get().getStatus().toString());
+
+                historyRepository.save(newItem);
+            }
+        }else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "userDetails not found");
+        }
+
+
+        List<ImageWithTitle> savedImages = bucketImageService.uploadFileWithTitle(images);
         List<ImageWithTitle> returnImages = saveImagesInDatabase(savedImages, savedPet);
 
         return mapPetToPetWithImages(savedPet, returnImages);
