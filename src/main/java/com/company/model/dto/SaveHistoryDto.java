@@ -23,4 +23,6 @@ public class SaveHistoryDto {
     @NotNull(message = "El ID de la user es obligatorio.")
     private int userDetailsId;
 
+    private String status;
+
 }

@@ -3,7 +3,17 @@ package com.company.service;
 
 import com.company.enums.PetGender;
 import com.company.enums.PetSize;
+import com.company.model.entity.History;
+import com.company.model.entity.Pets;
 import com.company.enums.PetStatus;
+import com.company.model.dto.CompletePetDto;
+import com.company.model.dto.CopmpleteGetPetDto;
+import com.company.model.dto.CreatePetDto;
+import com.company.model.dto.ImageWithTitle;
+import com.company.model.dto.PetWithImagesDto;
+import com.company.model.dto.PetWithUserInformationDto;
+import com.company.model.dto.UserInformationDTO;
+import com.company.model.dto.UpdatePetDto;
 import com.company.exceptions.ResourceNotFoundException;
 import com.company.model.dto.*;
 import com.company.model.entity.Breeds;
@@ -11,7 +21,13 @@ import com.company.model.entity.Image;
 import com.company.model.entity.Location;
 import com.company.model.entity.Pets;
 import com.company.model.entity.UserDetails;
-import com.company.repository.*;
+import com.company.repository.IBreedsRepository;
+import com.company.repository.IHistoryRepository;
+import com.company.repository.IImageRepository;
+import com.company.repository.IPetsRepository;
+import com.company.repository.IUserDetailsRepository;
+import com.company.repository.IUserPetInterestRepository;
+import com.company.repository.LocationRepository;
 import com.company.service.interfaces.IPetService;
 import jakarta.persistence.criteria.Join;
 import jakarta.transaction.Transactional;
@@ -27,9 +43,16 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import java.text.ParseException;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -57,6 +80,7 @@ import static com.company.constants.Constants.WRONG_PET_SIZE;
 import static com.company.constants.Constants.WRONG_PET_UPDATE_STATUS;
 import static com.company.utils.Mapper.mapCreatePetDtoToPet;
 import static com.company.utils.Mapper.mapPetToPetWithImages;
+import static com.company.utils.Mapper.mapToCompleteGetPetDto;
 import static com.company.utils.Mapper.mapToCompletePetDto;
 import static com.company.utils.Mapper.mapToImageWithTitleList;
 import static com.company.utils.Mapper.mapUpdatePetDtoToPet;
@@ -72,6 +96,8 @@ public class PetService implements IPetService {
     private IImageRepository imageRepository;
     private IBreedsRepository breedsRepository;
     private IHistoryRepository historyRepository;
+    private IUserPetInterestRepository userPetInterestRepository;
+    private UserService userService;
 
 
     public Page<CompletePetDto> findAll(Pageable pageable) throws Exception {
@@ -87,11 +113,23 @@ public class PetService implements IPetService {
         }
     }
 
-    public CompletePetDto findById(int id) throws Exception {
+    public PetWithUserInformationDto findById(int id) throws Exception {
+        UserDetails userDetails = getCompleteUserDetails();
+
         try {
             Optional<Pets> pet = IPetsRepository.findById(id);
             if (pet.isPresent()) {
-                return attachImages(pet.get());
+                PetWithUserInformationDto petWithUserInformationDto = new PetWithUserInformationDto();
+
+                if ((userDetails != null && userPetInterestRepository.existsByUserIdAndPetId(userDetails.getId(), id) && pet.get().getStatus().equals(PetStatus.EN_ADOPCION))||
+                        (pet.get().getStatus().equals(PetStatus.MASCOTA_PROPIA))) {
+                    UserInformationDTO userInformationDTO = userService.findById(pet.get().getUserDetails().getUserId());
+                    petWithUserInformationDto.setOwnerInformation(userInformationDTO);
+                }
+
+                petWithUserInformationDto.setPet(attachImages(pet.get()));
+
+                return petWithUserInformationDto;
             } else {
                 throw new Exception("Pet with id " + id + " not found.");
             }
@@ -223,6 +261,26 @@ public class PetService implements IPetService {
         fullPet.setStatus(PetStatus.EN_ADOPCION);
 
         Pets savedPet = IPetsRepository.save(fullPet);
+
+        if(savedPet.getUserDetails() != null){
+
+            Optional<Pets> petIt = IPetsRepository.findById(savedPet.getId());
+            Optional<UserDetails> userDetailsTemp = userDetailsRepository.findById(savedPet.getUserDetails().getId());
+
+            if (userDetailsTemp.isPresent() && petIt.isPresent()) {
+
+                History newItem = new History(Date.from(Instant.now()));
+
+                newItem.setPet(petIt.get());
+                newItem.setUserDetails(userDetailsTemp.get());
+                newItem.setStatus(petIt.get().getStatus().toString());
+
+                historyRepository.save(newItem);
+            }
+        }else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "userDetails not found");
+        }
+
 
         List<ImageWithTitle> savedImages = bucketImageService.uploadFileWithTitle(images);
 
@@ -550,12 +608,12 @@ public class PetService implements IPetService {
         return petsDto;
     }
 
-    private CompletePetDto attachImages(Pets pet) {
-        CompletePetDto petDto = new CompletePetDto();
+    private CopmpleteGetPetDto attachImages(Pets pet) {
+        CopmpleteGetPetDto petDto = new CopmpleteGetPetDto();
         var images = imageRepository.findByPetId(pet.getId());
         if (images.isPresent()) {
             List<ImageWithTitle> imagesPets = mapToImageWithTitleList(images.get());
-            petDto = mapToCompletePetDto(pet, imagesPets);
+            petDto = mapToCompleteGetPetDto(pet, imagesPets);
         }
         return petDto;
     }
@@ -578,15 +636,17 @@ public class PetService implements IPetService {
 
         if (authentication instanceof JwtAuthenticationToken jwtAuthToken) {
             userId = jwtAuthToken.getToken().getClaims().get("sub").toString();
+
+            Optional<UserDetails> userDetails = userDetailsRepository.findByUserId(userId);
+
+            if (userDetails.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, USER_NOT_FOUND);
+            }
+
+            return userDetails.get();
         }
 
-        Optional<UserDetails> userDetails = userDetailsRepository.findByUserId(userId);
-
-        if (userDetails.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, USER_NOT_FOUND);
-        }
-
-        return userDetails.get();
+        return null;
     }
 
     public List<PetStatusUpdateDTO> findbyOwnerByOwnerAndStatus(PetStatus status, Integer userId) throws ResourceNotFoundException {

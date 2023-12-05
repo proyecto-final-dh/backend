@@ -3,6 +3,7 @@ package integration;
 import com.company.ProyectoFinalApplication;
 import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.PetWithImagesDto;
+import com.company.repository.IHistoryRepository;
 import com.company.model.dto.UpdatePetDto;
 import com.company.repository.IPetsRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;

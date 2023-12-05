@@ -6,13 +6,13 @@ import com.company.exceptions.ResourceNotFoundException;
 import com.company.model.dto.CompletePetDto;
 import com.company.model.dto.CreatePetDto;
 import com.company.enums.PetStatus;
+import com.company.model.dto.PetWithUserInformationDto;
 import com.company.model.dto.UpdatePetDto;
 import com.company.model.entity.Pets;
 import com.company.service.PetService;
 import com.company.service.UserDetailsService;
 import com.company.utils.ResponsesBuilder;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,11 +39,11 @@ import java.util.List;
 
 import static com.company.constants.Constants.PET_CREATED;
 import static com.company.constants.Constants.PET_UPDATED;
+import static com.company.constants.Constants.PET_GET_SUCCESS;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("/pets")
-@Builder
 public class PetController {
 
     private final PetService petService;
@@ -79,10 +79,11 @@ public class PetController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getPetById(@PathVariable int id) {
+    public ResponseEntity getPetById(@PathVariable int id) {
         try {
-            CompletePetDto pets = petService.findById(id);
-            return ResponseEntity.ok(pets);
+            PetWithUserInformationDto pets = petService.findById(id);
+            return responsesBuilder.buildResponse(HttpStatus.OK.value(), PET_GET_SUCCESS, pets, null);
+
         } catch (ResponseStatusException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         } catch (Exception e) {

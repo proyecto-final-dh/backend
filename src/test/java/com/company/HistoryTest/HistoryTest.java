@@ -44,7 +44,7 @@ public class HistoryTest {
 
     @Test
     void createHistory() {
-        SaveHistoryDto historyDto = new SaveHistoryDto(new Date(), 1, 1);
+        SaveHistoryDto historyDto = new SaveHistoryDto(new Date(), 1, 1,"");
         History createdHistory = historyService.createHistory(historyDto);
         assertNotNull(createdHistory);
         assertTrue(createdHistory.getId() > 0);
@@ -53,10 +53,10 @@ public class HistoryTest {
 
     @Test
     public void testGetAllStories() {
-        SaveHistoryDto historyDto = new SaveHistoryDto(new Date(), 1, 1);
+        SaveHistoryDto historyDto = new SaveHistoryDto(new Date(), 1, 1,"");
         ResponseEntity<Object> result = historyController.createHistory(historyDto);
 
-        SaveHistoryDto historyDto2 = new SaveHistoryDto(new Date(), 1, 1);
+        SaveHistoryDto historyDto2 = new SaveHistoryDto(new Date(), 1, 1,"");
         ResponseEntity<Object> result2 = historyController.createHistory(historyDto2);
 
         List<History> historyList = historyController.getAllHistory();
@@ -69,7 +69,7 @@ public class HistoryTest {
 
     @Test
     public void testGetStoryById() {
-        SaveHistoryDto historyDto = new SaveHistoryDto(new Date(), 1, 1);
+        SaveHistoryDto historyDto = new SaveHistoryDto(new Date(), 1, 1,"");
         ResponseEntity<Object> createResult = historyController.createHistory(historyDto);
 
         int id = ((History) createResult.getBody()).getId();
@@ -86,7 +86,7 @@ public class HistoryTest {
 
     @Test
     public void testDeleteStory() {
-        SaveHistoryDto historyDto = new SaveHistoryDto(new Date(), 1, 1);
+        SaveHistoryDto historyDto = new SaveHistoryDto(new Date(), 1, 1,"");
         ResponseEntity<Object> result = historyController.createHistory(historyDto);
         var bodyResult = ((History) result.getBody());
         int id = bodyResult.getId();
@@ -97,7 +97,7 @@ public class HistoryTest {
 
     @Test
     public void testUpdateHistory() {
-        SaveHistoryDto historyDto = new SaveHistoryDto(new Date(), 1, 1);
+        SaveHistoryDto historyDto = new SaveHistoryDto(new Date(), 1, 1,"");
         ResponseEntity<Object> createResult = historyController.createHistory(historyDto);
         var createdHistory = (History) createResult.getBody();
         int id = createdHistory.getId();

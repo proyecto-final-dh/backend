@@ -565,25 +565,25 @@ INSERT INTO breeds (species_id, name) VALUES
 INSERT INTO user_details (user_id, location_id, cellphone, created_at, updated_at)
 VALUES
     ('b9b7d8f1-8ff7-426a-98ef-7a620f1fa81b', 1, '555-1111', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
-    ('d0e4f6a5-3c78-8421-9eaa', 2, '555-2222', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
-    ('f9e2d5c1-6b47-129d-8a8e', 3, '555-3333', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
-    ('9c4e2f5a1-7b8c-3d2e-1f8a', 4, '555-4444', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
-    ('e1a3f2b5-4c7d-8e2d-9a8a', 5, '555-5555', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
-    ('2f1d3a5e-6b8c4d2-1e9-8a9e', 6, '555-6666', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
-    ('a9e2f5d1-c7b8-1e2d-8a7a', 7, '555-7777', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
-    ('5b1c7e9d2-4c3d8-2e1d-1a9a', 8, '555-8888', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
-    ('1a2e3f5d7-6b8c-4d3e-2f1a', 9, '555-9999', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
-    ('8f9e2d5c1-7b8c4d2-1e2d', 10, '555-1010', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
-    ('1c337090-0d59-45b8-ba82-428395de0da2', 11, '555-1111', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
-    ('792aea21-d936-444e-8e0b-a0da9e71f70f', 12, '555-2222', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
-    ('30f72ee2-ea5e-45f3-bb52-cf0deeea2450', 13, '555-3333', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
-    ('f4e29255-9306-4b51-9dd1-c28527b2d0a0', 14, '555-4444', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
-    ('c9a294ee-0204-4c76-ba55-f85cab8406aa', 15, '555-5555', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
-    ('0903c1eb-49e1-40e2-b472-76ca7b50bfce', 16, '555-6666', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
-    ('48ada9ca-f429-4b94-bea8-c037739ac512', 17, '555-7777', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
-    ('a7e57d70-c2d2-4aa3-a2d5-3d9b532b8686', 18, '555-8888', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
-    ('ed19d0d2-742a-4336-8b9e-e180a6f57ae5', 19, '555-9999', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
-    ('eff5857a-c55f-413e-adc6-4580e51de220', 20, '555-1010', '2023-11-06 12:00:00', '2023-11-06 12:00:00');
+    ('5a65fca8-da4b-4403-ab6d-a56f8ac7666d', 2, '555-2222', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
+    ('e1a12dab-7793-4bcd-af45-6e8c90e0b4a7', 3, '555-3333', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
+    ('f83d4481-6ca8-42fa-bf61-6ef3f7b15645', 4, '555-4444', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
+    ('b19dc58a-0836-425d-ae3e-814a816a523e', 5, '555-5555', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
+    ('a92f3971-5a8f-4363-acfb-0bd2a9cde11d', 6, '555-6666', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
+    ('f13f1c4c-92b3-4e72-910b-4fd0e564ad54', 7, '555-7777', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
+    ('ae7e0235-4721-4791-90ad-7d6b9480418e', 8, '555-8888', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
+    ('05d872de-51c5-4561-b27c-78840a8aaa5b', 9, '555-9999', '2023-11-05 00:00:00', '2023-11-05 00:00:00');
+--     ('b9b7d8f1-8ff7-426a-98ef-7a620f1fa81b', 10, '555-1010', '2023-11-05 00:00:00', '2023-11-05 00:00:00'),
+--     ('5a65fca8-da4b-4403-ab6d-a56f8ac7666d', 11, '555-1111', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
+--     ('e1a12dab-7793-4bcd-af45-6e8c90e0b4a7', 12, '555-2222', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
+--     ('f83d4481-6ca8-42fa-bf61-6ef3f7b15645', 13, '555-3333', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
+--     ('b19dc58a-0836-425d-ae3e-814a816a523e', 14, '555-4444', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
+--     ('a92f3971-5a8f-4363-acfb-0bd2a9cde11d', 15, '555-5555', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
+--     ('f13f1c4c-92b3-4e72-910b-4fd0e564ad54', 16, '555-6666', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
+--     ('ae7e0235-4721-4791-90ad-7d6b9480418e', 17, '555-7777', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
+--     ('05d872de-51c5-4561-b27c-78840a8aaa5b', 18, '555-8888', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
+--     ('b9b7d8f1-8ff7-426a-98ef-7a620f1fa81b', 19, '555-9999', '2023-11-06 12:00:00', '2023-11-06 12:00:00'),
+--     ('5a65fca8-da4b-4403-ab6d-a56f8ac7666d', 20, '555-1010', '2023-11-06 12:00:00', '2023-11-06 12:00:00');
 
 -- ingreso de mascotas --
 INSERT INTO pets (name, owner_id, breed_id, status, size, gender, description, age)
@@ -597,7 +597,7 @@ VALUES
     (N'Charlie', 7, 14, 'EN_ADOPCION', N'MEDIANO', 'MACHO', N'Charlie es un perro amigable y enérgico que siempre está lleno de energía.', 2),
     (N'Daisy', 8, 3, 'EN_ADOPCION', N'PEQUEÑO', 'HEMBRA', N'Daisy es una perrita pequeña y traviesa que adora jugar con sus juguetes.', 4),
     (N'Cooper', 9, 21, 'EN_ADOPCION', N'GRANDE', 'MACHO', N'Cooper es un perro grande y protector que siempre cuida de su familia.', 5),
-    (N'Zoe', 10, 36, 'EN_ADOPCION', N'MEDIANO', 'HEMBRA', N'Zoe es una gatita cariñosa y juguetona que ama los mimos y caricias.', 1),
+    (N'Zoe', 1, 36, 'EN_ADOPCION', N'MEDIANO', 'HEMBRA', N'Zoe es una gatita cariñosa y juguetona que ama los mimos y caricias.', 1),
     (N'Pirata', 1, 37, 'EN_ADOPCION', N'PEQUEÑO', 'MACHO', N'Pirata es un gatito curioso y aventurero que está buscando un hogar.', 2),
     (N'Misty', 2, 29, 'EN_ADOPCION', N'GRANDE', 'HEMBRA', N'Misty es una perra grande y dulce que merece una familia amorosa.', 6),
     (N'Leo', 3, 7, 'EN_ADOPCION', N'MEDIANO', 'MACHO', N'Leo es un perro activo y juguetón que necesita un lugar donde correr y jugar.', 3),
@@ -607,7 +607,7 @@ VALUES
     (N'Teddy', 7, 31, 'ADOPTADA', N'PEQUEÑO', 'MACHO', N'Teddy es un perrito pequeño y tierno en busca de un compañero fiel.', 1),
     (N'Bentley', 8, 4, 'ADOPTADA', N'GRANDE', 'HEMBRA', N'Bentley es una perra grande y leal que te protegerá siempre.', 6),
     (N'Milo', 9, 21, 'ADOPTADA', N'MEDIANO', 'MACHO', N'Milo es un perro mediano y juguetón que alegrará tu hogar.', 4),
-    (N'Lucio', 10, 3, 'ADOPTADA', N'PEQUEÑO', 'MACHO', N'Lucio es un perrito pequeño y encantador que te hará sonreír.', 3);
+    (N'Lucio', 1, 3, 'ADOPTADA', N'PEQUEÑO', 'MACHO', N'Lucio es un perrito pequeño y encantador que te hará sonreír.', 3);
 
 
 -- ingreso de fotos de mascotas --
@@ -745,9 +745,9 @@ INSERT INTO history_states (pet_id, date, status, user_id) VALUES
 
 -- Insertar pruebas resgistro de usuarios
 
-INSERT INTO user_details (user_id, location_id, cellphone, created_at, updated_at) VALUES
-('a3f1e25e-5b89-4032-8d7a-9899b0ee0bde', 1, '555-1234-5678', '2023-11-03 10:00:00', '2023-11-03 10:00:00'),
-('b4g2f36f-6c98-5043-9e8b-aa99c1ee1bfc', 2, '555-9876-5432', '2023-11-03 10:05:00', '2023-11-03 10:05:00'),
-('b19dc58a-0836-425d-ae3e-814a816a523e', 3, '555-5643-5890', '2023-11-03 10:10:00', '2023-11-03 10:10:00');
+-- INSERT INTO user_details (user_id, location_id, cellphone, created_at, updated_at) VALUES
+-- ('e1a12dab-7793-4bcd-af45-6e8c90e0b4a7', 1, '555-1234-5678', '2023-11-03 10:00:00', '2023-11-03 10:00:00'),
+-- ('f83d4481-6ca8-42fa-bf61-6ef3f7b15645', 2, '555-9876-5432', '2023-11-03 10:05:00', '2023-11-03 10:05:00'),
+-- ('b19dc58a-0836-425d-ae3e-814a816a523e', 3, '555-5643-5890', '2023-11-03 10:10:00', '2023-11-03 10:10:00');
 
 SET SQL_SAFE_UPDATES = 0;
