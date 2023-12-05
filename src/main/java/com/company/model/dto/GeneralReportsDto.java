@@ -1,16 +1,16 @@
 package com.company.model.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class AverageTimeDto {
+public class GeneralReportsDto {
+
+    private int enAdopcionCount;
+    private int adoptadasCount;
+    private int conQrCount;
     private Double averageTime;
 }

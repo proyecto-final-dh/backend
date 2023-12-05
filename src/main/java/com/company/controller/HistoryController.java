@@ -128,4 +128,13 @@ public class HistoryController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while fetching the history");
         }
     }
+
+    @GetMapping("/generalReports")
+    public ResponseEntity<Object> getFilterPetReports() {
+        try {
+            return ResponseEntity.ok(historyService.filterPetReports());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while fetching the history");
+        }
+    }
 }
