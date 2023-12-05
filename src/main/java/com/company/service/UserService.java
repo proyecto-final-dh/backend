@@ -19,7 +19,12 @@ public class UserService {
     }
 
     public UserInformationDTO findById(String userId) throws ResourceNotFoundException {
-        UserKeycloak userKeycloak= userKeycloakRepository.findUser(userId);
+        UserKeycloak userKeycloak;
+        try {
+            userKeycloak = userKeycloakRepository.findUser(userId);
+        } catch (ResourceNotFoundException e) {
+            return null;
+        }
         UserDetails userDetails= userDetailsService.findByUserId(userId);
 
         UserInformationDTO userInformationDTO= new UserInformationDTO();

@@ -85,3 +85,10 @@ ALTER TABLE history_states
     ADD FOREIGN KEY (user_id) REFERENCES user_details(id);
 
 
+CREATE TABLE user_pet_interest (
+                                   user_id INT,
+                                   pet_id INT,
+                                   PRIMARY KEY (user_id, pet_id),
+                                   FOREIGN KEY (user_id) REFERENCES user_details(id),
+                                   FOREIGN KEY (pet_id) REFERENCES pets(id)
+);
