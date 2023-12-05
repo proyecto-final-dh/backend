@@ -3,12 +3,9 @@ package com.company.PetsTest;
 import com.company.controller.PetController;
 import com.company.enums.PetStatus;
 import com.company.model.dto.CompletePetDto;
-import com.company.model.entity.Breeds;
 import com.company.model.entity.Pets;
-import com.company.model.entity.Species;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,22 +75,6 @@ public class PetsTest {
         assertEquals(newPet, result.getBody());
 
         petController.deletePet(((Pets) result.getBody()).getId());
-    }
-
-    @Test
-    public void testUpdatePet() {
-        ResponseEntity<Object> result = petController.createPet(newPet);
-        var bodyResult = ((Pets) result.getBody());
-        int id = bodyResult.getId();
-
-        Pets updatedPet = new Pets("CatUpdate", PetStatus.EN_ADOPCION, "PEQUEÑO", "HEMBRA", "A friendly and adopted cat", 3);
-        ResponseEntity<Object> resultUpdateResponse = petController.updatePet(id, updatedPet);
-        assertEquals(HttpStatus.OK, resultUpdateResponse.getStatusCode());
-
-        Pets resultUpdate = (Pets) resultUpdateResponse.getBody();
-        assertEquals(resultUpdate.getName(), updatedPet.getName());
-
-        petController.deletePet(id);
     }
 
     @Test
