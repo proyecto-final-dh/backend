@@ -1,5 +1,6 @@
 package com.company.service.interfaces;
 
+import com.company.model.dto.GeneralReportsDto;
 import com.company.model.dto.ReportBySpeciesDto;
 import com.company.model.dto.AverageTimeDto;
 import com.company.model.dto.ReportByStatusDto;
@@ -26,4 +27,5 @@ public interface IHistoryService {
     List<ReportBySpeciesDto> getReportBySpecies(LocalDate startDate, LocalDate endDate);
     List<ReportByStatusDto> getReportByStatus(LocalDate startDate, LocalDate endDate);
 
+    GeneralReportsDto filterPetReports();
 }

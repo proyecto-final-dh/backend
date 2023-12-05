@@ -3,6 +3,7 @@ package com.company.service;
 import com.company.model.dto.ReportBySpeciesDto;
 import com.company.model.dto.AverageTimeDto;
 import com.company.model.dto.ReportByStatusDto;
+import com.company.model.dto.GeneralReportsDto;
 import com.company.model.dto.SaveHistoryDto;
 import com.company.model.entity.History;
 import com.company.model.entity.Pets;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -114,4 +116,22 @@ public class HistoryService implements IHistoryService {
         var response = historyRepository.getAdoptionsPerMonthAndStatus(startDate, endDate);
         return Mapper.mapToReportByStatusDtoList(response);
     }
+
+    @Override
+    public GeneralReportsDto filterPetReports() {
+        Object[] response = historyRepository.filterPetReports();
+
+        BigDecimal item1 = (BigDecimal) ((Object[]) response[0])[0];
+        BigDecimal item2 = (BigDecimal) ((Object[]) response[0])[1];
+        BigDecimal item3 = (BigDecimal) ((Object[]) response[0])[2];
+
+        int enAdopcion = item1.intValue();
+        int adoptadas = item2.intValue();
+        int conQr = item3.intValue();
+        Double averageTime = historyRepository.getAverageTimeForAdoption() == null ? 0.0 : historyRepository.getAverageTimeForAdoption();
+
+        GeneralReportsDto generalReportsDto = new GeneralReportsDto(enAdopcion, adoptadas, conQr, averageTime);
+        return generalReportsDto;
+    }
+
 }
