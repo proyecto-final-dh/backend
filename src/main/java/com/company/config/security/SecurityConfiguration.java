@@ -81,12 +81,12 @@ public class SecurityConfiguration {
             }
         }));
 
-        http.cors(cors -> cors.disable())
+        http
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeRequests(authz -> authz
                         .requestMatchers(HttpMethod.POST,"/locations/**","/species/**","/breeds/**","/pets/**").authenticated()
                         .requestMatchers(HttpMethod.PUT,"/locations/**","/species/**","/breeds/**","/pets/**").authenticated()
-                        .requestMatchers("/user-details/**","/history/**","/users/**").authenticated()
+                        .requestMatchers("/user-details/**","/users/**").authenticated()
                         .anyRequest().permitAll());
         return http.build();
     }
