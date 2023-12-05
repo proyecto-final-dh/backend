@@ -1,5 +1,6 @@
 package com.company.controller;
 
+import com.company.model.dto.GeneralReportsDto;
 import com.company.model.dto.SaveHistoryDto;
 import com.company.model.entity.History;
 import com.company.service.HistoryService;
@@ -7,7 +8,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -36,7 +37,6 @@ public class HistoryController {
         History response = historyService.createHistory(item);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
 
 
     @GetMapping
@@ -89,8 +89,10 @@ public class HistoryController {
         }
     }
 
-
-
+    @GetMapping("/generalReports")
+    public ResponseEntity<Object> getFilterPetReports() {
+        return ResponseEntity.ok(historyService.filterPetReports());
+    }
 
 
 }
