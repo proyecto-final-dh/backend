@@ -5,6 +5,7 @@ import com.company.enums.PetStatus;
 import com.company.model.dto.ReportBySpeciesDto;
 import com.company.model.dto.AdoptionsByDateDto;
 import com.company.model.dto.CompletePetDto;
+import com.company.model.dto.CopmpleteGetPetDto;
 import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.ImageWithTitle;
 import com.company.model.dto.PetWithImagesDto;
@@ -133,6 +134,21 @@ public class Mapper {
         }
 
         return new ArrayList<>(reportByStatusDtoMap.values());
+    }
+
+    public static CopmpleteGetPetDto mapToCompleteGetPetDto(Pets pet, List<ImageWithTitle> images){
+        CopmpleteGetPetDto copmpleteGetPetDto = new CopmpleteGetPetDto();
+        copmpleteGetPetDto.setId(pet.getId());
+        copmpleteGetPetDto.setName(pet.getName());
+        copmpleteGetPetDto.setStatus(pet.getStatus());
+        copmpleteGetPetDto.setSize(pet.getSize());
+        copmpleteGetPetDto.setGender(pet.getGender());
+        copmpleteGetPetDto.setDescription(pet.getDescription());
+        copmpleteGetPetDto.setBreed(pet.getBreed());
+        copmpleteGetPetDto.setLocation(pet.getUserDetails().getLocation());
+        copmpleteGetPetDto.setAge(pet.getAge());
+        copmpleteGetPetDto.setImages(images);
+        return copmpleteGetPetDto;
     }
 
     public static Pets mapUpdatePetDtoToPet(UpdatePetDto updatePetDto) {
