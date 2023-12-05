@@ -32,7 +32,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import java.text.ParseException;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -40,6 +45,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.time.Instant;
+import java.util.TimeZone;
 
 import static com.company.constants.Constants.BREED_NOT_FOUND;
 import static com.company.constants.Constants.LOCATION_NOT_FOUND;
@@ -173,8 +179,11 @@ public class PetService implements IPetService {
             Optional<UserDetails> userDetails = userDetailsRepository.findById(savedPet.getUserDetails().getId());
 
             if (userDetails.isPresent() && petIt.isPresent()) {
+                
+                LocalDate currentDate = LocalDate.now();
+                Date formattedDate = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                History newItem = new History(formattedDate);
 
-                History newItem = new History(Date.from(Instant.now()));
                 newItem.setPet(petIt.get());
                 newItem.setUserDetails(userDetails.get());
                 newItem.setStatus(petIt.get().getStatus().toString());

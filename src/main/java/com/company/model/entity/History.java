@@ -1,5 +1,6 @@
 package com.company.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.persistence.Entity;
@@ -32,6 +33,7 @@ public class History {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "UTC")
     private Date date;
 
     @ManyToOne
@@ -43,6 +45,7 @@ public class History {
     private UserDetails userDetails;
 
     private String status;
+
 
     public History(Date date) {
         this.date = date;
