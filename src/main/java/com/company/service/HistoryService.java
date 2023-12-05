@@ -128,7 +128,7 @@ public class HistoryService implements IHistoryService {
         int enAdopcion = item1.intValue();
         int adoptadas = item2.intValue();
         int conQr = item3.intValue();
-        String averageTime = historyRepository.getAverageTimeForAdoption();
+        Double averageTime = historyRepository.getAverageTimeForAdoption() == null ? 0.0 : historyRepository.getAverageTimeForAdoption();
 
         GeneralReportsDto generalReportsDto = new GeneralReportsDto(enAdopcion, adoptadas, conQr, averageTime);
         return generalReportsDto;

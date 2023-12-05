@@ -12,5 +12,5 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class AverageTimeDto {
-    private String averageTime;
+    private Double averageTime;
 }

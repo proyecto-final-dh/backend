@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface IHistoryRepository extends JpaRepository<History, Integer> {
     @Query(value = "CALL GetAverageTimeForAdoption()", nativeQuery = true)
-    String getAverageTimeForAdoption();
+    Double getAverageTimeForAdoption();
 
     @Query(value = "CALL AdoptionsPerMonthAndSpecies(:startDate, :endDate)", nativeQuery = true)
     List<Object[]> getAdoptionsPerMonthAndSpecies(
