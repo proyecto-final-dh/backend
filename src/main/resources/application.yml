@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: ${ENV:default}
   datasource:
     url: jdbc:mysql://localhost:3307/petPI?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
     username: user
