@@ -179,10 +179,8 @@ public class PetService implements IPetService {
             Optional<UserDetails> userDetails = userDetailsRepository.findById(savedPet.getUserDetails().getId());
 
             if (userDetails.isPresent() && petIt.isPresent()) {
-                
-                LocalDate currentDate = LocalDate.now();
-                Date formattedDate = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                History newItem = new History(formattedDate);
+
+                History newItem = new History(Date.from(Instant.now()));
 
                 newItem.setPet(petIt.get());
                 newItem.setUserDetails(userDetails.get());
