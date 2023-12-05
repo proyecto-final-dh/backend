@@ -1,6 +1,8 @@
 package com.company.service;
 
-
+import com.company.model.dto.ReportBySpeciesDto;
+import com.company.model.dto.AverageTimeDto;
+import com.company.model.dto.ReportByStatusDto;
 import com.company.model.dto.GeneralReportsDto;
 import com.company.model.dto.SaveHistoryDto;
 import com.company.model.entity.History;
@@ -10,11 +12,13 @@ import com.company.repository.IHistoryRepository;
 import com.company.repository.IPetsRepository;
 import com.company.repository.IUserDetailsRepository;
 import com.company.service.interfaces.IHistoryService;
+import com.company.utils.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -92,6 +96,25 @@ public class HistoryService implements IHistoryService {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "History with ID " + id + " does not exist");
         }
+    }
+
+    @Override
+    public AverageTimeDto getAverageTimeForAdoption() {
+        AverageTimeDto averageTimeDto = new AverageTimeDto();
+        averageTimeDto.setAverageTime(historyRepository.getAverageTimeForAdoption());
+        return averageTimeDto;
+    }
+
+    @Override
+    public List<ReportBySpeciesDto> getReportBySpecies(LocalDate startDate, LocalDate endDate) {
+        var response = historyRepository.getAdoptionsPerMonthAndSpecies(startDate, endDate);
+        return Mapper.mapToReportBySpeciesDtoList(response);
+    }
+
+    @Override
+    public List<ReportByStatusDto> getReportByStatus(LocalDate startDate, LocalDate endDate) {
+        var response = historyRepository.getAdoptionsPerMonthAndStatus(startDate, endDate);
+        return Mapper.mapToReportByStatusDtoList(response);
     }
 
     @Override

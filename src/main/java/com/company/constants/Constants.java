@@ -28,13 +28,16 @@ public class Constants {
     public static final String PET_UPDATE_UNAUTHORIZED= "You are not authorized to update this pet";
     public static final String WRONG_PET_UPDATE_STATUS = "It is not possible to update pets that have been adopted";
 
+    // USER ERRORS
+    public static final String USER_INTEREST_ALREADY_EXISTS = "User interest already exists";
+    public static final String INTEREST_CAN_ONLY_BE_FOR_PETS_IN_ADOPTION = "The interest can only be created for pets in adoption";
+
     // NOT FOUND MESSAGES
     public static final String BREED_NOT_FOUND = "Breed not found";
     public static final String OWNER_NOT_FOUND = "Owner not found";
     public static final String LOCATION_NOT_FOUND = "Location not found";
     public static final String PET_NOT_FOUND = "Pet not found";
     public static final String USER_NOT_FOUND = "User not found";
-
 
     // SUCCESS MESSAGES
 
@@ -43,5 +46,8 @@ public class Constants {
 
     // UPDATE
     public static final String PET_UPDATED = "Pet updated successfully";
+
+    // GETS
+    public static final String PET_GET_SUCCESS = "Pet get successfully";
 
 }

@@ -6,8 +6,10 @@ import com.company.model.entity.History;
 import com.company.service.HistoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -37,7 +40,6 @@ public class HistoryController {
         History response = historyService.createHistory(item);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
 
     @GetMapping
     public List<History> getAllHistory() {
@@ -89,10 +91,47 @@ public class HistoryController {
         }
     }
 
+    //TODO: eliminar este get y llamar al servicio getAverageTimeForAdoption dentro del endpoint que está haciendo nat
+    @GetMapping("/averageTime")
+    public ResponseEntity<Object> getAvergeTimeAdoption() {
+        try {
+            return ResponseEntity.ok(historyService.getAverageTimeForAdoption());
+        } catch (ResponseStatusException ex) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while fetching the history");
+        }
+    }
+
+    @GetMapping("/reports/species")
+    public ResponseEntity<Object> getReportBySpecies(@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                                         @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        try {
+            return ResponseEntity.ok(historyService.getReportBySpecies(startDate, endDate));
+        } catch (ResponseStatusException ex) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while fetching the history");
+        }
+    }
+
+    @GetMapping("/reports/status")
+    public ResponseEntity<Object> getReportByStatus(@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                                         @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        try {
+            return ResponseEntity.ok(historyService.getReportByStatus(startDate, endDate));
+        } catch (ResponseStatusException ex) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while fetching the history");
+        }
+    }
+
     @GetMapping("/generalReports")
     public ResponseEntity<Object> getFilterPetReports() {
         return ResponseEntity.ok(historyService.filterPetReports());
     }
-
-
 }
