@@ -33,6 +33,6 @@ jobs:
       - name: Delete old container
         run: docker rm -f backend-resqpet
       - name: Run docker container
-        run: docker run -e BACKEND_USERNAME=${{secrets.BACKEND_USERNAME}} -e BACKEND_PASSWORD=${{secrets.BACKEND_PASSWORD}} -e BACKEND_DB=${{secrets.BACKEND_DB}} -e BUCKET_NAME=${{secrets.BUCKET_NAME}} -e S3_ACCESS_KEY_ID=${{secrets.S3_ACCESS_KEY_ID}} -e S3_SECRET_ACCESS_KEY=${{secrets.S3_SECRET_ACCESS_KEY}} -d -p 8080:8080 --name backend-resqpet piresqpet/backend
+        run: docker run -e ENV=prod -e BACKEND_USERNAME=${{secrets.BACKEND_USERNAME}} -e BACKEND_PASSWORD=${{secrets.BACKEND_PASSWORD}} -e BACKEND_DB=${{secrets.BACKEND_DB}} -e BUCKET_NAME=${{secrets.BUCKET_NAME}} -e S3_ACCESS_KEY_ID=${{secrets.S3_ACCESS_KEY_ID}} -e S3_SECRET_ACCESS_KEY=${{secrets.S3_SECRET_ACCESS_KEY}} -d -p 8080:8080 --name backend-resqpet piresqpet/backend
       - name: Ver logs docker
         run: docker logs backend-resqpet
