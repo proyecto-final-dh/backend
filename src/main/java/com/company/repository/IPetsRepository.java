@@ -60,7 +60,7 @@ public interface IPetsRepository extends JpaRepository<Pets, Integer> , JpaSpeci
     Page<Pets> findBySize(String size, Pageable pageable);
 
 
-    @Query("SELECT NEW com.company.model.dto.PetStatusUpdateDTO(p, h.date) " +
+    @Query("SELECT DISTINCT  NEW com.company.model.dto.PetStatusUpdateDTO(p, h.date) " +
             "FROM Pets p " +
             "INNER JOIN History h ON p.userDetails.id = h.userDetails.id " +
             "WHERE p.status = :status AND p.userDetails.id = :userId")

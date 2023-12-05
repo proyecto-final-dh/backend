@@ -588,7 +588,7 @@ VALUES
 -- ingreso de mascotas --
 INSERT INTO pets (name, owner_id, breed_id, status, size, gender, description, age)
 VALUES
-    (N'Buddy', 1, 21, 'MASCOTA_PROPIA', N'MEDIANO', 'MACHO', N'Buddy es un perro cariñoso y juguetón que adora correr por el parque.', 3),
+    (N'Buddy', 1, 1, 'ADOPTADA', N'MEDIANO', 'MACHO', N'Buddy es un perro cariñoso y juguetón que adora correr por el parque.', 3),
     (N'Luna', 2, 32, 'MASCOTA_PROPIA', N'PEQUEÑO', 'HEMBRA', N'Luna es una gatita elegante y curiosa que le encanta explorar la casa.', 2),
     (N'Max', 3, 21, 'MASCOTA_PROPIA', N'GRANDE', 'MACHO', N'Max es un perro grande y amigable que siempre está listo para pasear.', 4),
     (N'Molly', 4, 21, 'EN_ADOPCION', N'MEDIANO', 'HEMBRA', N'Molly es una perrita dulce y leal que adora estar en compañía de su familia.', 5),
@@ -738,11 +738,11 @@ VALUES
 
 -- ingreso de historial --
 INSERT INTO history_states ( pet_id, date, status,user_id) VALUES
-    (1, CURRENT_DATE(), 'ADOPTADA',1 ),
-    (1, CURRENT_DATE(), 'EN_ADOPCION',2),
-    (13, CURRENT_DATE(), 'ADOPTADA',3),
+    (13, CURRENT_DATE(), 'ADOPTADA',1 ),
+    (1, CURRENT_DATE(), 'EN_ADOPCION',1),
+    (1, CURRENT_DATE(), 'ADOPTADA',1),
     (5, CURRENT_DATE(), 'EN_ADOPCION',4),
-    (7, CURRENT_DATE(), 'ADOPTADA',5);
+    (5, CURRENT_DATE(), 'ADOPTADA',4);
 
 
 -- Insertar pruebas resgistro de usuarios

@@ -4,17 +4,14 @@ package com.company.service;
 import com.company.enums.PetGender;
 import com.company.enums.PetSize;
 import com.company.enums.PetStatus;
+import com.company.exceptions.ResourceNotFoundException;
 import com.company.model.dto.*;
 import com.company.model.entity.Breeds;
 import com.company.model.entity.Image;
 import com.company.model.entity.Location;
 import com.company.model.entity.Pets;
 import com.company.model.entity.UserDetails;
-import com.company.repository.IBreedsRepository;
-import com.company.repository.IImageRepository;
-import com.company.repository.IPetsRepository;
-import com.company.repository.IUserDetailsRepository;
-import com.company.repository.LocationRepository;
+import com.company.repository.*;
 import com.company.service.interfaces.IPetService;
 import jakarta.persistence.criteria.Join;
 import jakarta.transaction.Transactional;
@@ -74,6 +71,7 @@ public class PetService implements IPetService {
     private BucketImageService bucketImageService;
     private IImageRepository imageRepository;
     private IBreedsRepository breedsRepository;
+    private IHistoryRepository historyRepository;
 
 
     public Page<CompletePetDto> findAll(Pageable pageable) throws Exception {
@@ -591,7 +589,7 @@ public class PetService implements IPetService {
         return userDetails.get();
     }
 
-    public List<PetStatusUpdateDTO> findbyOwnerByOwnerAndStatus(PetStatus status, Integer userId) {
+    public List<PetStatusUpdateDTO> findbyOwnerByOwnerAndStatus(PetStatus status, Integer userId) throws ResourceNotFoundException {
         List<PetStatusUpdateDTO> results = IPetsRepository.findByOwnerAndStatus(status, userId);
 
 
@@ -604,9 +602,22 @@ public class PetService implements IPetService {
             result.setImages(imageWithTitles);
 
 
+            if(status.equals(PetStatus.EN_ADOPCION)){
+                result.setDateCreationPet(result.getDateCreationStatus());
+            }else{
+                var resultHistoryPet= historyRepository.findByPetIdAndStatus(result.getPet().getId(),PetStatus.EN_ADOPCION.getId());
+               if (resultHistoryPet.size()==0){
+                   throw new ResourceNotFoundException("status 'EN_ADOPCION' does not exist in the pet history");
+               }
+               var dateCreationPet= resultHistoryPet.get(0).getDate();
+               result.setDateCreationPet((Timestamp) dateCreationPet);
+
+            }
+
         }
-
-
         return results;
     }
+
+
+
 }

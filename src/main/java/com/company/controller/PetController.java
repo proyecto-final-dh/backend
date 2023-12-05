@@ -229,6 +229,21 @@ public class PetController {
         return ResponseEntity.status(HttpStatus.OK).body(petService.findbyOwnerByOwnerAndStatus(PetStatus.ADOPTADA,1));
     }
 
+    @GetMapping("/pet-for-adoption")
+    public ResponseEntity<?>findbyOwnerByOwnerAndStatusAdoption() throws ResourceNotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId=null;
+
+        if (authentication instanceof JwtAuthenticationToken) {
+            JwtAuthenticationToken jwtAuthToken = (JwtAuthenticationToken) authentication;
+            userId = (String) jwtAuthToken.getTokenAttributes().get("sub");
+        }
+
+        Integer userDetailsId= userDetailsService.findByUserId(userId).getId();
+
+        return ResponseEntity.status(HttpStatus.OK).body(petService.findbyOwnerByOwnerAndStatus(PetStatus.EN_ADOPCION,1));
+    }
+
 
 
 }
