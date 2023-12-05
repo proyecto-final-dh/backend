@@ -243,14 +243,14 @@ public class PetService implements IPetService {
         if(savedPet.getUserDetails() != null){
 
             Optional<Pets> petIt = IPetsRepository.findById(savedPet.getId());
-            Optional<UserDetails> userDetails = userDetailsRepository.findById(savedPet.getUserDetails().getId());
+            Optional<UserDetails> userDetailsTemp = userDetailsRepository.findById(savedPet.getUserDetails().getId());
 
-            if (userDetails.isPresent() && petIt.isPresent()) {
+            if (userDetailsTemp.isPresent() && petIt.isPresent()) {
 
                 History newItem = new History(Date.from(Instant.now()));
 
                 newItem.setPet(petIt.get());
-                newItem.setUserDetails(userDetails.get());
+                newItem.setUserDetails(userDetailsTemp.get());
                 newItem.setStatus(petIt.get().getStatus().toString());
 
                 historyRepository.save(newItem);
