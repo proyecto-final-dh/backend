@@ -131,6 +131,10 @@ public class HistoryController {
 
     @GetMapping("/generalReports")
     public ResponseEntity<Object> getFilterPetReports() {
-        return ResponseEntity.ok(historyService.filterPetReports());
+        try {
+            return ResponseEntity.ok(historyService.filterPetReports());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while fetching the history");
+        }
     }
 }
