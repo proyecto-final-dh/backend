@@ -187,7 +187,7 @@ public class PetController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the pet");
         }
     }
-    
+
 
 
     @DeleteMapping("/{id}")
@@ -241,7 +241,7 @@ public class PetController {
 
         Integer userDetailsId= userDetailsService.findByUserId(userId).getId();
 
-        return ResponseEntity.status(HttpStatus.OK).body(petService.findbyOwnerByOwnerAndStatus(PetStatus.ADOPTADA,1));
+        return ResponseEntity.status(HttpStatus.OK).body(petService.findbyOwnerByOwnerAndStatus(PetStatus.ADOPTADA,userDetailsId));
     }
 
     @GetMapping("/pet-for-adoption")
@@ -255,10 +255,7 @@ public class PetController {
         }
 
         Integer userDetailsId= userDetailsService.findByUserId(userId).getId();
-
-        return ResponseEntity.status(HttpStatus.OK).body(petService.findbyOwnerByOwnerAndStatus(PetStatus.EN_ADOPCION,1));
+        return ResponseEntity.status(HttpStatus.OK).body(petService.findbyOwnerByOwnerAndStatus(PetStatus.EN_ADOPCION,userDetailsId));
     }
-
-
 
 }
