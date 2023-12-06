@@ -66,5 +66,8 @@ public interface IPetsRepository extends JpaRepository<Pets, Integer> , JpaSpeci
     List<PetStatusUpdateDTO> findByStatusAndOwner(@Param("hStatus") String hStatus, @Param("pStatus") PetStatus pStatus, @Param("userId") Integer userId);
     //Se tuvieron que implentar 3 parametros porque History no usó en enum de status, para no romper nada de lo ya construido
 
+    Page<Pets> findByGender(String gender, Pageable pageable);
+    Page<Pets> findBySize(String size, Pageable pageable);
+
 
 }
