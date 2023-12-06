@@ -443,10 +443,11 @@ public class PetService implements IPetService {
         }
     }
 
-    public Page<CompletePetDto> findByOwner(int id, Pageable pageable) throws Exception {
-        validateUserDetails(id);
+    public Page<CompletePetDto> findByOwner(Pageable pageable) throws Exception {
+        UserDetails userDetails = getCompleteUserDetails();
+
         try {
-            var petsDB = IPetsRepository.findByOwnerAndStatus(id, pageable);
+            var petsDB = IPetsRepository.findByOwnerAndStatus(Objects.requireNonNull(userDetails).getId(), pageable);
             if (petsDB.isEmpty()) {
                 return Page.empty();
             }
