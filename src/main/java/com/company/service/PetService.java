@@ -19,7 +19,6 @@ import com.company.model.dto.*;
 import com.company.model.entity.Breeds;
 import com.company.model.entity.Image;
 import com.company.model.entity.Location;
-import com.company.model.entity.Pets;
 import com.company.model.entity.UserDetails;
 import com.company.repository.IBreedsRepository;
 import com.company.repository.IHistoryRepository;
@@ -43,15 +42,9 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import java.text.ParseException;
+
 
 import java.time.Instant;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,7 +53,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
+
 
 import static com.company.constants.Constants.BREED_NOT_FOUND;
 import static com.company.constants.Constants.EMPTY_IMAGE;
