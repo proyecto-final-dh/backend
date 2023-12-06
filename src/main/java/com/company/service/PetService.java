@@ -3,6 +3,8 @@ package com.company.service;
 
 import com.company.enums.PetGender;
 import com.company.enums.PetSize;
+import com.company.model.entity.History;
+import com.company.model.entity.Pets;
 import com.company.enums.PetStatus;
 import com.company.model.dto.CompletePetDto;
 import com.company.model.dto.CopmpleteGetPetDto;
@@ -12,12 +14,15 @@ import com.company.model.dto.PetWithImagesDto;
 import com.company.model.dto.PetWithUserInformationDto;
 import com.company.model.dto.UserInformationDTO;
 import com.company.model.dto.UpdatePetDto;
+import com.company.exceptions.ResourceNotFoundException;
+import com.company.model.dto.*;
 import com.company.model.entity.Breeds;
 import com.company.model.entity.Image;
 import com.company.model.entity.Location;
 import com.company.model.entity.Pets;
 import com.company.model.entity.UserDetails;
 import com.company.repository.IBreedsRepository;
+import com.company.repository.IHistoryRepository;
 import com.company.repository.IImageRepository;
 import com.company.repository.IPetsRepository;
 import com.company.repository.IUserDetailsRepository;
@@ -38,13 +43,22 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import java.text.ParseException;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.company.constants.Constants.BREED_NOT_FOUND;
 import static com.company.constants.Constants.EMPTY_IMAGE;
@@ -81,9 +95,9 @@ public class PetService implements IPetService {
     private BucketImageService bucketImageService;
     private IImageRepository imageRepository;
     private IBreedsRepository breedsRepository;
+    private IHistoryRepository historyRepository;
     private IUserPetInterestRepository userPetInterestRepository;
     private UserService userService;
-
 
     public Page<CompletePetDto> findAll(Pageable pageable) throws Exception {
         try {
@@ -191,6 +205,55 @@ public class PetService implements IPetService {
         return mapPetToPetWithImages(returnPet, returnImages);
     }
 
+
+    @Override
+    @Transactional
+    public Pets updateStatus(int id, String status) {
+
+        Optional<Pets> oldPet = IPetsRepository.findById(id);
+
+        if (oldPet.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, PET_NOT_FOUND);
+        }
+
+        PetStatus oldPetStatus = oldPet.get().getStatus();
+
+        if (Objects.equals(oldPetStatus.toString(), status)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_PET_UPDATE_STATUS);
+        }
+
+        if (!PetStatus.isValidStatus(status)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_PET_UPDATE_STATUS);
+        }
+
+        oldPet.get().setStatus(PetStatus.getStatusById(status));
+        Pets returnPet = IPetsRepository.save(oldPet.get());
+
+        if(returnPet.getUserDetails() != null){
+
+            Optional<Pets> petTemp = IPetsRepository.findById(returnPet.getId());
+            Optional<UserDetails> userDetailsTemp = userDetailsRepository.findById(returnPet.getUserDetails().getId());
+
+            if (userDetailsTemp.isPresent() && petTemp.isPresent()) {
+
+                History newItem = new History(Date.from(Instant.now()));
+
+                newItem.setPet(petTemp.get());
+                newItem.setUserDetails(userDetailsTemp.get());
+                newItem.setStatus(petTemp.get().getStatus().toString());
+
+                historyRepository.save(newItem);
+            }
+        }else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "userDetails not found");
+        }
+
+
+        return IPetsRepository.save(returnPet);
+    }
+
+
+
     public Pets save(Pets pets) throws Exception {
         validateGender(pets.getGender());
         validateSize(pets.getSize());
@@ -246,6 +309,26 @@ public class PetService implements IPetService {
         fullPet.setStatus(PetStatus.EN_ADOPCION);
 
         Pets savedPet = IPetsRepository.save(fullPet);
+
+        if(savedPet.getUserDetails() != null){
+
+            Optional<Pets> petIt = IPetsRepository.findById(savedPet.getId());
+            Optional<UserDetails> userDetailsTemp = userDetailsRepository.findById(savedPet.getUserDetails().getId());
+
+            if (userDetailsTemp.isPresent() && petIt.isPresent()) {
+
+                History newItem = new History(Date.from(Instant.now()));
+
+                newItem.setPet(petIt.get());
+                newItem.setUserDetails(userDetailsTemp.get());
+                newItem.setStatus(petIt.get().getStatus().toString());
+
+                historyRepository.save(newItem);
+            }
+        }else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "userDetails not found");
+        }
+
 
         List<ImageWithTitle> savedImages = bucketImageService.uploadFileWithTitle(images);
 
@@ -370,7 +453,7 @@ public class PetService implements IPetService {
     public Page<CompletePetDto> findByOwner(int id, Pageable pageable) throws Exception {
         validateUserDetails(id);
         try {
-            var petsDB = IPetsRepository.findByOwner(id, pageable);
+            var petsDB = IPetsRepository.findByOwnerAndStatus(id, pageable);
             if (petsDB.isEmpty()) {
                 return Page.empty();
             }
@@ -613,6 +696,37 @@ public class PetService implements IPetService {
 
         return null;
     }
+
+    public List<PetStatusUpdateDTO> findbyOwnerByOwnerAndStatus(PetStatus status, Integer userId) throws ResourceNotFoundException {
+        List<PetStatusUpdateDTO> results = IPetsRepository.findByStatusAndOwner(status.getId(),status, userId);
+
+
+        for (PetStatusUpdateDTO result : results) {
+            Integer petId = result.getPet().getId();
+            result.getPet().setUserDetails(null);
+
+            List<Image> images = imageRepository.findByPetId(petId).get();
+            List<ImageWithTitle> imageWithTitles = mapToImageWithTitleList(images);
+            result.setImages(imageWithTitles);
+
+
+            if(status.equals(PetStatus.EN_ADOPCION)){
+                result.setDateCreationPet(result.getDateCreationStatus());
+            }else{
+                var resultHistoryPet= historyRepository.findByPetIdAndStatus(result.getPet().getId(),PetStatus.EN_ADOPCION.getId());
+               if (resultHistoryPet.size()==0){
+                   throw new ResourceNotFoundException("status 'EN_ADOPCION' does not exist in the pet history");
+               }
+               var dateCreationPet= resultHistoryPet.get(0).getDate();
+               result.setDateCreationPet((Timestamp) dateCreationPet);
+
+
+            }
+
+        }
+        return results;
+    }
+
 
 
 }
