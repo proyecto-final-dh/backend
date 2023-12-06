@@ -55,10 +55,6 @@ public interface IPetsRepository extends JpaRepository<Pets, Integer> , JpaSpeci
             "WHERE pets.owner_id = :id AND pets.status = 'MASCOTA_PROPIA'", nativeQuery = true)
     Page<Pets> findByOwnerAndStatus(@Param("id") int id, Pageable pageable);
 
-    Page<Pets> findByGender(String gender, Pageable pageable);
-    Page<Pets> findBySize(String size, Pageable pageable);
-
-
     @Query("SELECT DISTINCT NEW com.company.model.dto.PetStatusUpdateDTO(p, h.date) " +
             "FROM Pets p " +
             "INNER JOIN History h ON p.id = h.pet.id " +
