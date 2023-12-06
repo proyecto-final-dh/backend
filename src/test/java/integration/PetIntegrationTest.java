@@ -244,7 +244,7 @@ public class PetIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         CreatePetDto pet = createCreatePetDto();
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/pets/owner/1"))
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/pets/owner/2"))
 
                 .andExpect(status().isOk())
                 .andReturn();
