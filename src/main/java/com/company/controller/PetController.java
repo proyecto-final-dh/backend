@@ -227,7 +227,7 @@ public class PetController {
 
         Integer userDetailsId= userDetailsService.findByUserId(userId).getId();
 
-        return ResponseEntity.status(HttpStatus.OK).body(petService.findbyOwnerByOwnerAndStatus(PetStatus.ADOPTADA,1));
+        return ResponseEntity.status(HttpStatus.OK).body(petService.findbyOwnerByOwnerAndStatus(PetStatus.ADOPTADA,userDetailsId));
     }
 
     @GetMapping("/pet-for-adoption")
@@ -241,10 +241,7 @@ public class PetController {
         }
 
         Integer userDetailsId= userDetailsService.findByUserId(userId).getId();
-
-        return ResponseEntity.status(HttpStatus.OK).body(petService.findbyOwnerByOwnerAndStatus(PetStatus.EN_ADOPCION,1));
+        return ResponseEntity.status(HttpStatus.OK).body(petService.findbyOwnerByOwnerAndStatus(PetStatus.EN_ADOPCION,userDetailsId));
     }
-
-
 
 }
