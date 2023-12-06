@@ -7,7 +7,7 @@ import com.company.model.entity.History;
 import com.company.model.entity.Pets;
 import com.company.enums.PetStatus;
 import com.company.model.dto.CompletePetDto;
-import com.company.model.dto.CopmpleteGetPetDto;
+import com.company.model.dto.CompleteGetPetDto;
 import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.ImageWithTitle;
 import com.company.model.dto.PetWithImagesDto;
@@ -45,6 +45,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import java.text.ParseException;
 
+import java.time.Instant;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -205,6 +207,55 @@ public class PetService implements IPetService {
 
         return mapPetToPetWithImages(returnPet, returnImages);
     }
+
+
+    @Override
+    @Transactional
+    public Pets updateStatus(int id, String status) {
+
+        Optional<Pets> oldPet = IPetsRepository.findById(id);
+
+        if (oldPet.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, PET_NOT_FOUND);
+        }
+
+        PetStatus oldPetStatus = oldPet.get().getStatus();
+
+        if (Objects.equals(oldPetStatus.toString(), status)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_PET_UPDATE_STATUS);
+        }
+
+        if (!PetStatus.isValidStatus(status)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_PET_UPDATE_STATUS);
+        }
+
+        oldPet.get().setStatus(PetStatus.getStatusById(status));
+        Pets returnPet = IPetsRepository.save(oldPet.get());
+
+        if(returnPet.getUserDetails() != null){
+
+            Optional<Pets> petTemp = IPetsRepository.findById(returnPet.getId());
+            Optional<UserDetails> userDetailsTemp = userDetailsRepository.findById(returnPet.getUserDetails().getId());
+
+            if (userDetailsTemp.isPresent() && petTemp.isPresent()) {
+
+                History newItem = new History(Date.from(Instant.now()));
+
+                newItem.setPet(petTemp.get());
+                newItem.setUserDetails(userDetailsTemp.get());
+                newItem.setStatus(petTemp.get().getStatus().toString());
+
+                historyRepository.save(newItem);
+            }
+        }else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "userDetails not found");
+        }
+
+
+        return IPetsRepository.save(returnPet);
+    }
+
+
 
     public Pets save(Pets pets) throws Exception {
         validateGender(pets.getGender());
@@ -405,7 +456,7 @@ public class PetService implements IPetService {
     public Page<CompletePetDto> findByOwner(int id, Pageable pageable) throws Exception {
         validateUserDetails(id);
         try {
-            var petsDB = IPetsRepository.findByOwner(id, pageable);
+            var petsDB = IPetsRepository.findByOwnerAndStatus(id, pageable);
             if (petsDB.isEmpty()) {
                 return Page.empty();
             }
@@ -608,8 +659,8 @@ public class PetService implements IPetService {
         return petsDto;
     }
 
-    private CopmpleteGetPetDto attachImages(Pets pet) {
-        CopmpleteGetPetDto petDto = new CopmpleteGetPetDto();
+    private CompleteGetPetDto attachImages(Pets pet) {
+        CompleteGetPetDto petDto = new CompleteGetPetDto();
         var images = imageRepository.findByPetId(pet.getId());
         if (images.isPresent()) {
             List<ImageWithTitle> imagesPets = mapToImageWithTitleList(images.get());

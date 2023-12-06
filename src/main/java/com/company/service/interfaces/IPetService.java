@@ -17,6 +17,9 @@ public interface IPetService {
     Page<CompletePetDto> findAll(Pageable pageable) throws Exception;
     PetWithUserInformationDto findById(int id) throws Exception;
     PetWithImagesDto update(int id, UpdatePetDto pets, MultipartFile[] newImages) throws Exception;
+
+    Pets updateStatus(int id, String status) throws Exception;
+
     Pets save(Pets pets) throws Exception;
     PetWithImagesDto saveOwnPetWithImages(CreatePetDto pet, MultipartFile[] images) throws Exception;
     PetWithImagesDto saveAdoptivePetWithImages(CreatePetDto pet, MultipartFile[] images) throws Exception;

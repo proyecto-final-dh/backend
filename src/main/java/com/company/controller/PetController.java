@@ -176,6 +176,20 @@ public class PetController {
 
     }
 
+    @PutMapping("/{petId}/update-status")
+    public ResponseEntity<String> updatePetStatus(@PathVariable int petId, @RequestParam String newStatus) {
+        try {
+            petService.updateStatus(petId, newStatus);
+            return ResponseEntity.ok("Pet status updated successfully");
+        } catch (ResponseStatusException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the pet");
+        }
+    }
+
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deletePet(@PathVariable int id) {
         try {
