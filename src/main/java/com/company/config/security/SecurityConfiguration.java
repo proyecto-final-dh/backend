@@ -90,7 +90,6 @@ public class SecurityConfiguration {
                 .authorizeRequests(authz -> authz
                         .requestMatchers(HttpMethod.POST,"/locations/**","/species/**","/breeds/**","/pets/**").authenticated()
                         .requestMatchers(HttpMethod.PUT,"/locations/**","/species/**","/breeds/**","/pets/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/pets/owner").authenticated()
                         .requestMatchers("/user-details/**","/users/**").authenticated()
                         .requestMatchers(HttpMethod.GET,"/pets/rescued-pet","pets/pet-for-adoption").authenticated()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
