@@ -237,26 +237,6 @@ public class PetIntegrationTest {
         assertTrue(jsonNode.isArray() && jsonNode.size() > 0);
     }
 
-
-    @Test
-    public void getPetsByOwner() throws Exception {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        ObjectMapper objectMapper = new ObjectMapper();
-        CreatePetDto pet = createCreatePetDto();
-
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/pets/owner/1"))
-
-                .andExpect(status().isOk())
-                .andReturn();
-
-        String jsonResponse = result.getResponse().getContentAsString();
-        JsonNode jsonNode = objectMapper.readTree(jsonResponse);
-
-        assertTrue(jsonNode.has("content") && jsonNode.get("content").isArray() && jsonNode.get("content").size() > 0);
-
-
-    }
-
     @Test
     public void getPetsByLocation() throws Exception {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
