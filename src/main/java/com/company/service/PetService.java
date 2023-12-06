@@ -14,6 +14,8 @@ import com.company.model.dto.PetWithImagesDto;
 import com.company.model.dto.PetWithUserInformationDto;
 import com.company.model.dto.UserInformationDTO;
 import com.company.model.dto.UpdatePetDto;
+import com.company.exceptions.ResourceNotFoundException;
+import com.company.model.dto.*;
 import com.company.model.entity.Breeds;
 import com.company.model.entity.Image;
 import com.company.model.entity.Location;
@@ -44,9 +46,11 @@ import org.springframework.web.server.ResponseStatusException;
 import java.text.ParseException;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -54,8 +58,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.time.Instant;
-import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 import static com.company.constants.Constants.BREED_NOT_FOUND;
 import static com.company.constants.Constants.EMPTY_IMAGE;
@@ -95,7 +98,6 @@ public class PetService implements IPetService {
     private IHistoryRepository historyRepository;
     private IUserPetInterestRepository userPetInterestRepository;
     private UserService userService;
-
 
     public Page<CompletePetDto> findAll(Pageable pageable) throws Exception {
         try {
@@ -203,6 +205,55 @@ public class PetService implements IPetService {
         return mapPetToPetWithImages(returnPet, returnImages);
     }
 
+
+    @Override
+    @Transactional
+    public Pets updateStatus(int id, String status) {
+
+        Optional<Pets> oldPet = IPetsRepository.findById(id);
+
+        if (oldPet.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, PET_NOT_FOUND);
+        }
+
+        PetStatus oldPetStatus = oldPet.get().getStatus();
+
+        if (Objects.equals(oldPetStatus.toString(), status)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_PET_UPDATE_STATUS);
+        }
+
+        if (!PetStatus.isValidStatus(status)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_PET_UPDATE_STATUS);
+        }
+
+        oldPet.get().setStatus(PetStatus.getStatusById(status));
+        Pets returnPet = IPetsRepository.save(oldPet.get());
+
+        if(returnPet.getUserDetails() != null){
+
+            Optional<Pets> petTemp = IPetsRepository.findById(returnPet.getId());
+            Optional<UserDetails> userDetailsTemp = userDetailsRepository.findById(returnPet.getUserDetails().getId());
+
+            if (userDetailsTemp.isPresent() && petTemp.isPresent()) {
+
+                History newItem = new History(Date.from(Instant.now()));
+
+                newItem.setPet(petTemp.get());
+                newItem.setUserDetails(userDetailsTemp.get());
+                newItem.setStatus(petTemp.get().getStatus().toString());
+
+                historyRepository.save(newItem);
+            }
+        }else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "userDetails not found");
+        }
+
+
+        return IPetsRepository.save(returnPet);
+    }
+
+
+
     public Pets save(Pets pets) throws Exception {
         validateGender(pets.getGender());
         validateSize(pets.getSize());
@@ -280,6 +331,7 @@ public class PetService implements IPetService {
 
 
         List<ImageWithTitle> savedImages = bucketImageService.uploadFileWithTitle(images);
+
         List<ImageWithTitle> returnImages = saveImagesInDatabase(savedImages, savedPet);
 
         return mapPetToPetWithImages(savedPet, returnImages);
@@ -644,6 +696,37 @@ public class PetService implements IPetService {
 
         return null;
     }
+
+    public List<PetStatusUpdateDTO> findbyOwnerByOwnerAndStatus(PetStatus status, Integer userId) throws ResourceNotFoundException {
+        List<PetStatusUpdateDTO> results = IPetsRepository.findByStatusAndOwner(status.getId(),status, userId);
+
+
+        for (PetStatusUpdateDTO result : results) {
+            Integer petId = result.getPet().getId();
+            result.getPet().setUserDetails(null);
+
+            List<Image> images = imageRepository.findByPetId(petId).get();
+            List<ImageWithTitle> imageWithTitles = mapToImageWithTitleList(images);
+            result.setImages(imageWithTitles);
+
+
+            if(status.equals(PetStatus.EN_ADOPCION)){
+                result.setDateCreationPet(result.getDateCreationStatus());
+            }else{
+                var resultHistoryPet= historyRepository.findByPetIdAndStatus(result.getPet().getId(),PetStatus.EN_ADOPCION.getId());
+               if (resultHistoryPet.size()==0){
+                   throw new ResourceNotFoundException("status 'EN_ADOPCION' does not exist in the pet history");
+               }
+               var dateCreationPet= resultHistoryPet.get(0).getDate();
+               result.setDateCreationPet((Timestamp) dateCreationPet);
+
+
+            }
+
+        }
+        return results;
+    }
+
 
 
 }
