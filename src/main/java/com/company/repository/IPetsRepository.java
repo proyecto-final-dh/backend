@@ -19,8 +19,6 @@ public interface IPetsRepository extends JpaRepository<Pets, Integer> , JpaSpeci
     Pets findByName(String name);
     Page<Pets> findByStatus(PetStatus status, Pageable pageable);
 
-
-
     @Query("SELECT p FROM Pets p " +
             "WHERE p.status = (SELECT status FROM Pets WHERE id = :petId) " +
             "AND p.breed.species.id = (SELECT b.species.id FROM Breeds b WHERE b.id = (SELECT breed.id FROM Pets WHERE id = :petId)) " +
@@ -51,10 +49,11 @@ public interface IPetsRepository extends JpaRepository<Pets, Integer> , JpaSpeci
 
     @Query(value = "SELECT pets.* " +
             "FROM petPI.pets AS pets " +
-            "WHERE pets.owner_id = :id ",
+            "WHERE pets.owner_id = :id " +
+            "AND pets.status = 'MASCOTA_PROPIA' ",
             countQuery = "SELECT COUNT(*) FROM petPI.pets AS pets " +
-            "WHERE pets.owner_id = :id ", nativeQuery = true)
-    Page<Pets> findByOwner(@Param("id") int id, Pageable pageable);
+            "WHERE pets.owner_id = :id AND pets.status = 'MASCOTA_PROPIA'", nativeQuery = true)
+    Page<Pets> findByOwnerAndStatus(@Param("id") int id, Pageable pageable);
 
     Page<Pets> findByGender(String gender, Pageable pageable);
     Page<Pets> findBySize(String size, Pageable pageable);
