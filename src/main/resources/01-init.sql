@@ -121,7 +121,7 @@ DELIMITER //
 CREATE PROCEDURE AdoptionsPerMonthAndSpecies(IN start_date DATE, IN end_date DATE)
 BEGIN
 
-DROP TABLE IF exists numbers;
+DROP TABLE IF EXISTS numbers;
 CREATE TEMPORARY TABLE IF NOT EXISTS numbers (
         number INT
     );
@@ -129,7 +129,7 @@ CREATE TEMPORARY TABLE IF NOT EXISTS numbers (
 INSERT INTO numbers (number) VALUES (1),(2),(3),(4),(5),(6),(7),(8),(9),(10),(11),(12);
 
 SELECT
-    b.species_id AS speciesId,
+    s.name AS especie,
     m.MesInicio AS mes,
     COALESCE(COUNT(counted_data.pet_id), 0) AS cantidad_en_adopcion
 FROM (
@@ -139,6 +139,7 @@ FROM (
          WHERE DATE_ADD(start_date, INTERVAL (number - 1) MONTH) <= end_date
      ) m
          CROSS JOIN breeds b
+         LEFT JOIN species s ON b.species_id = s.id
          LEFT JOIN (
     SELECT
         DATE_FORMAT(MIN(hs.date), '%Y-%m-%d') AS mes,
@@ -150,8 +151,8 @@ FROM (
       AND hs.status = 'en_adopcion'
     GROUP BY p.breed_id, hs.pet_id
 ) AS counted_data ON MONTH(m.MesInicio) = MONTH(counted_data.mes) AND b.id = counted_data.breed_id
-GROUP BY b.species_id, m.MesInicio
-ORDER BY b.species_id, m.MesInicio;
+GROUP BY s.name, m.MesInicio
+ORDER BY s.name, m.MesInicio;
 END //
 
 DELIMITER ;
