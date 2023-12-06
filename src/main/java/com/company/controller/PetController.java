@@ -1,5 +1,8 @@
 package com.company.controller;
 
+import com.company.enums.PetGender;
+import com.company.enums.PetSize;
+import com.company.exceptions.ResourceNotFoundException;
 import com.company.model.dto.CompletePetDto;
 import com.company.model.dto.CreatePetDto;
 import com.company.enums.PetStatus;
@@ -7,13 +10,18 @@ import com.company.model.dto.PetWithUserInformationDto;
 import com.company.model.dto.UpdatePetDto;
 import com.company.model.entity.Pets;
 import com.company.service.PetService;
+import com.company.service.UserDetailsService;
 import com.company.utils.ResponsesBuilder;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +48,7 @@ public class PetController {
 
     private final PetService petService;
     private final ResponsesBuilder responsesBuilder;
+    private final UserDetailsService userDetailsService;
 
 
     @GetMapping
@@ -220,6 +229,36 @@ public class PetController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+    @GetMapping("/rescued-pet")
+    public ResponseEntity<?>findbyOwnerByOwnerAndStatusAdopted() throws ResourceNotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId=null;
+
+        if (authentication instanceof JwtAuthenticationToken) {
+            JwtAuthenticationToken jwtAuthToken = (JwtAuthenticationToken) authentication;
+            userId = (String) jwtAuthToken.getTokenAttributes().get("sub");
+        }
+
+        Integer userDetailsId= userDetailsService.findByUserId(userId).getId();
+
+        return ResponseEntity.status(HttpStatus.OK).body(petService.findbyOwnerByOwnerAndStatus(PetStatus.ADOPTADA,1));
+    }
+
+    @GetMapping("/pet-for-adoption")
+    public ResponseEntity<?>findbyOwnerByOwnerAndStatusAdoption() throws ResourceNotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId=null;
+
+        if (authentication instanceof JwtAuthenticationToken) {
+            JwtAuthenticationToken jwtAuthToken = (JwtAuthenticationToken) authentication;
+            userId = (String) jwtAuthToken.getTokenAttributes().get("sub");
+        }
+
+        Integer userDetailsId= userDetailsService.findByUserId(userId).getId();
+
+        return ResponseEntity.status(HttpStatus.OK).body(petService.findbyOwnerByOwnerAndStatus(PetStatus.EN_ADOPCION,1));
+    }
+
 
 
 }
