@@ -80,21 +80,21 @@ public class Mapper {
     }
 
     public static List<ReportBySpeciesDto> mapToReportBySpeciesDtoList (List<Object[]> responseDB){
-        Map<Integer, ReportBySpeciesDto> reportBySpeciesDtoMap = new HashMap<>();
+        Map<String, ReportBySpeciesDto> reportBySpeciesDtoMap = new HashMap<>();
 
         for (Object[] row : responseDB) {
-            int speciesId = (int) row[0];
+            String species = row[0].toString();
             String dateString = row[1].toString();
             LocalDate date = LocalDate.parse(dateString);
             long adoptionsCount = (long) row[2];
 
-            ReportBySpeciesDto reportBySpeciesDto = reportBySpeciesDtoMap.get(speciesId);
+            ReportBySpeciesDto reportBySpeciesDto = reportBySpeciesDtoMap.get(species);
 
             if (reportBySpeciesDto == null) {
                 reportBySpeciesDto = new ReportBySpeciesDto();
-                reportBySpeciesDto.setSpeciesId(speciesId);
+                reportBySpeciesDto.setSpecies(species);
                 reportBySpeciesDto.setResult(new ArrayList<>());
-                reportBySpeciesDtoMap.put(speciesId, reportBySpeciesDto);
+                reportBySpeciesDtoMap.put(species, reportBySpeciesDto);
             }
 
             AdoptionsByDateDto adoptionsByDateDto = new AdoptionsByDateDto();
