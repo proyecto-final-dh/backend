@@ -22,6 +22,7 @@ public enum PetStatus {
         return Arrays.stream(PetStatus.values()).anyMatch(e -> e.getId().equalsIgnoreCase(status));
     }
 
+
     public static PetStatus getStatusById(String status) {
         return Arrays.stream(PetStatus.values()).filter(e -> e.getId().equalsIgnoreCase(status)).findFirst().get();
     }

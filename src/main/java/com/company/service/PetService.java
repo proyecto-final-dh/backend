@@ -96,7 +96,6 @@ public class PetService implements IPetService {
     private IUserPetInterestRepository userPetInterestRepository;
     private UserService userService;
 
-
     public Page<CompletePetDto> findAll(Pageable pageable) throws Exception {
         try {
             var petsDB = IPetsRepository.findAll(pageable);
@@ -202,6 +201,55 @@ public class PetService implements IPetService {
 
         return mapPetToPetWithImages(returnPet, returnImages);
     }
+
+
+    @Override
+    @Transactional
+    public Pets updateStatus(int id, String status) {
+
+        Optional<Pets> oldPet = IPetsRepository.findById(id);
+
+        if (oldPet.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, PET_NOT_FOUND);
+        }
+
+        PetStatus oldPetStatus = oldPet.get().getStatus();
+
+        if (Objects.equals(oldPetStatus.toString(), status)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_PET_UPDATE_STATUS);
+        }
+
+        if (!PetStatus.isValidStatus(status)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_PET_UPDATE_STATUS);
+        }
+
+        oldPet.get().setStatus(PetStatus.getStatusById(status));
+        Pets returnPet = IPetsRepository.save(oldPet.get());
+
+        if(returnPet.getUserDetails() != null){
+
+            Optional<Pets> petTemp = IPetsRepository.findById(returnPet.getId());
+            Optional<UserDetails> userDetailsTemp = userDetailsRepository.findById(returnPet.getUserDetails().getId());
+
+            if (userDetailsTemp.isPresent() && petTemp.isPresent()) {
+
+                History newItem = new History(Date.from(Instant.now()));
+
+                newItem.setPet(petTemp.get());
+                newItem.setUserDetails(userDetailsTemp.get());
+                newItem.setStatus(petTemp.get().getStatus().toString());
+
+                historyRepository.save(newItem);
+            }
+        }else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "userDetails not found");
+        }
+
+
+        return IPetsRepository.save(returnPet);
+    }
+
+
 
     public Pets save(Pets pets) throws Exception {
         validateGender(pets.getGender());
