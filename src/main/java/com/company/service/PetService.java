@@ -401,7 +401,7 @@ public class PetService implements IPetService {
     public Page<CompletePetDto> findByOwner(int id, Pageable pageable) throws Exception {
         validateUserDetails(id);
         try {
-            var petsDB = IPetsRepository.findByOwner(id, pageable);
+            var petsDB = IPetsRepository.findByOwnerAndStatus(id, pageable);
             if (petsDB.isEmpty()) {
                 return Page.empty();
             }
