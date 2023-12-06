@@ -27,7 +27,7 @@ public interface IPetService {
 
     List<CompletePetDto> findPetsRecommendations(int petId, int limit) throws Exception;
     Page<CompletePetDto> findByLocation(int id, Pageable pageable) throws Exception;
-    Page<CompletePetDto> findByOwner(int id, Pageable pageable) throws Exception;
+    Page<CompletePetDto> findByOwner(Pageable pageable) throws Exception;
     Page<CompletePetDto> findByStatus(PetStatus status, Pageable pageable) throws Exception;
     Page<CompletePetDto> filterPets(Integer location, Integer species, Integer breed, String size,String status, Pageable pageable) throws Exception;
     Page<CompletePetDto> findByGender(String gender, Pageable pageable) throws Exception;
