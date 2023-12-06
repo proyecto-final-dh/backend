@@ -3,12 +3,13 @@ package com.company.UserPetInterestTest;
 import com.company.enums.PetStatus;
 import com.company.exceptions.ResourceNotFoundException;
 import com.company.model.dto.PetInterestWithOwnerInformationDto;
+import com.company.model.dto.PetWithUserInformationDto;
 import com.company.model.dto.UserInformationDTO;
 import com.company.model.dto.UserPetInterestDto;
-import com.company.model.entity.Location;
 import com.company.model.entity.Pets;
 import com.company.model.entity.UserDetails;
 import com.company.model.entity.UserPetInterest;
+import com.company.repository.IImageRepository;
 import com.company.repository.IPetsRepository;
 import com.company.repository.IUserDetailsRepository;
 import com.company.repository.IUserPetInterestRepository;
@@ -42,6 +43,8 @@ public class UserPetInterestTest {
     private IPetsRepository petsRepository;
     @Mock
     private UserService userService;
+    @Mock
+    private IImageRepository imageRepository;
 
     @InjectMocks
     private UserPetInterestService userPetInterestService;
@@ -76,7 +79,7 @@ public class UserPetInterestTest {
         userDetails.setId(1);
 
         Pets pet = new Pets();
-        pet.setId(1);
+        pet.setId(2);
         pet.setStatus(PetStatus.EN_ADOPCION);
         pet.setUserDetails(userDetails);
 
@@ -104,14 +107,15 @@ public class UserPetInterestTest {
         when(userDetailsRepository.findByUserId(anyString())).thenReturn(Optional.of(userDetails));
         when(userPetInterestRepository.findAllByUserId(anyInt())).thenReturn(List.of(userPetInterest, userPetInterest2));
         when(userService.findById(anyString())).thenReturn(userInformationDTO);
+        when(petsRepository.findById(anyInt())).thenReturn(Optional.of(pet));
+        when(imageRepository.findByPetId(anyInt())).thenReturn(Optional.empty());
 
         // Then
-        List<PetInterestWithOwnerInformationDto> result = userPetInterestService.getUserPetListInterests();
+        List<PetWithUserInformationDto> result = userPetInterestService.getUserPetListInterests();
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(userPetInterest.getPetId(), result.get(0).getPetId());
-        assertTrue(result.get(0).isInterested());
+        assertEquals(userPetInterest.getPetId(), result.get(0).getPet().getId());
     }
 
     @Test

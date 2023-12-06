@@ -39,21 +39,25 @@ public interface IPetsRepository extends JpaRepository<Pets, Integer> , JpaSpeci
 
 
     @Query(value = "SELECT pets.* " +
-            "FROM petPI.pets AS pets " +
+            "FROM pets AS pets " +
             "WHERE pets.owner_id IN " +
-            "(SELECT ud.id FROM petPI.user_details AS ud WHERE ud.location_id = :id )",
-            countQuery = "SELECT COUNT(*) FROM petPI.pets AS pets " +
+            "(SELECT ud.id FROM user_details AS ud WHERE ud.location_id = :id )",
+            countQuery = "SELECT COUNT(*) FROM pets AS pets " +
                     "WHERE pets.owner_id IN " +
-                    "(SELECT ud.id FROM petPI.user_details AS ud WHERE ud.location_id = :id )", nativeQuery = true)
+                    "(SELECT ud.id FROM user_details AS ud WHERE ud.location_id = :id )", nativeQuery = true)
     Page<Pets> findByLocation(@Param("id") int id, Pageable pageable);
 
     @Query(value = "SELECT pets.* " +
-            "FROM petPI.pets AS pets " +
+            "FROM pets AS pets " +
             "WHERE pets.owner_id = :id " +
             "AND pets.status = 'MASCOTA_PROPIA' ",
-            countQuery = "SELECT COUNT(*) FROM petPI.pets AS pets " +
+            countQuery = "SELECT COUNT(*) FROM pets AS pets " +
             "WHERE pets.owner_id = :id AND pets.status = 'MASCOTA_PROPIA'", nativeQuery = true)
     Page<Pets> findByOwnerAndStatus(@Param("id") int id, Pageable pageable);
+
+    Page<Pets> findByGender(String gender, Pageable pageable);
+    Page<Pets> findBySize(String size, Pageable pageable);
+
 
     @Query("SELECT DISTINCT NEW com.company.model.dto.PetStatusUpdateDTO(p, h.date) " +
             "FROM Pets p " +
@@ -61,9 +65,6 @@ public interface IPetsRepository extends JpaRepository<Pets, Integer> , JpaSpeci
             "WHERE h.status = :hStatus AND p.status = :pStatus AND p.userDetails.id = :userId")
     List<PetStatusUpdateDTO> findByStatusAndOwner(@Param("hStatus") String hStatus, @Param("pStatus") PetStatus pStatus, @Param("userId") Integer userId);
     //Se tuvieron que implentar 3 parametros porque History no usó en enum de status, para no romper nada de lo ya construido
-
-    Page<Pets> findByGender(String gender, Pageable pageable);
-    Page<Pets> findBySize(String size, Pageable pageable);
 
 
 }
