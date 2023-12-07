@@ -611,7 +611,13 @@ VALUES
     (N'Sam', 1, 36, 'EN_ADOPCION', N'GRANDE', 'MACHO', N'Sam es un gatito adorable y protector que te hará compañía en todo momento.', 14),
     (N'Vishenka', 1, 36, 'EN_ADOPCION', N'PEQUEÑO', 'HEMBRA', N'Vishenka es una gatita peresoza y elegante que te hará compañía en todo momento.', 14),
     (N'Paco', 1, 31, 'EN_ADOPCION', N'PEQUEÑO', 'MACHO', N'Paco es un perrito con mucha energía y amistoso.', 1),
-    (N'Luci', 1, 30, 'EN_ADOPCION', N'MEDIANO', 'HEMBRA', N'Luci es una perrita en busca de una familia que le brinde cuidado y amor.', 1);
+    (N'Luci', 1, 30, 'EN_ADOPCION', N'MEDIANO', 'HEMBRA', N'Luci es una perrita en busca de una familia que le brinde cuidado y amor.', 1),
+    (N'Momo', 1, 12, 'EN_ADOPCION', N'GRANDE', 'MACHO', N'Momo es un perro en busca alegre al que le encanta jugar.', 3),
+    (N'Michi', 1, 40, 'EN_ADOPCION', N'MEDIANO', 'MACHO', N'Michi es un gatito siames muy tranquilo en busca de hogar.', 4),
+    (N'Sissi', 1, 32, 'EN_ADOPCION', N'MEDIANO', 'HEMBRA', N'Sissi es una gatita muy tímida y dulce.', 4),
+    (N'Pancho', 1, 16, 'EN_ADOPCION', N'GRANDE', 'MACHO', N'Pancho es un perro muy cariñoso y paciente con los niños.', 7),
+    (N'Feli', 1, 11, 'EN_ADOPCION', N'PEQUEÑO', 'MACHO', N'Feli es un perro muy leal y sociable.', 8),
+    (N'Mindi', 1, 21, 'EN_ADOPCION', N'MEDIANO', 'HEMBRA', N'Mindi es una perrita muy curiosa y buena compañera.', 3);
 
 
 -- ingreso de fotos de mascotas --
@@ -643,13 +649,11 @@ VALUES
     (4, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045446/4/?bust=1698799848&width=720', 'Imagen 4'),
     (4, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045446/5/?bust=1698800002&width=720', 'Imagen 5'),
 -- Mascota 5
-    (5, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045436/1/?bust=1698597050&width=720', 'Imagen 1'),
     (5, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045436/2/?bust=1698597051&width=720', 'Imagen 2'),
     (5, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045436/3/?bust=1698799913&width=720', 'Imagen 3'),
     (5, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045436/4/?bust=1698800130&width=720', 'Imagen 4'),
     (5, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045436/5/?bust=1698799989&width=720', 'Imagen 5'),
 -- Mascota 6
-    (6, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045439/1/?bust=1698597081&width=720', 'Imagen 1'),
     (6, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045439/2/?bust=1698799979&width=720', 'Imagen 2'),
     (6, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045439/3/?bust=1698800125&width=720', 'Imagen 3'),
     (6, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/69045439/5/?bust=1698800003&width=720', 'Imagen 4'),
@@ -745,7 +749,19 @@ VALUES
 -- Mascota 23
     (23, 'https://media.traveler.es/photos/613760adcb06ad0f20e11980/master/w_1600%2Cc_limit/202931.jpg', 'Imagen 1'),
 -- Mascota 24
-    (24, 'https://fotografias.lasexta.com/clipping/cmsimages01/2022/08/09/3FFA8546-05CE-4608-9B69-6602D02A4C58/cachorro-pomsky_103.jpg', 'Imagen 1');
+    (24, 'https://fotografias.lasexta.com/clipping/cmsimages01/2022/08/09/3FFA8546-05CE-4608-9B69-6602D02A4C58/cachorro-pomsky_103.jpg', 'Imagen 1'),
+-- Mascota 25
+    (25, 'https://www.clinicaveterinariaaguilar.es/wp-content/uploads/2020/01/cachorro.jpg', 'Imagen 1'),
+-- Mascota 26
+    (26, 'https://i0.wp.com/puppis.blog/wp-content/uploads/2023/05/shutterstock_525025708.jpg?resize=900%2C600&ssl=1', 'Imagen 1'),
+-- Mascota 27
+    (27, 'https://blog.felinus.cl/wp-content/uploads/2023/03/gato-angora-6-1024x576.png', 'Imagen 1'),
+-- Mascota 28
+    (28, 'https://cdn.dogsplanet.com/wp-content/uploads/2022/06/gran-danes-marron.jpg', 'Imagen 1'),
+-- Mascota 29
+    (29, 'https://koalamascotas.com/modules/ph_simpleblog/covers/22.jpg', 'Imagen 1'),
+-- Mascota 30
+    (30, 'https://www.zooplus.es/magazine/wp-content/uploads/2019/07/reinrassig-vs-mischling-hund-768x512.jpeg', 'Imagen 1');
 
 -- ingreso de historial --
 INSERT INTO history_states ( pet_id, date, status,user_id) VALUES
@@ -775,7 +791,34 @@ INSERT INTO history_states ( pet_id, date, status,user_id) VALUES
     (20, '2023-11-05 00:00:00', 'ADOPTADA',5),
     (21, '2023-10-05 00:00:00', 'EN_ADOPCION',5),
     (22, '2023-12-05 00:00:00', 'EN_ADOPCION',5),
-    (23, '2023-11-05 00:00:00', 'EN_ADOPCION',5);
+    (23, '2023-11-05 00:00:00', 'EN_ADOPCION',5),
+    (24, '2023-12-05 00:00:00', 'EN_ADOPCION',5),
+    (25, '2023-10-05 00:00:00', 'EN_ADOPCION',5),
+    (26, '2023-10-05 00:00:00', 'EN_ADOPCION',5),
+    (27, '2023-11-05 00:00:00', 'EN_ADOPCION',5),
+    (28, '2023-10-05 00:00:00', 'EN_ADOPCION',5),
+    (29, '2023-11-05 00:00:00', 'EN_ADOPCION',5),
+    (30, '2023-10-05 00:00:00', 'EN_ADOPCION',5),
+    (11, '2023-11-05 00:00:00', 'EN_ADOPCION',5),
+    (19, '2023-12-05 00:00:00', 'EN_ADOPCION',5),
+    (20, '2023-12-05 00:00:00', 'EN_ADOPCION',5),
+    (17, '2023-12-03 00:00:00', 'EN_ADOPCION',5),
+    (8, '2023-11-05 00:00:00', 'ADOPTADA',5),
+    (6, '2023-11-05 00:00:00', 'ADOPTADA',5),
+    (21, '2023-10-05 00:00:00', 'ADOPTADA',5),
+    (26, '2023-11-05 00:00:00', 'ADOPTADA',5),
+    (28, '2023-11-05 00:00:00', 'ADOPTADA',5),
+    (25, '2023-10-05 00:00:00', 'ADOPTADA',5),
+    (30, '2023-10-05 00:00:00', 'ADOPTADA',5),
+    (9, '2023-11-05 00:00:00', 'ADOPTADA',5),
+    (4, '2023-11-05 00:00:00', 'ADOPTADA',5),
+    (5, '2023-11-05 00:00:00', 'ADOPTADA',5),
+    (19, '2023-12-15 00:00:00', 'ADOPTADA',5),
+    (20, '2023-12-25 00:00:00', 'ADOPTADA',5),
+    (14, '2023-10-25 00:00:00', 'ADOPTADA',5),
+    (14, '2023-10-25 00:00:00', 'ADOPTADA',5),
+    (7, '2023-12-25 00:00:00', 'ADOPTADA',5),
+    (17, '2023-12-25 00:00:00', 'ADOPTADA',5);
 
 
 -- Insertar pruebas resgistro de usuarios
