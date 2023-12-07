@@ -611,8 +611,7 @@ VALUES
     (N'Sam', 1, 36, 'EN_ADOPCION', N'GRANDE', 'MACHO', N'Sam es un gatito adorable y protector que te hará compañía en todo momento.', 14),
     (N'Vishenka', 1, 36, 'EN_ADOPCION', N'PEQUEÑO', 'HEMBRA', N'Vishenka es una gatita peresoza y elegante que te hará compañía en todo momento.', 14),
     (N'Paco', 1, 31, 'EN_ADOPCION', N'PEQUEÑO', 'MACHO', N'Paco es un perrito con mucha energía y amistoso.', 1),
-    (N'Luci', 1, 30, 'EN_ADOPCION', N'MEDIANO', 'HEMBRA', N'Luci es una perrita en busca de una familia que le brinde cuidado y amor.', 1),
-    ;
+    (N'Luci', 1, 30, 'EN_ADOPCION', N'MEDIANO', 'HEMBRA', N'Luci es una perrita en busca de una familia que le brinde cuidado y amor.', 1);
 
 
 -- ingreso de fotos de mascotas --
@@ -746,9 +745,8 @@ VALUES
 -- Mascota 23
     (23, 'https://media.traveler.es/photos/613760adcb06ad0f20e11980/master/w_1600%2Cc_limit/202931.jpg', 'Imagen 1'),
 -- Mascota 24
-    (24, 'https://fotografias.lasexta.com/clipping/cmsimages01/2022/08/09/3FFA8546-05CE-4608-9B69-6602D02A4C58/cachorro-pomsky_103.jpg', 'Imagen 1'),
+    (24, 'https://fotografias.lasexta.com/clipping/cmsimages01/2022/08/09/3FFA8546-05CE-4608-9B69-6602D02A4C58/cachorro-pomsky_103.jpg', 'Imagen 1');
 
-;
 -- ingreso de historial --
 INSERT INTO history_states ( pet_id, date, status,user_id) VALUES
     (4, '2023-10-05 00:00:00', 'EN_ADOPCION',2),
@@ -777,8 +775,7 @@ INSERT INTO history_states ( pet_id, date, status,user_id) VALUES
     (20, '2023-11-05 00:00:00', 'ADOPTADA',5)
     (21, '2023-10-05 00:00:00', 'EN_ADOPCION',5),
     (22, '2023-12-05 00:00:00', 'EN_ADOPCION',5),
-    (23, '2023-11-05 00:00:00', 'EN_ADOPCION',5),
-    ;
+    (23, '2023-11-05 00:00:00', 'EN_ADOPCION',5);
 
 
 -- Insertar pruebas resgistro de usuarios
