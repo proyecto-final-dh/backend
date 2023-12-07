@@ -607,7 +607,12 @@ VALUES
     (N'Teddy', 7, 31, 'ADOPTADA', N'PEQUEÑO', 'MACHO', N'Teddy es un perrito pequeño y tierno en busca de un compañero fiel.', 1),
     (N'Bentley', 8, 4, 'ADOPTADA', N'GRANDE', 'HEMBRA', N'Bentley es una perra grande y leal que te protegerá siempre.', 6),
     (N'Milo', 9, 21, 'ADOPTADA', N'MEDIANO', 'MACHO', N'Milo es un perro mediano y juguetón que alegrará tu hogar.', 4),
-    (N'Lucio', 1, 3, 'ADOPTADA', N'PEQUEÑO', 'MACHO', N'Lucio es un perrito pequeño y encantador que te hará sonreír.', 3);
+    (N'Lucio', 1, 3, 'ADOPTADA', N'PEQUEÑO', 'MACHO', N'Lucio es un perrito pequeño y encantador que te hará sonreír.', 3),
+    (N'Sam', 1, 36, 'EN_ADOPCION', N'GRANDE', 'MACHO', N'Sam es un gatito adorable y protector que te hará compañía en todo momento.', 14),
+    (N'Vishenka', 1, 36, 'EN_ADOPCION', N'PEQUEÑO', 'HEMBRA', N'Vishenka es una gatita peresoza y elegante que te hará compañía en todo momento.', 14),
+    (N'Paco', 1, 31, 'EN_ADOPCION', N'PEQUEÑO', 'MACHO', N'Paco es un perrito con mucha energía y amistoso.', 1),
+    (N'Luci', 1, 30, 'EN_ADOPCION', N'MEDIANO', 'HEMBRA', N'Luci es una perrita en busca de una familia que le brinde cuidado y amor.', 1),
+    ;
 
 
 -- ingreso de fotos de mascotas --
@@ -733,16 +738,47 @@ VALUES
     (20, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/50762899/2/?bust=1699028432&width=720', 'Imagen 2'),
     (20, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/50762899/3/?bust=1699028436&width=720', 'Imagen 3'),
     (20, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/50762899/4/?bust=1699020930&width=720', 'Imagen 4'),
-    (20, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/50762899/5/?bust=1699128942&width=720', 'Imagen 5');
+    (20, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/50762899/5/?bust=1699128942&width=720', 'Imagen 5')
+-- Mascota 21
+    (21, 'https://resqpet-images.s3.us-east-1.amazonaws.com/petImages/1701906306502-sam.jpg', 'Imagen 1'),
+-- Mascota 22
+    (22, 'https://resqpet-images.s3.us-east-1.amazonaws.com/petImages/1701910775706-visha.jpg', 'Imagen 1'),
+-- Mascota 23
+    (23, 'https://media.traveler.es/photos/613760adcb06ad0f20e11980/master/w_1600%2Cc_limit/202931.jpg', 'Imagen 1'),
+-- Mascota 24
+    (24, 'https://fotografias.lasexta.com/clipping/cmsimages01/2022/08/09/3FFA8546-05CE-4608-9B69-6602D02A4C58/cachorro-pomsky_103.jpg', 'Imagen 1'),
 
-
+;
 -- ingreso de historial --
 INSERT INTO history_states ( pet_id, date, status,user_id) VALUES
-    (1, CURRENT_DATE(), 'ADOPTADA',1 ),
-    (1, CURRENT_DATE(), 'EN_ADOPCION',2),
-    (13, CURRENT_DATE(), 'ADOPTADA',3),
-    (5, CURRENT_DATE(), 'EN_ADOPCION',4),
-    (7, CURRENT_DATE(), 'ADOPTADA',5);
+    (4, '2023-10-05 00:00:00', 'EN_ADOPCION',2),
+    (5, '2023-10-05 00:00:00', 'EN_ADOPCION',2),
+    (6, '2023-10-05 00:00:00', 'EN_ADOPCION',2),
+    (7, '2023-11-05 00:00:00', 'EN_ADOPCION',2),
+    (8, '2023-11-05 00:00:00', 'EN_ADOPCION',2),
+    (9, '2023-11-05 00:00:00', 'EN_ADOPCION',2),
+    (10, '2023-11-05 00:00:00', 'EN_ADOPCION',2),
+    (11, '2023-11-05 00:00:00', 'EN_ADOPCION',2),
+    (12, '2023-12-05 00:00:00', 'EN_ADOPCION',2),
+    (13, '2023-12-05 00:00:00', 'EN_ADOPCION',2),
+    (14, '2023-10-05 00:00:00', 'ADOPTADA',1 ),
+    (14, '2023-12-05 00:00:00', 'EN_ADOPCION',2),
+    (15, '2023-11-05 00:00:00', 'ADOPTADA',3),
+    (15, '2023-10-05 00:00:00', 'EN_ADOPCION',4),
+    (16, '2023-10-05 00:00:00', 'EN_ADOPCION',5),
+    (16, '2023-12-05 00:00:00', 'ADOPTADA',5),
+    (17, '2023-10-05 00:00:00', 'EN_ADOPCION',5),
+    (17, '2023-11-05 00:00:00', 'ADOPTADA',5),
+    (18, '2023-11-05 00:00:00', 'EN_ADOPCION',5),
+    (18, '2023-12-05 00:00:00', 'ADOPTADA',5),
+    (19, '2023-10-05 00:00:00', 'EN_ADOPCION',5),
+    (19, '2023-12-05 00:00:00', 'ADOPTADA',5),
+    (20, '2023-10-05 00:00:00', 'EN_ADOPCION',5),
+    (20, '2023-11-05 00:00:00', 'ADOPTADA',5)
+    (21, '2023-10-05 00:00:00', 'EN_ADOPCION',5),
+    (22, '2023-12-05 00:00:00', 'EN_ADOPCION',5),
+    (23, '2023-11-05 00:00:00', 'EN_ADOPCION',5),
+    ;
 
 
 -- Insertar pruebas resgistro de usuarios
