@@ -737,7 +737,7 @@ VALUES
     (20, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/50762899/2/?bust=1699028432&width=720', 'Imagen 2'),
     (20, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/50762899/3/?bust=1699028436&width=720', 'Imagen 3'),
     (20, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/50762899/4/?bust=1699020930&width=720', 'Imagen 4'),
-    (20, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/50762899/5/?bust=1699128942&width=720', 'Imagen 5')
+    (20, 'https://dl5zpyw5k3jeb.cloudfront.net/photos/pets/50762899/5/?bust=1699128942&width=720', 'Imagen 5'),
 -- Mascota 21
     (21, 'https://resqpet-images.s3.us-east-1.amazonaws.com/petImages/1701906306502-sam.jpg', 'Imagen 1'),
 -- Mascota 22
@@ -772,7 +772,7 @@ INSERT INTO history_states ( pet_id, date, status,user_id) VALUES
     (19, '2023-10-05 00:00:00', 'EN_ADOPCION',5),
     (19, '2023-12-05 00:00:00', 'ADOPTADA',5),
     (20, '2023-10-05 00:00:00', 'EN_ADOPCION',5),
-    (20, '2023-11-05 00:00:00', 'ADOPTADA',5)
+    (20, '2023-11-05 00:00:00', 'ADOPTADA',5),
     (21, '2023-10-05 00:00:00', 'EN_ADOPCION',5),
     (22, '2023-12-05 00:00:00', 'EN_ADOPCION',5),
     (23, '2023-11-05 00:00:00', 'EN_ADOPCION',5);
