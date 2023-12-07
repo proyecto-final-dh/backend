@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class ReportBySpeciesDto {
-    private int speciesId;
+    private String species;
     private List<AdoptionsByDateDto> result;
 
 }
