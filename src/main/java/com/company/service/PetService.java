@@ -43,6 +43,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+
 import java.time.Instant;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+
 
 import static com.company.constants.Constants.BREED_NOT_FOUND;
 import static com.company.constants.Constants.EMPTY_IMAGE;
@@ -91,6 +93,7 @@ public class PetService implements IPetService {
     private IHistoryRepository historyRepository;
     private IUserPetInterestRepository userPetInterestRepository;
     private UserService userService;
+
 
     public Page<CompletePetDto> findAll(Pageable pageable) throws Exception {
         try {
@@ -443,10 +446,11 @@ public class PetService implements IPetService {
         }
     }
 
-    public Page<CompletePetDto> findByOwner(int id, Pageable pageable) throws Exception {
-        validateUserDetails(id);
+    public Page<CompletePetDto> findByOwner(Pageable pageable) throws Exception {
+        UserDetails userDetails = getCompleteUserDetails();
+
         try {
-            var petsDB = IPetsRepository.findByOwnerAndStatus(id, pageable);
+            var petsDB = IPetsRepository.findByOwnerAndStatus(Objects.requireNonNull(userDetails).getId(), pageable);
             if (petsDB.isEmpty()) {
                 return Page.empty();
             }

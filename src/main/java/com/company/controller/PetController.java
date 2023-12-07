@@ -104,13 +104,13 @@ public class PetController {
         }
     }
 
-    @GetMapping("/owner/{id}")
-    public Page<CompletePetDto> getByOwner(@PathVariable int id,
+    @GetMapping("/owner")
+    public Page<CompletePetDto> getByOwner(
                                     @RequestParam(defaultValue = "0") int page,
                                     @RequestParam(defaultValue = "9") int size) {
         try {
             Pageable pageable = PageRequest.of(page,size);
-            Page<CompletePetDto> petPage = petService.findByOwner(id,pageable);
+            Page<CompletePetDto> petPage = petService.findByOwner(pageable);
             return petPage;
         } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -187,7 +187,7 @@ public class PetController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the pet");
         }
     }
-    
+
 
 
     @DeleteMapping("/{id}")
@@ -241,7 +241,7 @@ public class PetController {
 
         Integer userDetailsId= userDetailsService.findByUserId(userId).getId();
 
-        return ResponseEntity.status(HttpStatus.OK).body(petService.findbyOwnerByOwnerAndStatus(PetStatus.ADOPTADA,1));
+        return ResponseEntity.status(HttpStatus.OK).body(petService.findbyOwnerByOwnerAndStatus(PetStatus.ADOPTADA,userDetailsId));
     }
 
     @GetMapping("/pet-for-adoption")
@@ -255,10 +255,7 @@ public class PetController {
         }
 
         Integer userDetailsId= userDetailsService.findByUserId(userId).getId();
-
-        return ResponseEntity.status(HttpStatus.OK).body(petService.findbyOwnerByOwnerAndStatus(PetStatus.EN_ADOPCION,1));
+        return ResponseEntity.status(HttpStatus.OK).body(petService.findbyOwnerByOwnerAndStatus(PetStatus.EN_ADOPCION,userDetailsId));
     }
-
-
 
 }
