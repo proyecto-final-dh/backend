@@ -2,12 +2,17 @@ package com.company.service;
 
 import com.company.enums.PetStatus;
 import com.company.exceptions.ResourceNotFoundException;
+import com.company.model.dto.CompleteGetPetDto;
+import com.company.model.dto.ImageWithTitle;
+import com.company.model.dto.PetWithUserInformationDto;
 import com.company.model.dto.UserInformationDTO;
 import com.company.model.dto.PetInterestWithOwnerInformationDto;
 import com.company.model.dto.UserPetInterestDto;
+import com.company.model.entity.Image;
 import com.company.model.entity.Pets;
 import com.company.model.entity.UserDetails;
 import com.company.model.entity.UserPetInterest;
+import com.company.repository.IImageRepository;
 import com.company.repository.IPetsRepository;
 import com.company.repository.IUserDetailsRepository;
 import com.company.repository.IUserPetInterestRepository;
@@ -27,6 +32,7 @@ import static com.company.constants.Constants.INTEREST_CAN_ONLY_BE_FOR_PETS_IN_A
 import static com.company.constants.Constants.PET_NOT_FOUND;
 import static com.company.constants.Constants.USER_INTEREST_ALREADY_EXISTS;
 import static com.company.constants.Constants.USER_NOT_FOUND;
+import static com.company.utils.Mapper.mapToCompleteGetPetDto;
 
 @Service
 public class UserPetInterestService implements IUserPetInterestService {
@@ -35,25 +41,45 @@ public class UserPetInterestService implements IUserPetInterestService {
     private final IUserDetailsRepository userDetailsRepository;
     private final IPetsRepository petsRepository;
     private final UserService userService;
+    private final IImageRepository imageRepository;
 
-    public UserPetInterestService(IUserPetInterestRepository userPetInterestRepository, IUserDetailsRepository userDetailsRepository, IPetsRepository petsRepository, UserService userService) {
+    public UserPetInterestService(IUserPetInterestRepository userPetInterestRepository, IUserDetailsRepository userDetailsRepository, IPetsRepository petsRepository, UserService userService, IImageRepository imageRepository) {
         this.userPetInterestRepository = userPetInterestRepository;
         this.userDetailsRepository = userDetailsRepository;
         this.petsRepository = petsRepository;
         this.userService = userService;
+        this.imageRepository = imageRepository;
     }
 
     @Override
-    public List<PetInterestWithOwnerInformationDto> getUserPetListInterests() throws ResourceNotFoundException {
+    public List<PetWithUserInformationDto> getUserPetListInterests() throws ResourceNotFoundException {
         int userId = getUserId();
-        List<PetInterestWithOwnerInformationDto> listDto = new ArrayList<>();
+        List<PetWithUserInformationDto> listDto = new ArrayList<>();
 
         List<UserPetInterest> list = userPetInterestRepository.findAllByUserId(userId);
 
         for (UserPetInterest userPetInterest : list) {
             if (userPetInterest.getPet().getStatus() == PetStatus.EN_ADOPCION) {
                 UserInformationDTO userInformationDTO = userService.findById(userPetInterest.getPet().getUserDetails().getUserId());
-                listDto.add(new PetInterestWithOwnerInformationDto(userPetInterest.getPetId(), userInformationDTO, true));
+
+                Optional<Pets> pets = petsRepository.findById(userPetInterest.getPetId());
+
+                if(pets.isEmpty()){
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, PET_NOT_FOUND);
+                }
+
+                Optional<List<Image>> image = imageRepository.findByPetId(pets.get().getId());
+                List<ImageWithTitle> imageWithTitleList = new ArrayList<>();
+                if (image.isPresent()) {
+                    for (Image image1 : image.get()) {
+                        imageWithTitleList.add(new ImageWithTitle(image1.getId(), image1.getUrl(), image1.getTitle()));
+                    }
+                }
+
+                CompleteGetPetDto completeGetPetDto = mapToCompleteGetPetDto(pets.get(), imageWithTitleList);
+
+                listDto.add(new PetWithUserInformationDto(completeGetPetDto, userInformationDTO));
+
             }
         }
 

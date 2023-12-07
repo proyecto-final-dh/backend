@@ -5,7 +5,7 @@ import com.company.enums.PetStatus;
 import com.company.model.dto.ReportBySpeciesDto;
 import com.company.model.dto.AdoptionsByDateDto;
 import com.company.model.dto.CompletePetDto;
-import com.company.model.dto.CopmpleteGetPetDto;
+import com.company.model.dto.CompleteGetPetDto;
 import com.company.model.dto.CreatePetDto;
 import com.company.model.dto.ImageWithTitle;
 import com.company.model.dto.PetWithImagesDto;
@@ -80,21 +80,21 @@ public class Mapper {
     }
 
     public static List<ReportBySpeciesDto> mapToReportBySpeciesDtoList (List<Object[]> responseDB){
-        Map<Integer, ReportBySpeciesDto> reportBySpeciesDtoMap = new HashMap<>();
+        Map<String, ReportBySpeciesDto> reportBySpeciesDtoMap = new HashMap<>();
 
         for (Object[] row : responseDB) {
-            int speciesId = (int) row[0];
+            String species = row[0].toString();
             String dateString = row[1].toString();
             LocalDate date = LocalDate.parse(dateString);
             long adoptionsCount = (long) row[2];
 
-            ReportBySpeciesDto reportBySpeciesDto = reportBySpeciesDtoMap.get(speciesId);
+            ReportBySpeciesDto reportBySpeciesDto = reportBySpeciesDtoMap.get(species);
 
             if (reportBySpeciesDto == null) {
                 reportBySpeciesDto = new ReportBySpeciesDto();
-                reportBySpeciesDto.setSpeciesId(speciesId);
+                reportBySpeciesDto.setSpecies(species);
                 reportBySpeciesDto.setResult(new ArrayList<>());
-                reportBySpeciesDtoMap.put(speciesId, reportBySpeciesDto);
+                reportBySpeciesDtoMap.put(species, reportBySpeciesDto);
             }
 
             AdoptionsByDateDto adoptionsByDateDto = new AdoptionsByDateDto();
@@ -136,19 +136,19 @@ public class Mapper {
         return new ArrayList<>(reportByStatusDtoMap.values());
     }
 
-    public static CopmpleteGetPetDto mapToCompleteGetPetDto(Pets pet, List<ImageWithTitle> images){
-        CopmpleteGetPetDto copmpleteGetPetDto = new CopmpleteGetPetDto();
-        copmpleteGetPetDto.setId(pet.getId());
-        copmpleteGetPetDto.setName(pet.getName());
-        copmpleteGetPetDto.setStatus(pet.getStatus());
-        copmpleteGetPetDto.setSize(pet.getSize());
-        copmpleteGetPetDto.setGender(pet.getGender());
-        copmpleteGetPetDto.setDescription(pet.getDescription());
-        copmpleteGetPetDto.setBreed(pet.getBreed());
-        copmpleteGetPetDto.setLocation(pet.getUserDetails().getLocation());
-        copmpleteGetPetDto.setAge(pet.getAge());
-        copmpleteGetPetDto.setImages(images);
-        return copmpleteGetPetDto;
+    public static CompleteGetPetDto mapToCompleteGetPetDto(Pets pet, List<ImageWithTitle> images){
+        CompleteGetPetDto completeGetPetDto = new CompleteGetPetDto();
+        completeGetPetDto.setId(pet.getId());
+        completeGetPetDto.setName(pet.getName());
+        completeGetPetDto.setStatus(pet.getStatus());
+        completeGetPetDto.setSize(pet.getSize());
+        completeGetPetDto.setGender(pet.getGender());
+        completeGetPetDto.setDescription(pet.getDescription());
+        completeGetPetDto.setBreed(pet.getBreed());
+        completeGetPetDto.setLocation(pet.getUserDetails().getLocation());
+        completeGetPetDto.setAge(pet.getAge());
+        completeGetPetDto.setImages(images);
+        return completeGetPetDto;
     }
 
     public static Pets mapUpdatePetDtoToPet(UpdatePetDto updatePetDto) {

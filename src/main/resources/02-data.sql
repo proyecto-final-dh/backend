@@ -578,7 +578,7 @@ VALUES
 -- ingreso de mascotas --
 INSERT INTO pets (name, owner_id, breed_id, status, size, gender, description, age)
 VALUES
-    (N'Buddy', 1, 21, 'MASCOTA_PROPIA', N'MEDIANO', 'MACHO', N'Buddy es un perro cariñoso y juguetón que adora correr por el parque.', 3),
+    (N'Buddy', 5, 1, 'ADOPTADA', N'MEDIANO', 'MACHO', N'Buddy es un perro cariñoso y juguetón que adora correr por el parque.', 3),
     (N'Luna', 2, 32, 'MASCOTA_PROPIA', N'PEQUEÑO', 'HEMBRA', N'Luna es una gatita elegante y curiosa que le encanta explorar la casa.', 2),
     (N'Max', 3, 21, 'MASCOTA_PROPIA', N'GRANDE', 'MACHO', N'Max es un perro grande y amigable que siempre está listo para pasear.', 4),
     (N'Molly', 4, 21, 'EN_ADOPCION', N'MEDIANO', 'HEMBRA', N'Molly es una perrita dulce y leal que adora estar en compañía de su familia.', 5),
@@ -588,7 +588,7 @@ VALUES
     (N'Daisy', 8, 3, 'EN_ADOPCION', N'PEQUEÑO', 'HEMBRA', N'Daisy es una perrita pequeña y traviesa que adora jugar con sus juguetes.', 4),
     (N'Cooper', 9, 21, 'EN_ADOPCION', N'GRANDE', 'MACHO', N'Cooper es un perro grande y protector que siempre cuida de su familia.', 5),
     (N'Zoe', 1, 36, 'EN_ADOPCION', N'MEDIANO', 'HEMBRA', N'Zoe es una gatita cariñosa y juguetona que ama los mimos y caricias.', 1),
-    (N'Pirata', 1, 37, 'EN_ADOPCION', N'PEQUEÑO', 'MACHO', N'Pirata es un gatito curioso y aventurero que está buscando un hogar.', 2),
+    (N'Pirata', 5, 37, 'EN_ADOPCION', N'PEQUEÑO', 'MACHO', N'Pirata es un gatito curioso y aventurero que está buscando un hogar.', 2),
     (N'Misty', 2, 29, 'EN_ADOPCION', N'GRANDE', 'HEMBRA', N'Misty es una perra grande y dulce que merece una familia amorosa.', 6),
     (N'Leo', 3, 7, 'EN_ADOPCION', N'MEDIANO', 'MACHO', N'Leo es un perro activo y juguetón que necesita un lugar donde correr y jugar.', 3),
     (N'Lucky', 4, 1, 'ADOPTADA', N'PEQUEÑO', 'HEMBRA', N'Lucky es una perrita afortunada en busca de un hogar cálido y cariñoso.', 5),
