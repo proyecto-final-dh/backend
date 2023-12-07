@@ -72,7 +72,7 @@ public class UserPetInterestService implements IUserPetInterestService {
                 List<ImageWithTitle> imageWithTitleList = new ArrayList<>();
                 if (image.isPresent()) {
                     for (Image image1 : image.get()) {
-                        imageWithTitleList.add(new ImageWithTitle(image1.getId(), image1.getTitle(), image1.getUrl()));
+                        imageWithTitleList.add(new ImageWithTitle(image1.getId(), image1.getUrl(), image1.getTitle()));
                     }
                 }
 
